@@ -15,3 +15,52 @@ Material - Stores some parameters, texture pixel map and corresponding shading t
 Shading tab - Stores color indices adjustments for pixel map?
 
 Palette - stores color indices
+
+Brender files structure:
+
+*BrenderHeader:
+chunk:
+{
+	uint32 magic;	// 0x12 - CARMA_CHUNK_HEADER
+	uint32 size; 	// 0x8 
+}
+*body:
+{
+	uint32 u1; // versions???
+	uint32 u2;
+} // 2 and 2 in carma; somewhere 1 and 2
+The size includes data only; no chunk header.
+
+The chunks following. Chunks are stopping at eof and 8-zeroes chunk
+
+// Chunk IDs:
+// Some numbers are reused in different file types
+#define CARMA_CHUNK_HEADER 18
+#define CARMA_CHUNK_ZERO 0
+#define CARMA_CHUNK_ZERO2 3435973836
+
+#define CARMA_CHUNK_MODELHEAD 54
+#define CARMA_CHUNK_TEXTUREHEAD 3 // or shade tab or palette
+#define CARMA_CHUNK_MATERIALHEAD 4
+
+#define CARMA_CHUNK_TEXTUREDATA 33
+
+
+#define CARMA_CHUNK_MATERIADATA 28
+#define CARMA_CHUNK_MATERIADATA2 31
+
+
+#define CARMA_CHUNK_ACTORHEAD 35
+#define CARMA_CHUNK_ACTORDATA 43
+#define CARMA_CHUNK_ACTORDATA2 37
+#define CARMA_CHUNK_ACTORDATA3 36
+#define CARMA_CHUNK_ACTORDATA4 42
+#define CARMA_CHUNK_ACTORDATA5 50
+#define CARMA_CHUNK_ACTORDATA6 41
+#define CARMA_CHUNK_ACTORDATA7 38
+
+#define CARMA_CHUNK_VERTEX 23
+#define CARMA_CHUNK_UV 24
+#define CARMA_CHUNK_FACELIST 53
+#define CARMA_CHUNK_MATNAMES 22
+#define CARMA_CHUNK_FACEMAT 26
