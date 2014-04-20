@@ -1,0 +1,17 @@
+mat
+pal
+act
+pix
+dat
+
+Structure:
+Actor - controllable end renderable unit. The top of hierarchy.
+Actors can have some data attached(need to e investigated), and also models and materials. There can be more then one unit of every carma stuff item in file.
+
+Model - Solid renderable mesh. References materials. Should be designed the way to access vertices in order to modify them in traffic accidents.
+
+Material - Stores some parameters, texture pixel map and corresponding shading tab.
+
+Shading tab - Stores color indices adjustments for pixel map?
+
+Palette - stores color indices
