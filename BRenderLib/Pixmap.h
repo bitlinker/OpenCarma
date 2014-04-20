@@ -5,7 +5,7 @@ namespace OpenCarma
 {
 	namespace BRender
 	{
-		// todo
+		// TODO
 		class BR_API Chunk
 		{
 		private:
@@ -18,6 +18,9 @@ namespace OpenCarma
 		public:
 			Pixmap(void);
 			~Pixmap(void);
+		private:
+			uint32_t width, height, stride;
+			std::vector<uint8_t> m_pixels;
 		};
 	}
 }

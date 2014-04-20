@@ -13,5 +13,11 @@ namespace OpenCarma
 		Pixmap::~Pixmap(void)
 		{
 		}
+
+		bool fromStream()
+		{
+			// TODO
+			return true;
+		}
 	}
 }
