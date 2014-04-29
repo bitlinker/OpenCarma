@@ -1,4 +1,5 @@
 #pragma once
+#include "Object.h"
 #include "Common.h"
 
 namespace OpenCarma
@@ -6,7 +7,7 @@ namespace OpenCarma
 	namespace BRender
 	{
 		// BRender palette
-		class BR_API Palette
+		class BR_API Palette : public Object
 		{
 		public:
 			Palette();

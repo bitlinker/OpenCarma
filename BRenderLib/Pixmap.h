@@ -1,26 +1,22 @@
 #pragma once
 #include "Common.h"
+#include "Object.h"
 
 namespace OpenCarma
 {
 	namespace BRender
 	{
-		// TODO
-		class BR_API Chunk
-		{
-		private:
-			uint32_t m_magic;
-			uint32_t m_size;
-		};
-
-		class BR_API Pixmap
+        class BR_API Pixmap : public Object
 		{
 		public:
-			Pixmap(void);
-			~Pixmap(void);
+			Pixmap();
+
+			// TODO: getters
+
 		private:
-			uint32_t width, height, stride;
+			uint32_t m_width, m_height, m_stride;
 			std::vector<uint8_t> m_pixels;
+			std::string m_name;
 		};
 	}
 }
