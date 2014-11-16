@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Common">
+      <UniqueIdentifier>{a642610c-2cbc-4234-bbe7-1e11da68fd41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src">
+      <UniqueIdentifier>{86dc1edb-9300-4b44-aa9d-8370602f1869}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Exception.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Init.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Logger.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Render.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\TextDecoder.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Exception.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Init.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Render.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\TextDecoder.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

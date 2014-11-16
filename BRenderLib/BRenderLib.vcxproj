@@ -39,7 +39,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>.;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>
@@ -74,27 +76,32 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Actor.h" />
-    <ClInclude Include="Chunk.h" />
+    <ClInclude Include="BigEndianStreamReader.h" />
     <ClInclude Include="Common.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="Model.h" />
-    <ClInclude Include="Object.h" />
-    <ClInclude Include="ObjectFactory.h" />
-    <ClInclude Include="Palette.h" />
-    <ClInclude Include="Pixmap.h" />
-    <ClInclude Include="Shadetab.h" />
+    <ClInclude Include="Exception.h" />
+    <ClInclude Include="Objects\Actor.h" />
+    <ClInclude Include="Objects\ChunkHeader.h" />
+    <ClInclude Include="Objects\Material.h" />
+    <ClInclude Include="Objects\Model.h" />
+    <ClInclude Include="Objects\Palette.h" />
+    <ClInclude Include="Objects\Pixmap.h" />
+    <ClInclude Include="Objects\Shadetab.h" />
+    <ClInclude Include="Serialization\ModelSerializer.h" />
+    <ClInclude Include="Serialization\PaletteSerializer.h" />
+    <ClInclude Include="Serialization\TextureSerializer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Actor.cpp" />
-    <ClCompile Include="Chunk.cpp" />
-    <ClCompile Include="Material.cpp" />
-    <ClCompile Include="Model.cpp" />
-    <ClCompile Include="Object.cpp" />
-    <ClCompile Include="ObjectFactory.cpp" />
-    <ClCompile Include="Palette.cpp" />
-    <ClCompile Include="Pixmap.cpp" />
-    <ClCompile Include="Shadetab.cpp" />
+    <ClCompile Include="BigEndianStreamReader.cpp" />
+    <ClCompile Include="Objects\Actor.cpp" />
+    <ClCompile Include="Objects\ChunkHeader.cpp" />
+    <ClCompile Include="Objects\Material.cpp" />
+    <ClCompile Include="Objects\Model.cpp" />
+    <ClCompile Include="Objects\Palette.cpp" />
+    <ClCompile Include="Objects\Pixmap.cpp" />
+    <ClCompile Include="Objects\Shadetab.cpp" />
+    <ClCompile Include="Serialization\ModelSerializer.cpp" />
+    <ClCompile Include="Serialization\PaletteSerializer.cpp" />
+    <ClCompile Include="Serialization\TextureSerializer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
