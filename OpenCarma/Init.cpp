@@ -2,15 +2,17 @@
 #include <Exception.h>
 #include <glfw/glfw3.h>
 
-
-Init::Init()
+namespace OpenCarma
 {
-    if (GL_TRUE != glfwInit())
-        throw UnknownException("Can't init glfw");
-}
+    Init::Init()
+    {
+        if (GL_TRUE != glfwInit())
+            throw UnknownException("Can't init glfw");
+    }
 
 
-Init::~Init()
-{
-    glfwTerminate();
+    Init::~Init()
+    {
+        glfwTerminate();
+    }
 }

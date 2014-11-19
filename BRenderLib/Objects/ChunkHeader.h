@@ -62,6 +62,7 @@ namespace OpenCarma
             const bool isNULL() const { return (m_size == 0 && m_magic == 0); }
 
         public:
+            // Returns false on eof
             void read(BigEndianStreamReader& reader);
 
         private:
@@ -220,13 +221,16 @@ namespace OpenCarma
         };
 
         //! Material attributes chunk version 1
-/*        class BR_API MaterialAttributesV1Chunk : public ChunkHeader
+        class BR_API MaterialAttributesV1Chunk : public ChunkBase
         {
         public:
-            MaterialAttributesV1Chunk();
-            void ReadFromStream(const ChunkHeader& header, BigEndianStreamReader& stream);
+            static const uint32_t MAGIC = 0x04;
 
         public:
+            MaterialAttributesV1Chunk();
+            void read(BigEndianStreamReader& reader);
+
+        private:
             uint32_t m_color;		            //!< Color, RGBA
             uint32_t m_otherColors[4];	        //!< Other colors [Diffuse/Ambient/Specular/Emmission???]
             uint16_t m_flags;	                //!< Flags
@@ -236,6 +240,55 @@ namespace OpenCarma
             string m_name;                      //!< Null-terminated name
         };
 
+        //! Material attributes chunk version 2
+        class BR_API MaterialAttributesV2Chunk : public ChunkBase
+        {
+        public:
+            static const uint32_t MAGIC = 0x3C;
+
+        public:
+            MaterialAttributesV2Chunk();
+            void read(BigEndianStreamReader& reader);
+
+        private:
+            uint32_t m_color;		            //!< Color, RGBA
+            uint32_t m_otherColors[4];	        //!< Other colors [Diffuse/Ambient/Specular/Emmission???]
+            uint32_t m_flags;	                //!< Flags
+            float m_transform[6];	            //!< Transform matrix // TODO: use matrix type
+            uint32_t m_unk;                     //!< ???
+            uint8_t m_unk2[13];                 //!< ???
+            string m_name;                      //!< Null-terminated name
+        };
+
+        //! Material pixelmap name chunk
+        class BR_API MaterialPixmapNameChunk: public ChunkBase
+        {
+        public:
+            static const uint32_t MAGIC = 0x1C;
+
+        public:
+            MaterialPixmapNameChunk();
+            void read(BigEndianStreamReader& reader);
+
+        private:
+            string m_name;                      //!< Null-terminated name
+        };
+
+        //! Material shadetab name chunk
+        class BR_API MaterialShadetabNameChunk : public ChunkBase
+        {
+        public:
+            static const uint32_t MAGIC = 0x1F;
+
+        public:
+            MaterialShadetabNameChunk();
+            void read(BigEndianStreamReader& reader);
+
+        private:
+            string m_name;                      //!< Null-terminated name
+        };
+            
+        /*
         //! Actor
         class BR_API ActorStartChunk : public ChunkHeader
         {

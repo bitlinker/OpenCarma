@@ -3,15 +3,24 @@
 #include <memory>
 #include <glfw/glfw3.h>
 #include <glm/glm.hpp>
+#include <TextureManager.h>
 
-class Render
+namespace OpenCarma
 {
-public:
-    Render();
-    ~Render();
+    class Render
+    {
+    public:
+        Render();
+        ~Render();
 
-    bool tick(float fTimeDelta);
+        bool tick(float fTimeDelta);
+        void render();
 
-private:
-    std::shared_ptr<GLFWwindow> m_window;
-};
+        // TODO: replace
+        TextureManager& getTextureManager();
+
+    private:
+        std::shared_ptr<GLFWwindow> m_window;
+        TextureManager m_texManager;
+    };
+}

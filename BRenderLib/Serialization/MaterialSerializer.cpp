@@ -1,6 +1,6 @@
 #include <cassert>
 #include <sstream>
-#include <Serialization/PaletteSerializer.h>
+#include <Serialization/MaterialSerializer.h>
 #include <BigEndianStreamReader.h>
 #include <Exception.h>
 
@@ -8,12 +8,12 @@ namespace OpenCarma
 {
     namespace BRender
     {
-        PalettePtr PaletteSerializer::DeserializePalette(std::istream& stream)
+        void MaterialSerializer::DeserializeMaterial(std::istream& stream, std::vector<MaterialPtr>& materials)
         {
             if (!stream)
                 throw IOException("Stream is not opened");
 
-            PalettePtr pal(new Palette());
+            MaterialPtr curMat;
 
             BigEndianStreamReader reader(stream);
 
@@ -29,17 +29,31 @@ namespace OpenCarma
                 {
                     fileHeader.read(reader);
                 }
-                else if (header.getMagic() == TextureHeadChunk::MAGIC)
+                else if (header.getMagic() == MaterialAttributesV1Chunk::MAGIC)
                 {
-                    pal->m_header.read(reader);
+                    curMat = MaterialPtr(new Material());
+                    assert(curMat.get());
+                    curMat->m_header.read(reader);
                 }
-                else if (header.getMagic() == TextureDataChunk::MAGIC)
+                else if (header.getMagic() == MaterialAttributesV2Chunk::MAGIC)
                 {
-                    pal->m_data.read(reader);
+                    // TODO
+                    throw "Unimplemented";
+                }
+                else if (header.getMagic() == MaterialPixmapNameChunk::MAGIC)
+                {
+                    curMat->m_pixelmap.read(reader);
+                }
+                else if (header.getMagic() == MaterialShadetabNameChunk::MAGIC)
+                {
+                    curMat->m_shadetab.read(reader);
                 }
                 else if (header.isNULL())
                 {
-                    continue;
+                    if (!curMat.get() || !curMat->isValid())
+                        throw SerializationException("Material object is incorrect");
+                    materials.push_back(curMat);
+                    curMat.reset();
                 }
                 else
                 {
@@ -53,17 +67,12 @@ namespace OpenCarma
                 {
                     std::stringstream ss;
                     ss << "Incorrect chunk size red: required: " << header.getSize() << " current " << redSize;
-                    throw SerializationException(ss.str());
+                    //throw SerializationException(ss.str()); TODO: warning?
                 }
             }
-
-            if (!pal->isValid())
-                throw SerializationException("Palette object is incorrect");
-
-            return pal;
         }
 
-        void PaletteSerializer::SerializePalette(const PalettePtr& pal, std::ostream& stream)
+        void MaterialSerializer::SerializeMaterial(const MaterialPtr& pal, std::ostream& stream)
         {
             assert(pal);
 

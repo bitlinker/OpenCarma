@@ -54,6 +54,10 @@
     <ClInclude Include="Serialization\ModelSerializer.h">
       <Filter>Src\Serialization</Filter>
     </ClInclude>
+    <ClInclude Include="EndianConverter.h" />
+    <ClInclude Include="Serialization\MaterialSerializer.h">
+      <Filter>Src\Serialization</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BigEndianStreamReader.cpp">
@@ -87,6 +91,10 @@
       <Filter>Src\Serialization</Filter>
     </ClCompile>
     <ClCompile Include="Serialization\ModelSerializer.cpp">
+      <Filter>Src\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="EndianConverter.cpp" />
+    <ClCompile Include="Serialization\MaterialSerializer.cpp">
       <Filter>Src\Serialization</Filter>
     </ClCompile>
   </ItemGroup>

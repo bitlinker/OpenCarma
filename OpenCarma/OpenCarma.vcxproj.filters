@@ -27,6 +27,12 @@
     <ClCompile Include="..\Common\TextDecoder.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Exception.h">
@@ -43,6 +49,12 @@
     </ClInclude>
     <ClInclude Include="..\Common\TextDecoder.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Src</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

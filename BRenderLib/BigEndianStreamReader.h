@@ -7,6 +7,7 @@ namespace OpenCarma
     namespace BRender
     {
         // BRender chunk stream reader
+        // throws istream::failure
         class BR_API BigEndianStreamReader
         {
         public:
@@ -25,7 +26,7 @@ namespace OpenCarma
             void write(uint8_t* buf, size_t size);
             uint32_t tell();
             bool isEOF();
-
+            
             uint32_t readUInt32();
             uint16_t readUInt16();
             uint8_t readUInt8();

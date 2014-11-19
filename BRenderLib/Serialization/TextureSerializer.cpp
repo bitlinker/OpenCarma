@@ -19,11 +19,9 @@ namespace OpenCarma
 
             FileHeaderChunk fileHeader;
             ChunkHeader header;
-            while (true)
+            while (!reader.isEOF())
             {
-                header.read(reader);
-                if (reader.isEOF())
-                    break;
+                header.read(reader);                
 
                 uint32_t lastOffset = reader.tell();
 

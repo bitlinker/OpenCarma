@@ -78,6 +78,7 @@
   <ItemGroup>
     <ClInclude Include="BigEndianStreamReader.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="EndianConverter.h" />
     <ClInclude Include="Exception.h" />
     <ClInclude Include="Objects\Actor.h" />
     <ClInclude Include="Objects\ChunkHeader.h" />
@@ -86,12 +87,14 @@
     <ClInclude Include="Objects\Palette.h" />
     <ClInclude Include="Objects\Pixmap.h" />
     <ClInclude Include="Objects\Shadetab.h" />
+    <ClInclude Include="Serialization\MaterialSerializer.h" />
     <ClInclude Include="Serialization\ModelSerializer.h" />
     <ClInclude Include="Serialization\PaletteSerializer.h" />
     <ClInclude Include="Serialization\TextureSerializer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BigEndianStreamReader.cpp" />
+    <ClCompile Include="EndianConverter.cpp" />
     <ClCompile Include="Objects\Actor.cpp" />
     <ClCompile Include="Objects\ChunkHeader.cpp" />
     <ClCompile Include="Objects\Material.cpp" />
@@ -99,6 +102,7 @@
     <ClCompile Include="Objects\Palette.cpp" />
     <ClCompile Include="Objects\Pixmap.cpp" />
     <ClCompile Include="Objects\Shadetab.cpp" />
+    <ClCompile Include="Serialization\MaterialSerializer.cpp" />
     <ClCompile Include="Serialization\ModelSerializer.cpp" />
     <ClCompile Include="Serialization\PaletteSerializer.cpp" />
     <ClCompile Include="Serialization\TextureSerializer.cpp" />

@@ -51,11 +51,16 @@ return 0;
 }*/
 
 #include <Serialization/ModelSerializer.h>
+#include <Serialization/TextureSerializer.h>
+#include <Serialization/PaletteSerializer.h>
+#include <Serialization/MaterialSerializer.h>
 #include <fstream>
 
 int main(int argc, char **argv)
 {
+    using namespace OpenCarma;
     using namespace OpenCarma::BRender;
+
     try
     {
         std::cout << "Initializing Carma" << std::endl;
@@ -67,6 +72,19 @@ int main(int argc, char **argv)
         std::vector<ModelPtr> models;
         std::ifstream strm_model("e:\\Games\\Carma\\DATA\\MODELS\\EAGBLAK.DAT", std::ifstream::binary);
         ModelSerializer::DeserializeModels(strm_model, models);
+
+        std::ifstream strm_palette("e:\\Games\\Carma\\DATA\\REG\\PALETTES\\DRRENDER.PAL", std::ifstream::binary);
+        PalettePtr palette = PaletteSerializer::DeserializePalette(strm_palette);
+    
+        std::vector<PixmapPtr> pixelmaps;
+        std::ifstream strm_pixmaps("e:\\Games\\Carma\\DATA\\PIXELMAP\\EAGREDL8.PIX", std::ifstream::binary);
+        TextureSerializer::DeserializePixelmap(strm_pixmaps, pixelmaps);
+
+        std::vector<MaterialPtr> materials;
+        std::ifstream strm_material("e:\\Games\\Carma\\DATA\\MATERIAL\\AGENTO.MAT", std::ifstream::binary);
+        MaterialSerializer::DeserializeMaterial(strm_material, materials);
+
+        render.getTextureManager().load(pixelmaps, palette);
 
         while (render.tick(0.F))
         {

@@ -1,4 +1,5 @@
 #include <BigEndianStreamReader.h>
+#include <EndianConverter.h>
 #include <Exception.h>
 
 
@@ -9,6 +10,9 @@ namespace OpenCarma
         BigEndianStreamReader::BigEndianStreamReader(std::istream& stream)
             : m_stream(stream)
         {
+            // TODO: endian detection
+            //bool archBigEndian = EndianConverter::IsArchBigEndian();
+            m_stream.exceptions(std::istream::failbit | std::istream::badbit);
         }
 
         BigEndianStreamReader::~BigEndianStreamReader()
@@ -29,7 +33,7 @@ namespace OpenCarma
                 return std::ios_base::end;
                 break;
             default:
-                throw IOException("Unknown seek origin");
+                throw std::istream::failure("Unknown seek origin");
             }
         }
 
@@ -50,6 +54,7 @@ namespace OpenCarma
 
         bool BigEndianStreamReader::isEOF()
         {
+            m_stream.peek();
             return m_stream.eof();
         }
 
@@ -61,26 +66,21 @@ namespace OpenCarma
         uint32_t BigEndianStreamReader::readUInt32()
         {
             uint32_t origVal;
-            m_stream.read(reinterpret_cast<char*>(&origVal), sizeof(origVal));
-
-            // TODO: separate endian correction
-            return static_cast<uint32_t>(_byteswap_ulong(origVal));
+            m_stream.read(reinterpret_cast<char*>(&origVal), sizeof(origVal));            
+            return EndianConverter::ByteSwapUInt32(origVal); // TODO: if needed
         }
 
         uint16_t BigEndianStreamReader::readUInt16()
         {
             uint16_t origVal;
             m_stream.read(reinterpret_cast<char*>(&origVal), sizeof(origVal));
-
-            // TODO: separate endian correction
-            return static_cast<uint16_t>(_byteswap_ushort(origVal));
+            return EndianConverter::ByteSwapUInt16(origVal);
         }
 
         uint8_t BigEndianStreamReader::readUInt8()
         {
             uint8_t value;
             m_stream.read(reinterpret_cast<char*>(&value), sizeof(value));
-
             return value;
         }
 
@@ -88,9 +88,7 @@ namespace OpenCarma
         {
             uint32_t origVal;
             m_stream.read(reinterpret_cast<char*>(&origVal), sizeof(origVal));
-            origVal = _byteswap_ulong(origVal);
-
-            // TODO: separate endian correction
+            origVal = EndianConverter::ByteSwapUInt32(origVal);
             return *reinterpret_cast<float*>(&origVal);
         }
 

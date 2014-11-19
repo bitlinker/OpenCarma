@@ -1,14 +1,20 @@
-#include "Material.h"
+#include <Objects/Material.h>
 
 namespace OpenCarma
 {
 	namespace BRender
 	{
-		/*Material::Material()
+		Material::Material()
             : m_header()
-            , m_pixelmapName()
-            , m_shadetabName()
+            , m_pixelmap()
+            , m_shadetab()
 		{
-		}	*/
+		}
+
+        bool Material::isValid() const
+        {
+            // TODO: implement
+            return true;
+        }
 	}
 }

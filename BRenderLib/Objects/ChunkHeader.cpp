@@ -15,8 +15,10 @@ namespace OpenCarma
 
         void ChunkHeader::read(BigEndianStreamReader& reader)
         {
-            m_magic = reader.readUInt32();
-            m_size = reader.readUInt32();
+            if (!reader.isEOF())
+                m_magic = reader.readUInt32();
+            if (!reader.isEOF())
+                m_size = reader.readUInt32();
             // TODO: type the chunk magic, size & offset here...
         }
 
@@ -174,37 +176,73 @@ namespace OpenCarma
             }
         }
 
-        
+        MaterialAttributesV1Chunk::MaterialAttributesV1Chunk()
+            : m_color(0)
+            , m_otherColors()
+            , m_flags(0)
+            , m_transform()
+            , m_simpleMatPixelIndex(0)
+            , m_simpleMatGradientCount(0)
+            , m_name()
+        {
+        }
 
+        void MaterialAttributesV1Chunk::read(BigEndianStreamReader& reader)
+        {
+            m_color = reader.readUInt32();
+            for (int i = 0; i < 4; ++i)
+                m_otherColors[i] = reader.readUInt32();
+            m_flags = reader.readUInt16();
+            for (int i = 0; i < 6; ++i)
+                m_transform[i] = reader.readFloat();
+            m_simpleMatPixelIndex = reader.readUInt8();
+            m_simpleMatGradientCount = reader.readUInt8();
+            m_name = reader.readString();
+        }
 
+        MaterialAttributesV2Chunk::MaterialAttributesV2Chunk()
+            : m_color(0)
+            , m_otherColors()
+            , m_flags(0)
+            , m_transform() // TODO
+            , m_unk(0)
+            , m_unk2()
+            , m_name()
+        {
+        }
 
+        void MaterialAttributesV2Chunk::read(BigEndianStreamReader& reader)
+        {
+            m_color = reader.readUInt32();
+            for (int i = 0; i < 4; ++i)
+                m_otherColors[i] = reader.readUInt32();
+            m_flags = reader.readUInt32();
+            for (int i = 0; i < 6; ++i)
+                m_transform[i] = reader.readFloat();
+            m_unk = reader.readUInt32();
+            reader.read(m_unk2, 13);
+            m_name = reader.readString();
+        }
 
-        //    MaterialAttributesV1Chunk::MaterialAttributesV1Chunk()
-        //        : m_color(0)
-        //        , m_otherColors()
-        //        , m_flags(0)
-        //        , m_transform()
-        //        , m_simpleMatPixelIndex(0)
-        //        , m_simpleMatGradientCount(0)
-        //        , m_name()
-        //    {
-        //    }
+        MaterialPixmapNameChunk::MaterialPixmapNameChunk()
+            : m_name()
+        {
+        }
 
-        //    void MaterialAttributesV1Chunk::ReadFromStream(const ChunkHeader& header, BigEndianStreamReader& stream)
-        //    {
-        //        setMagic(header.getMagic());
-        //        setSize(header.getSize());
+        void MaterialPixmapNameChunk::read(BigEndianStreamReader& reader)
+        {
+            m_name = reader.readString();
+        }
 
-        //        m_color = stream.readUInt32();
-        //        for (int i = 0; i < 4; ++i)
-        //            m_otherColors[i] = stream.readUInt32();
-        //        m_flags = stream.readUInt16();
-        //        for (int i = 0; i < 6; ++i)
-        //            m_transform[i] = stream.readFloat();
-        //        m_simpleMatPixelIndex = stream.readUInt8();
-        //        m_simpleMatGradientCount = stream.readUInt8();
-        //        m_name = stream.readString();
-        //    }
+        MaterialShadetabNameChunk::MaterialShadetabNameChunk()
+            : m_name()
+        {
+        }
+
+        void MaterialShadetabNameChunk::read(BigEndianStreamReader& reader)
+        {
+            m_name = reader.readString();
+        }
 
         //    ActorStartChunk::ActorStartChunk()
         //        : m_flags(0)

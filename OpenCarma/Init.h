@@ -1,10 +1,13 @@
 #pragma once
-class Init
+
+namespace OpenCarma
 {
-public:
-    Init();
-    ~Init();
-private:
+    class Init
+    {
+    public:
+        Init();
+        ~Init();
+    private:
 
-};
-
+    };
+}
