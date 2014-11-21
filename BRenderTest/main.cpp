@@ -89,14 +89,11 @@ int main()
         WritePixmap2Tga("d:/test.tga", pixelMaps[1], pal);*/
 
         /*FileStream strm_mat("e:/Games/Carma/DATA/MATERIAL/MERC8.MAT");
-        auto mat = TextureSerializer::DeserializeMaterial(strm_mat);
+        auto mat = TextureSerializer::DeserializeMaterial(strm_mat);*/
 
-        FileStream strm_act("e:/Games/Carma/DATA/ACTORS/CITYB3.ACT");
-        auto act = TextureSerializer::DeserializeActor(strm_act);*/
-
-        std::vector<ModelPtr> models;
+        /*std::vector<ModelPtr> models;
         std::ifstream strm_model("e:\\Games\\Carma\\DATA\\MODELS\\EAGBLAK.DAT", std::ifstream::binary);
-        ModelSerializer::DeserializeModels(strm_model, models);        
+        ModelSerializer::DeserializeModels(strm_model, models);        */
     }
     catch (const SerializationException se)
     {

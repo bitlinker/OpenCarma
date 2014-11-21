@@ -20,6 +20,7 @@ namespace OpenCarma
             if (!reader.isEOF())
                 m_size = reader.readUInt32();
             // TODO: type the chunk magic, size & offset here...
+            //printf("Magic: %x(%d), len: %d at: %d\n", m_magic, m_magic, m_size, reader.tell());
         }
 
 
@@ -244,85 +245,90 @@ namespace OpenCarma
             m_name = reader.readString();
         }
 
-        //    ActorStartChunk::ActorStartChunk()
-        //        : m_flags(0)
-        //        , m_name()
-        //    {
-        //    }
+        ActorNameChunk::ActorNameChunk()
+            : m_flags(0)
+            , m_name()
+        {
+        }
+        
+        void ActorNameChunk::read(BigEndianStreamReader& reader)
+        {
+            m_flags = reader.readUInt16();
+            m_name = reader.readString();
+        }
 
-        //    void ActorStartChunk::ReadFromStream(const ChunkHeader& header, BigEndianStreamReader& stream)
-        //    {
-        //        setMagic(header.getMagic());
-        //        setSize(header.getSize());
+        ActorMatrixChunk::ActorMatrixChunk()
+            : m_matrix() // TODO
+        {
+            m_matrix[15] = 1.F;
+        }
 
-        //        m_flags = stream.readUInt16();
-        //        m_name = stream.readString();
-        //    }
+        void ActorMatrixChunk::read(BigEndianStreamReader& reader)
+        {
+            for (int i = 0; i < 12; ++i)
+                m_matrix[i] = reader.readFloat();
+            // TODO
+            m_matrix[15] = 1.F;
+        }
 
-        //    TransformMatrixChunk::TransformMatrixChunk()
-        //        : m_matrix()
-        //    {
-        //        m_matrix[15] = 1.F;
-        //    }
+        ActorPushChunk::ActorPushChunk()
+        {
+        }
 
-        //    void TransformMatrixChunk::ReadFromStream(const ChunkHeader& header, BigEndianStreamReader& stream)
-        //    {
-        //        setMagic(header.getMagic());
-        //        setSize(header.getSize());
+        void ActorPushChunk::read(BigEndianStreamReader& reader)
+        {
+        }
+        
+        ActorPopChunk::ActorPopChunk()
+        {
+        }
 
-        //        for (int i = 0; i < 12; ++i)
-        //            m_matrix[i] = stream.readFloat();
-        //        // TODO
-        //        m_matrix[15] = 1.F;
-        //    }
-        //    
-        //    HierarchyBeginChunk::HierarchyBeginChunk()
-        //    {
-        //    }
+        void ActorPopChunk::read(BigEndianStreamReader& reader)
+        {
+        }
+     
+        
+        ActorModelChunk::ActorModelChunk()
+            : m_name()
+        {
+        }
 
-        //    void HierarchyBeginChunk::ReadFromStream(const ChunkHeader& header, BigEndianStreamReader& stream)
-        //    {
-        //        setMagic(header.getMagic());
-        //        setSize(header.getSize());
-        //    }
+        void ActorModelChunk::read(BigEndianStreamReader& reader)
+        {
+            m_name = reader.readString();
+        }
 
-        //    HierarchyEndChunk::HierarchyEndChunk()
-        //    {
-        //    }
+        ActorEmptyChunk::ActorEmptyChunk()
+        {
+        }
 
-        //    void HierarchyEndChunk::ReadFromStream(const ChunkHeader& header, BigEndianStreamReader& stream)
-        //    {
-        //        setMagic(header.getMagic());
-        //        setSize(header.getSize());
-        //    }
+        void ActorEmptyChunk::read(BigEndianStreamReader& reader)
+        {
+        }
+                        
+        ActorMaterialChunk::ActorMaterialChunk()
+            : m_name()
+        {
+        }
 
-        //    BBoxChunk::BBoxChunk()
-        //    {
-        //        // TODO: zero
-        //    }
+        void ActorMaterialChunk::read(BigEndianStreamReader& reader)
+        {
+            m_name = reader.readString();
+        }
+        
+        ActorBBoxChunk::ActorBBoxChunk()
+            : m_pos()
+            , m_size()
+        {
+            // TODO
+        }
 
-        //    void BBoxChunk::ReadFromStream(const ChunkHeader& header, BigEndianStreamReader& stream)
-        //    {
-        //        setMagic(header.getMagic());
-        //        setSize(header.getSize());
-
-        //        for (uint32_t i = 0; i < 3; ++i)
-        //            m_pos[i] = stream.readFloat();
-        //        for (uint32_t i = 0; i < 3; ++i)
-        //            m_size[i] = stream.readFloat();
-        //    }
-        //    
-        //    MaterialNamesChunk::MaterialNamesChunk()
-        //        : m_name()
-        //    {
-        //    }
-
-        //    void MaterialNamesChunk::ReadFromStream(const ChunkHeader& header, BigEndianStreamReader& stream)
-        //    {
-        //        setMagic(header.getMagic());
-        //        setSize(header.getSize());
-
-        //        m_name = stream.readString();
-        //    }
+        void ActorBBoxChunk::read(BigEndianStreamReader& reader)
+        {
+            for (uint32_t i = 0; i < 3; ++i)
+                m_pos[i] = reader.readFloat();
+            for (uint32_t i = 0; i < 3; ++i)
+                m_size[i] = reader.readFloat();
+        }
     }
 }

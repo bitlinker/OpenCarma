@@ -288,63 +288,102 @@ namespace OpenCarma
             string m_name;                      //!< Null-terminated name
         };
             
-        /*
+        
         //! Actor
-        class BR_API ActorStartChunk : public ChunkHeader
+        class BR_API ActorNameChunk : public ChunkBase
         {
         public:
-            ActorStartChunk();
-            void ReadFromStream(const ChunkHeader& header, BigEndianStreamReader& stream);
+            static const uint32_t MAGIC = 0x23;
+
+        public:
+            ActorNameChunk();
+            void read(BigEndianStreamReader& reader);
 
         public:
             uint16_t m_flags;	                //!< Flags            
             string m_name;                      //!< Null-terminated name
         };
-
-        class BR_API TransformMatrixChunk : public ChunkHeader
+        
+        class BR_API ActorMatrixChunk : public ChunkHeader
         {
         public:
-            TransformMatrixChunk();
-            void ReadFromStream(const ChunkHeader& header, BigEndianStreamReader& stream);
+            static const uint32_t MAGIC = 0x2B;
+
+        public:
+            ActorMatrixChunk();
+            void read(BigEndianStreamReader& reader);
 
         public:
             float m_matrix[16];	                //!< Transform matrix
         };
 
-        class BR_API HierarchyBeginChunk : public ChunkHeader
+        class BR_API ActorPushChunk : public ChunkHeader
         {
         public:
-            HierarchyBeginChunk();
-            void ReadFromStream(const ChunkHeader& header, BigEndianStreamReader& stream);
+            static const uint32_t MAGIC = 0x29;
+
+        public:
+            ActorPushChunk();
+            void read(BigEndianStreamReader& reader);        
         };
 
-        class BR_API HierarchyEndChunk : public ChunkHeader
+        class BR_API ActorPopChunk : public ChunkHeader
         {
         public:
-            HierarchyEndChunk();
-            void ReadFromStream(const ChunkHeader& header, BigEndianStreamReader& stream);
+            static const uint32_t MAGIC = 0x2A;
+
+        public:
+            ActorPopChunk();
+            void read(BigEndianStreamReader& reader);
+        };     
+
+        class BR_API ActorModelChunk : public ChunkHeader
+        {
+        public:
+            static const uint32_t MAGIC = 0x24;
+
+        public:
+            ActorModelChunk();
+            void read(BigEndianStreamReader& reader);
+        private:
+            string m_name;
         };
 
-        class BR_API BBoxChunk : public ChunkHeader
+        class BR_API ActorEmptyChunk : public ChunkHeader
         {
         public:
-            BBoxChunk();
-            void ReadFromStream(const ChunkHeader& header, BigEndianStreamReader& stream);
+            static const uint32_t MAGIC = 0x25;
+
+        public:
+            ActorEmptyChunk();
+            void read(BigEndianStreamReader& reader);
+        };
+
+        class BR_API ActorMaterialChunk : public ChunkHeader
+        {
+        public:
+            static const uint32_t MAGIC = 0x26;
+
+        public:
+            ActorMaterialChunk();
+            void read(BigEndianStreamReader& reader);
+        private:
+            string m_name;
+        };
+
+        class BR_API ActorBBoxChunk : public ChunkHeader
+        {
+        public:
+            static const uint32_t MAGIC = 0x32;
+
+        public:
+            ActorBBoxChunk();
+            void read(BigEndianStreamReader& reader);
 
         private:
             float m_pos[3];
             float m_size[3];
         };
-
-        class BR_API MaterialNamesChunk : public ChunkHeader
-        {
-        public:
-            MaterialNamesChunk();
-            void ReadFromStream(const ChunkHeader& header, BigEndianStreamReader& stream);
-
-        private:
-            string m_name;
-        };*/
     }
 }
 

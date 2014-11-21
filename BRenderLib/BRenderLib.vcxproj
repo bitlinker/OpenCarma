@@ -87,6 +87,7 @@
     <ClInclude Include="Objects\Palette.h" />
     <ClInclude Include="Objects\Pixmap.h" />
     <ClInclude Include="Objects\Shadetab.h" />
+    <ClInclude Include="Serialization\ActorSerializer.h" />
     <ClInclude Include="Serialization\MaterialSerializer.h" />
     <ClInclude Include="Serialization\ModelSerializer.h" />
     <ClInclude Include="Serialization\PaletteSerializer.h" />
@@ -102,6 +103,7 @@
     <ClCompile Include="Objects\Palette.cpp" />
     <ClCompile Include="Objects\Pixmap.cpp" />
     <ClCompile Include="Objects\Shadetab.cpp" />
+    <ClCompile Include="Serialization\ActorSerializer.cpp" />
     <ClCompile Include="Serialization\MaterialSerializer.cpp" />
     <ClCompile Include="Serialization\ModelSerializer.cpp" />
     <ClCompile Include="Serialization\PaletteSerializer.cpp" />

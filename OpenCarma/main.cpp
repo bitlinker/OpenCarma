@@ -54,6 +54,8 @@ return 0;
 #include <Serialization/TextureSerializer.h>
 #include <Serialization/PaletteSerializer.h>
 #include <Serialization/MaterialSerializer.h>
+#include <Serialization/ActorSerializer.h>
+#include <Exception.h>
 #include <fstream>
 
 int main(int argc, char **argv)
@@ -83,6 +85,10 @@ int main(int argc, char **argv)
         std::vector<MaterialPtr> materials;
         std::ifstream strm_material("e:\\Games\\Carma\\DATA\\MATERIAL\\AGENTO.MAT", std::ifstream::binary);
         MaterialSerializer::DeserializeMaterial(strm_material, materials);
+        
+        std::vector<ActorPtr> actors;
+        std::ifstream strm_act("e:/Games/Carma/DATA/ACTORS/BUSTER.ACT", std::ifstream::binary);
+        ActorSerializer::DeserializeActor(strm_act, actors);
 
         render.getTextureManager().load(pixelmaps, palette);
 
@@ -97,5 +103,10 @@ int main(int argc, char **argv)
     {
         std::cout << "Exception occurred: " << e.what() << std::endl;
         return -1;
-    }    
+    }
+    catch (const std::runtime_error& e)
+    {
+        std::cout << "Exception occurred: " << e.what() << std::endl;
+        return -1;
+    }
 }
