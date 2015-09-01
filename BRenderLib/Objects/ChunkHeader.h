@@ -10,6 +10,7 @@ namespace OpenCarma
     namespace BRender
     {
         //! Chunk magics:
+        // TODO: common list
         /*const uint32_t CHUNK_NULL = 0x0;
         const uint32_t CHUNK_HEADER = 0x12;
         const uint32_t CHUNK_TEXTURE_HEAD = 0x3;
@@ -99,22 +100,17 @@ namespace OpenCarma
             static const uint32_t MAGIC = 0x3;
 
         public:
-            static const uint8_t TYPE_PALETTE = 0x7;
-            static const uint8_t TYPE_PIXELMAP = 0x3;
-
-        public:
             TextureHeadChunk();
             void read(BigEndianStreamReader& reader);
 
-        //private:
         public:
-            uint8_t m_type;		    //!< 3 for pixel maps and shade tabs; 7 for palettes
-            uint16_t m_width1;	    //!< Width for textures; number of components for palettes
-            uint16_t m_width2;	    //!< Width for textures; 1 for palettes
-            uint16_t m_height;	    //!< Height for textures; number of colors for palettes
-            uint16_t m_u1;
-            uint16_t m_u2;
-            string m_name;          //!< Null-terminated name
+            uint8_t m_pixelFormat;      //!< Pixel format
+            uint16_t m_stride;	        //!< Stride
+            uint16_t m_width;	        //!< Width
+            uint16_t m_height;	        //!< Height
+            uint16_t m_offsetX;         //!< oX
+            uint16_t m_offsetY;         //!< oY
+            string m_name;              //!< Null-terminated name
         };
 
         //! Texture data
@@ -129,8 +125,8 @@ namespace OpenCarma
             void read(BigEndianStreamReader& reader);
 
         public:
-            uint32_t m_numData;
-            uint32_t m_sizeData;
+            uint32_t m_numPixels;
+            uint32_t m_BPP;
             std::vector<uint8_t> m_data;
         };
 
@@ -160,7 +156,7 @@ namespace OpenCarma
 
             void read(BigEndianStreamReader& reader);
 
-        private:            
+        public:
             std::vector<Vertex3f> m_vertices;
         };
 
@@ -174,7 +170,7 @@ namespace OpenCarma
 
             void read(BigEndianStreamReader& reader);
 
-        private:
+        public:
             std::vector<Vertex2f> m_uv;
         };
 
@@ -188,7 +184,7 @@ namespace OpenCarma
 
             void read(BigEndianStreamReader& reader);
 
-        private:
+        public:
             std::vector<Face> m_faces;
         };
 
@@ -202,8 +198,8 @@ namespace OpenCarma
 
             void read(BigEndianStreamReader& reader);
 
-        private:
-            std::vector<std::string> m_materials;
+        public:
+            std::vector<string> m_materials;
         };
 
         class BR_API ModelFaceMaterialsChunk : public ChunkBase
@@ -216,7 +212,7 @@ namespace OpenCarma
 
             void read(BigEndianStreamReader& reader);
 
-        private:
+        public:
             std::vector<uint16_t> m_faceMats; // 1-based
         };
 
@@ -226,17 +222,19 @@ namespace OpenCarma
         public:
             static const uint32_t MAGIC = 0x04;
 
+            // Flags: always_visible, two_sided, light, smooth, perspective
+
         public:
             MaterialAttributesV1Chunk();
             void read(BigEndianStreamReader& reader);
 
-        private:
+        public:
             uint32_t m_color;		            //!< Color, RGBA
-            uint32_t m_otherColors[4];	        //!< Other colors [Diffuse/Ambient/Specular/Emmission???]
+            uint32_t m_otherColors[4];	        //!< Other colors [Diffuse/Ambient/Specular/power???]
             uint16_t m_flags;	                //!< Flags
             float m_transform[6];	            //!< Transform matrix // TODO: use matrix type
-            uint8_t m_simpleMatPixelIndex;      //!< ???
-            uint8_t m_simpleMatGradientCount;   //!< ???
+            uint8_t m_indexBase;                //!< ???
+            uint8_t m_indexRange;               //!< ???
             string m_name;                      //!< Null-terminated name
         };
 
@@ -250,7 +248,7 @@ namespace OpenCarma
             MaterialAttributesV2Chunk();
             void read(BigEndianStreamReader& reader);
 
-        private:
+        public:
             uint32_t m_color;		            //!< Color, RGBA
             uint32_t m_otherColors[4];	        //!< Other colors [Diffuse/Ambient/Specular/Emmission???]
             uint32_t m_flags;	                //!< Flags
@@ -270,7 +268,7 @@ namespace OpenCarma
             MaterialPixmapNameChunk();
             void read(BigEndianStreamReader& reader);
 
-        private:
+        public:
             string m_name;                      //!< Null-terminated name
         };
 
@@ -284,7 +282,7 @@ namespace OpenCarma
             MaterialShadetabNameChunk();
             void read(BigEndianStreamReader& reader);
 
-        private:
+        public:
             string m_name;                      //!< Null-terminated name
         };
             
@@ -345,7 +343,7 @@ namespace OpenCarma
         public:
             ActorModelChunk();
             void read(BigEndianStreamReader& reader);
-        private:
+        public:
             string m_name;
         };
 
@@ -367,7 +365,7 @@ namespace OpenCarma
         public:
             ActorMaterialChunk();
             void read(BigEndianStreamReader& reader);
-        private:
+        public:
             string m_name;
         };
 
@@ -380,7 +378,7 @@ namespace OpenCarma
             ActorBBoxChunk();
             void read(BigEndianStreamReader& reader);
 
-        private:
+        public:
             float m_pos[3];
             float m_size[3];
         };

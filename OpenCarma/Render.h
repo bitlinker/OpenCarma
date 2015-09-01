@@ -1,9 +1,12 @@
 #pragma once
 
 #include <memory>
-#include <glfw/glfw3.h>
-#include <glm/glm.hpp>
+#include <RenderCommon.h>
 #include <TextureManager.h>
+#include <RenderNode.h>
+#include <Camera.h>
+#include <Shader.h>
+#include <ShaderProgram.h>
 
 namespace OpenCarma
 {
@@ -16,11 +19,27 @@ namespace OpenCarma
         bool tick(float fTimeDelta);
         void render();
 
+        void setRootNode(RenderNodePtr& node);
+        RenderNodePtr getRootNode() const;
+
+		void setCamera(const CameraPtr& camera) { m_camera = camera; }
+		CameraPtr getCamera() const { return m_camera; }
+
         // TODO: replace
         TextureManager& getTextureManager();
+
+	private:
+		void updateCameraUniforms();
 
     private:
         std::shared_ptr<GLFWwindow> m_window;
         TextureManager m_texManager;
+		RenderNodePtr m_rootNode;
+		CameraPtr m_camera;
+
+
+		// TODO: custom for every mesh
+		ShaderProgramPtr m_shader;
+		uint32_t m_uMVP;
     };
 }

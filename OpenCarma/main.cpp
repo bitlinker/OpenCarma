@@ -1,7 +1,11 @@
 #include <iostream>
 #include <Render.h>
+#include <Scene.h>
+#include <StaticModel.h>
 #include <Init.h>
 #include <Exception.h>
+#include <AxisDrawable.h>
+#include <FreeFlyCameraController.h>
 
 
 //
@@ -52,7 +56,6 @@ return 0;
 
 #include <Serialization/ModelSerializer.h>
 #include <Serialization/TextureSerializer.h>
-#include <Serialization/PaletteSerializer.h>
 #include <Serialization/MaterialSerializer.h>
 #include <Serialization/ActorSerializer.h>
 #include <Exception.h>
@@ -61,49 +64,86 @@ return 0;
 int main(int argc, char **argv)
 {
     using namespace OpenCarma;
-    using namespace OpenCarma::BRender;
+    using namespace OpenCarma::BRender;    
 
     try
     {
         std::cout << "Initializing Carma" << std::endl;
 
+		// TODO: parse arguments properly
+		std::string carmaPath;
+		if (argc > 1)
+		{
+			carmaPath = argv[1];
+		}
+		
         Init init;
         Render render;
 
         // TODO Load mdl
         std::vector<ModelPtr> models;
-        std::ifstream strm_model("e:\\Games\\Carma\\DATA\\MODELS\\EAGBLAK.DAT", std::ifstream::binary);
+        std::ifstream strm_model(carmaPath + "/DATA/MODELS/EAGBLAK.DAT", std::ifstream::binary);
         ModelSerializer::DeserializeModels(strm_model, models);
 
-        std::ifstream strm_palette("e:\\Games\\Carma\\DATA\\REG\\PALETTES\\DRRENDER.PAL", std::ifstream::binary);
-        PalettePtr palette = PaletteSerializer::DeserializePalette(strm_palette);
+        std::vector<PixmapPtr> palettes;
+        std::ifstream strm_palette(carmaPath + "/DATA/REG/PALETTES/DRRENDER.PAL", std::ifstream::binary);
+        TextureSerializer::DeserializePixelmap(strm_palette, palettes);
+        assert(!palettes.empty());
     
         std::vector<PixmapPtr> pixelmaps;
-        std::ifstream strm_pixmaps("e:\\Games\\Carma\\DATA\\PIXELMAP\\EAGREDL8.PIX", std::ifstream::binary);
+        std::ifstream strm_pixmaps(carmaPath + "/DATA/PIXELMAP/EAGREDL8.PIX", std::ifstream::binary);
         TextureSerializer::DeserializePixelmap(strm_pixmaps, pixelmaps);
 
         std::vector<MaterialPtr> materials;
-        std::ifstream strm_material("e:\\Games\\Carma\\DATA\\MATERIAL\\AGENTO.MAT", std::ifstream::binary);
+        std::ifstream strm_material(carmaPath + "/DATA/MATERIAL/AGENTO.MAT", std::ifstream::binary);
         MaterialSerializer::DeserializeMaterial(strm_material, materials);
         
         std::vector<ActorPtr> actors;
-        std::ifstream strm_act("e:/Games/Carma/DATA/ACTORS/BUSTER.ACT", std::ifstream::binary);
+        std::ifstream strm_act(carmaPath + "/DATA/ACTORS/BUSTER.ACT", std::ifstream::binary);
         ActorSerializer::DeserializeActor(strm_act, actors);
 
-        render.getTextureManager().load(pixelmaps, palette);
+        //ScenePtr scene(std::make_shared<Scene>());
+		RenderNodePtr rootNode = std::make_shared<RenderNode>("root");
+        StaticModelPtr mdl(std::make_shared<StaticModel>());
+        mdl->init(models[0], render); // TODO: constructor; not init
 
-        while (render.tick(0.F))
-        {
-        }
+        rootNode->attachChild(std::dynamic_pointer_cast<RenderNode>(mdl));
+		mdl->setTranslation(glm::translate(5.F, 0.F, 0.F));
 
+		RenderNodePtr axis = std::make_shared<AxisDrawable>();
+		//mdl->setVisible(false);
+		rootNode->attachChild(axis);
+
+        render.setRootNode(rootNode);
+
+
+		CameraPtr camera = std::make_shared<Camera>();
+		// TODO: constructor?
+		camera->setPerspective(55.F, 4.F / 3.F, 1000.F, 0.01F);
+		FreeFlyCameraController controller(camera);
+		render.setCamera(camera);
+        //render.getTextureManager().load(pixelmaps, palettes[0]);
+			
+		double oldTime = glfwGetTime();
+		bool isClosed = false;
+		do
+		{
+			double curTime = glfwGetTime();
+			float delta = static_cast<float>(curTime - oldTime);
+			oldTime = curTime;
+
+			controller.update(delta);
+			isClosed = !render.tick(delta);
+		} while (!isClosed);
+        
         std::cout << "Carma finished" << std::endl;
         return 0;
     }
-    catch (const Exception& e)
+   /* catch (const Exception& e)
     {
         std::cout << "Exception occurred: " << e.what() << std::endl;
         return -1;
-    }
+    }*/
     catch (const std::runtime_error& e)
     {
         std::cout << "Exception occurred: " << e.what() << std::endl;

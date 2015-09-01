@@ -37,41 +37,41 @@ namespace OpenCarma
         }
 
         TextureHeadChunk::TextureHeadChunk()
-            : m_type(0)
-            , m_width1(0)
-            , m_width2(0)
+            : m_pixelFormat(0)
+            , m_stride(0)
+            , m_width(0)
             , m_height(0)
-            , m_u1(0)
-            , m_u2(0)
+            , m_offsetX(0)
+            , m_offsetY(0)
             , m_name()
         {
         }
 
         void TextureHeadChunk::read(BigEndianStreamReader& reader)
         {
-            m_type = reader.readUInt8();
-            m_width1 = reader.readUInt16();
-            m_width2 = reader.readUInt16();
+            m_pixelFormat = reader.readUInt8();
+            m_stride = reader.readUInt16();
+            m_width = reader.readUInt16();
             m_height = reader.readUInt16();
-            m_u1 = reader.readUInt16();
-            m_u2 = reader.readUInt16();
+            m_offsetX = reader.readUInt16();
+            m_offsetY = reader.readUInt16();
             m_name = reader.readString();
         }
 
 
         TextureDataChunk::TextureDataChunk()
-            : m_numData(0)
-            , m_sizeData(0)
+            : m_numPixels(0)
+            , m_BPP(0)
             , m_data()
         {
         }
 
         void TextureDataChunk::read(BigEndianStreamReader& reader)
         {
-            m_numData = reader.readUInt32();
-            m_sizeData = reader.readUInt32();
-            m_data.resize(m_numData * m_sizeData);
-            reader.read(&m_data[0], m_numData * m_sizeData);
+            m_numPixels = reader.readUInt32();
+            m_BPP = reader.readUInt32();
+            m_data.resize(m_BPP * m_numPixels);
+            reader.read(&m_data[0], m_numPixels * m_BPP);
         }
 
         ModelHeadChunk::ModelHeadChunk()
@@ -182,8 +182,8 @@ namespace OpenCarma
             , m_otherColors()
             , m_flags(0)
             , m_transform()
-            , m_simpleMatPixelIndex(0)
-            , m_simpleMatGradientCount(0)
+            , m_indexBase(0)
+            , m_indexRange(0)
             , m_name()
         {
         }
@@ -196,8 +196,8 @@ namespace OpenCarma
             m_flags = reader.readUInt16();
             for (int i = 0; i < 6; ++i)
                 m_transform[i] = reader.readFloat();
-            m_simpleMatPixelIndex = reader.readUInt8();
-            m_simpleMatGradientCount = reader.readUInt8();
+            m_indexBase = reader.readUInt8();
+            m_indexRange = reader.readUInt8();
             m_name = reader.readString();
         }
 

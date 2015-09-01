@@ -1,5 +1,6 @@
 #include <Texture.h>
 #include <cassert>
+#include <Render.h>
 
 namespace OpenCarma
 {
@@ -15,7 +16,9 @@ namespace OpenCarma
         glDeleteTextures(1, &m_tex);
     }
 
-    void Texture::initFromPixelmap(const BRender::PixmapPtr& pixelmap, const BRender::PalettePtr& palette)
+    // TODO: texture loader
+    /*void initFromPixelmap(const BRender::PixmapPtr& pixelmap, const BRender::PixmapPtr& palette);
+    void Texture::initFromPixelmap(const BRender::PixmapPtr& pixelmap, const BRender::PixmapPtr& palette)
     {
         assert(pixelmap);
         assert(palette);
@@ -35,7 +38,8 @@ namespace OpenCarma
 
             for (uint32_t x = 0; x < width; ++x)
             {
-                const uint32_t srcColor = palette->getColor(*src++);
+                const uint8_t index = *src++;                
+                uint32_t srcColor = index > 0 ? palette->getColorARGB(index) | 0xFF : 0x00000000; // TODO: endian change?
                 const uint8_t* srcChannel = reinterpret_cast<const uint8_t*>(&srcColor);
                 uint8_t *dstChannel = reinterpret_cast<uint8_t*>(dst++);
 
@@ -49,7 +53,7 @@ namespace OpenCarma
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pixelmap->getWidth(), pixelmap->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, &rgbPixmap[0]);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    }
+    }*/
 
     void Texture::bind()
     {
@@ -59,5 +63,20 @@ namespace OpenCarma
     void Texture::unbind()
     {
         glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    void Texture::setMinFilter(GLenum filter)
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    }
+
+    void Texture::setMagFilter(GLenum filter)
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    }
+
+    void Texture::setTexData2d()
+    {
+        // TODO
     }
 }

@@ -6,7 +6,7 @@ namespace OpenCarma
 {
 	namespace BRender
 	{
-		class Model
+		class BR_API Model
 		{
             friend class ModelSerializer;
 		public:
@@ -14,6 +14,13 @@ namespace OpenCarma
 			~Model();
 
             bool isValid() const;
+
+            const string& getName() const { return m_header.m_name; }
+            const std::vector<Vertex3f>& getVertices() const { return m_vertices.m_vertices; }
+            const std::vector<Vertex2f>& getUVs() const { return m_uv.m_uv; }
+            const std::vector<Face>& getFaces() const { return m_faces.m_faces; }
+            const std::vector<string>& getMaterials() const { return m_materials.m_materials; }
+            const std::vector<uint16_t>& getFaceMats() const { return m_faceMats.m_faceMats; }
 
         private:
             ModelHeadChunk m_header;

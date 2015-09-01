@@ -1,9 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <cstdio>
+#include <cassert>
 
 #include <Serialization/TextureSerializer.h>
-#include <Serialization/PaletteSerializer.h>
 #include <Serialization/ModelSerializer.h>
 #include <Exception.h>
 
@@ -37,8 +37,11 @@ static bool Write32BitTga(const string& filename, uint32_t width, uint32_t heigh
     return true;
 }
 
-static bool WritePixmap2Tga(const string& filename, const PixmapPtr& pixmap, const PalettePtr& pal)
+static bool WritePixmap2Tga(const string& filename, const PixmapPtr& pixmap, const PixmapPtr& pal)
 {    
+    assert(pixmap->getPixelFormat() == Pixmap::PF_PAL8);
+    assert(pal->getPixelFormat() == Pixmap::PF_XRGB);
+
     uint32_t width = pixmap->getWidth();
     uint32_t height = pixmap->getHeight();
 
@@ -51,7 +54,7 @@ static bool WritePixmap2Tga(const string& filename, const PixmapPtr& pixmap, con
 
         for (uint32_t x = 0; x < width; ++x)
         {
-            const uint32_t srcColor = pal->getColor(*src++);
+            const uint32_t srcColor = pal->getColorARGB(*src++);
             const uint8_t* srcChannel = reinterpret_cast<const uint8_t*>(&srcColor);
             uint8_t *dstChannel = reinterpret_cast<uint8_t*>(dst++);
             

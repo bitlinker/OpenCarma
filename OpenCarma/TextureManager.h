@@ -1,26 +1,31 @@
 #pragma once
 #include <Common.h>
 #include <Texture.h>
-#include <Objects/Pixmap.h>
-#include <Objects/Palette.h>
 #include <map>
+#include <set>
 
 namespace OpenCarma
 {
+    class ITextureLoader
+    {
+    public:
+        virtual TexturePtr load(const std::string& name);
+
+        virtual ~ITextureLoader() {};
+    };
+
     class TextureManager
     {
     public:
         TextureManager();
         ~TextureManager();
 
-        void load(const BRender::PixmapPtr& pixmap, const BRender::PalettePtr& palette);
-        void load(const std::vector<BRender::PixmapPtr>& pixmaps, const BRender::PalettePtr& palette);
-
         TexturePtr getTexture(const string& name);
-        void clear();
 
     private:
-        typedef std::map<string, TexturePtr> TTexturesMap;
+        typedef std::map<string, TextureWeakPtr> TTexturesMap;
         TTexturesMap m_textures;
+
+        std::set<ITextureLoader> m_textureLoaders;
     };
 }
