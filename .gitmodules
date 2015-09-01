@@ -1,0 +1,4 @@
+[submodule "BitlinkerCommons"]
+	path = BitlinkerCommons
+	url = git@github.com:bitlinker/BitlinkerCommons.git
+	branch = master
