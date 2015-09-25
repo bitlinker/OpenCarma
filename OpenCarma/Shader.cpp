@@ -1,5 +1,5 @@
 #include <Shader.h>
-#include <Exception.h>
+#include <Exception/Exception.h>
 
 namespace OpenCarma
 {

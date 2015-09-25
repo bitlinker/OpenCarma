@@ -6,14 +6,6 @@
 
 namespace OpenCarma
 {
-    class ITextureLoader
-    {
-    public:
-        virtual TexturePtr load(const std::string& name);
-
-        virtual ~ITextureLoader() {};
-    };
-
     class TextureManager
     {
     public:
@@ -25,7 +17,5 @@ namespace OpenCarma
     private:
         typedef std::map<string, TextureWeakPtr> TTexturesMap;
         TTexturesMap m_textures;
-
-        std::set<ITextureLoader> m_textureLoaders;
     };
 }

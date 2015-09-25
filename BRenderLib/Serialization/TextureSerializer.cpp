@@ -2,7 +2,7 @@
 #include <sstream>
 #include <Serialization/TextureSerializer.h>
 #include <BigEndianStreamReader.h>
-#include <Exception.h>
+#include <Exception/Exception.h>
 
 namespace OpenCarma
 {
@@ -11,7 +11,7 @@ namespace OpenCarma
         void TextureSerializer::DeserializePixelmap(std::istream& stream, std::vector<PixmapPtr>& pixelmaps)
         {
             if (!stream)
-                throw IOException("Stream is not opened");
+                throw Commons::IOException("Stream is not opened");
 
             PixmapPtr curPixmap;
 
@@ -43,7 +43,7 @@ namespace OpenCarma
                 else if (header.isNULL())
                 {
                     if (!curPixmap.get() || !curPixmap->isValid())
-                        throw SerializationException("Pixelmap object is incorrect");
+                        throw Commons::SerializationException("Pixelmap object is incorrect");
                     pixelmaps.push_back(curPixmap);
                     curPixmap.reset();
                 }
@@ -51,7 +51,7 @@ namespace OpenCarma
                 {
                     std::stringstream ss;
                     ss << "Unknown chunk: " << header.getMagic() << " at " << reader.tell();
-                    throw SerializationException(ss.str());
+                    throw Commons::SerializationException(ss.str());
                 }
 
                 uint32_t redSize = reader.tell() - lastOffset;
@@ -59,7 +59,7 @@ namespace OpenCarma
                 {
                     std::stringstream ss;
                     ss << "Incorrect chunk size red: required: " << header.getSize() << " current " << redSize;
-                    throw SerializationException(ss.str());
+                    throw Commons::SerializationException(ss.str());
                 }
             }
         }
@@ -69,7 +69,7 @@ namespace OpenCarma
             assert(pal);
 
             if (!stream)
-                throw IOException("Stream is not opened");
+                throw Commons::IOException("Stream is not opened");
 
             // TODO
         }

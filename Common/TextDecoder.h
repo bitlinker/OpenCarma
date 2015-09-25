@@ -15,7 +15,7 @@ public:
     TextDecoder(DecoderType type);
     ~TextDecoder();
 
-    bool decodeLine(const std::string& inStr, std::string& outStr);
+    bool decodeLine(const std::string& inStr, std::string& outStr) const;
 
 private:
     uint8_t* m_textDecodeTable;

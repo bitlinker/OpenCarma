@@ -44,7 +44,7 @@ TextDecoder::~TextDecoder()
 {
 }
 
-bool TextDecoder::decodeLine(const std::string& inStr, std::string& outStr)
+bool TextDecoder::decodeLine(const std::string& inStr, std::string& outStr) const
 {
     if (!m_textDecodeTable)
         return false;
@@ -68,7 +68,7 @@ bool TextDecoder::decodeLine(const std::string& inStr, std::string& outStr)
             if (pData[i] == 9) // Spaces fix
                 pData[i] = 0x9f;
 
-            if (m_commentDecodeTable && i > 3 && outStr[i - 3] == '/' && outStr[i - 2] == '/')
+            if (m_commentDecodeTable && i >= 3 && outStr[i - 3] == '/' && outStr[i - 2] == '/')
                 bComment = true;
 
             if (bComment)

@@ -26,6 +26,11 @@ set(OPENCARMA_SOURCES
     OpenCarma/TextReader.cpp
     OpenCarma/Texture.cpp
     OpenCarma/TextureManager.cpp
+	
+	OpenCarma/TextFiles/SoundTxt.cpp
+	OpenCarma/TextFiles/PedestrnTxt.cpp	
+	
+	OpenCarma/Sound/SoundMgr.cpp
 )
 
 set(BRENDER_SOURCES
@@ -46,7 +51,9 @@ set(BRENDER_SOURCES
 # Includes
 set(INCLUDE_DIRS
     Common
+	BitlinkerCommons
     OpenCarma
+	OpenCarma/TextFiles
     BRenderLib
     BRenderLib/Serialization
     BRenderLib/Objects
@@ -75,5 +82,6 @@ INCLUDE_DIRECTORIES (${GLFW3_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${GLM_INCLUDE_DIR}
 add_executable(OpenCarma ${COMMON_SOURCES} ${OPENCARMA_SOURCES} ${BRENDER_SOURCES})
 target_link_libraries(OpenCarma opengl32.lib ${GLFW3_LIBRARY} ${GLEW_LIBRARY})
 
+add_subdirectory("TextDecoder")
 
 #install(TARGETS opencarma DESTINATION /usr/lib) #TODO

@@ -1,7 +1,8 @@
 #pragma once
+#include <TextDecoder.h>
 #include <string>
 #include <iostream>
-#include <TextDecoder.h>
+#include <vector>
 
 class TextReader
 {
@@ -10,14 +11,20 @@ public:
     ~TextReader();
 
     //! Reads and decodes only meaningful lines, clearing out empty lines, comments, whitespaces
-    bool readLine(std::string& line);
+    void readLine(std::string& line) const;
 
     //! Reads and decodes a single RAW line
-    bool readLineRaw(std::string& line);
+    void readLineRaw(std::string& line) const;
 
-    uint32_t readUInt32();
+	void readUInt32(uint32_t& value) const;
 
-    bool isEOF();
+	void readUInt32Vec(std::vector<uint32_t>& vec) const;
+	void readUInt32_2(uint32_t& v1, uint32_t& v2) const;
+
+	void readFloatVec(std::vector<float>& vec) const;
+	void readFloat_2(float& v1, float& v2) const;
+
+    bool isEOF() const;
     
 private:
     std::istream& m_stream;

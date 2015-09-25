@@ -1,12 +1,11 @@
 #include <Render.h>
-#include <Exception.h>
+#include <Exception/Exception.h>
+#include <Log.h>
 
 // TODO: rm
 #include <StaticModel.h>
 #include <Serialization/ModelSerializer.h>
 #include <fstream>
-
-
 
 namespace OpenCarma
 {
@@ -30,14 +29,24 @@ namespace OpenCarma
         frame_count++;
     }
 
-    Render::Render()
-        : m_window()
-        , m_texManager()
+	void Render::CursorCallbackStatic(GLFWwindow* window, double xpos, double ypos)
+	{
+		Render* render = reinterpret_cast<Render*>(glfwGetWindowUserPointer(window));
+		if (render)
+		{
+			render->cursorCallback(xpos, ypos);
+		}
+	}
+
+	Render::Render()
+		: m_window()
+		, m_texManager()
+		, m_camera()
     {
         // TODO: options
 
         // FSAA
-        glfwWindowHint(GLFW_SAMPLES, 16);
+        //glfwWindowHint(GLFW_SAMPLES, 16);
 
         /*glfwWindowHint (GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint (GLFW_CONTEXT_VERSION_MINOR, 1);*/
@@ -53,21 +62,28 @@ namespace OpenCarma
         const GLFWvidmode* mode = glfwGetVideoMode(mon);
 
         // TODO: use mode & mon
-        m_window = std::shared_ptr<GLFWwindow>(glfwCreateWindow(1024, 768, "Title", NULL, NULL), glfwDestroyWindow);
+        m_window = std::shared_ptr<GLFWwindow>(glfwCreateWindow(800, 600, "Title", NULL, NULL), glfwDestroyWindow);
         if (m_window == nullptr)
-            throw new UnknownException("Can't create GLFW window");
+            throw Commons::UnknownException("Can't create GLFW window");
         glfwMakeContextCurrent(m_window.get());
+		glfwSetWindowUserPointer(m_window.get(), this);
 
         // GLEW
         glewExperimental = GL_TRUE;
         if (GLEW_OK != glewInit())
-            throw UnknownException("Can't init GLEW");
+            throw Commons::UnknownException("Can't init GLEW");
 
         const GLubyte* renderer = glGetString(GL_RENDERER); // get renderer string
         const GLubyte* version = glGetString(GL_VERSION); // version as a string
 
-        int k = 0;
-        //glfwSetKeyCallback(m_window.get(), );
+		LOG_DEBUG("Renderer: %s, version: %s", renderer, version);
+
+
+		// Mouse settings:
+		// Disabled gives unlimited mouse movement for camera
+		glfwSetInputMode(m_window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetCursorPosCallback(m_window.get(), CursorCallbackStatic); // TODO: not needed? (have events)
+
 
         // Alpha blending
         /*glEnable(GL_BLEND);
@@ -143,16 +159,24 @@ namespace OpenCarma
 		m_shader->setUniformSampler2D(uTex1, 0);
 
         // TODO: update builtin uniforms on every shader set
+
+		// TODO: default camera?
+		m_camera = std::make_shared<Camera>();
+		m_camera->setPerspective(45.F, 4.F / 3.F, 1000.F, 0.1F);
     }
 
     Render::~Render()
     {
     }
 
+	void Render::cursorCallback(double xpos, double ypos)
+	{
+		printf("Mouse: %f, %f\n", xpos, ypos);
+		// TODO: process input
+	}
+
 	void Render::updateCameraUniforms()
 	{
-		// TODO: default camera?
-
 		glm::mat4 modelMatrix; // Store the model matrix       // TODO
 		modelMatrix = glm::mat4(1.0f);
 

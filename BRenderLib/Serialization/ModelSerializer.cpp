@@ -2,7 +2,7 @@
 #include <sstream>
 #include <Serialization/ModelSerializer.h>
 #include <BigEndianStreamReader.h>
-#include <Exception.h>
+#include <Exception/Exception.h>
 
 namespace OpenCarma
 {
@@ -12,7 +12,7 @@ namespace OpenCarma
         void ModelSerializer::DeserializeModels(std::istream& stream, std::vector<ModelPtr>& models)
         {
             if (!stream)
-                throw IOException("Stream is not opened");
+                throw Commons::IOException("Stream is not opened");
 
             ModelPtr curModel;
 
@@ -64,7 +64,7 @@ namespace OpenCarma
                 else if (header.isNULL())
                 {
                     if (!curModel.get() || !curModel->isValid())
-                        throw SerializationException("Model object is incorrect");
+                        throw Commons::SerializationException("Model object is incorrect");
                     models.push_back(curModel);
                     curModel.reset();
                 }
@@ -72,7 +72,7 @@ namespace OpenCarma
                 {
                     std::stringstream ss;
                     ss << "Unknown chunk: " << header.getMagic() << " at " << reader.tell();
-                    throw SerializationException(ss.str());
+                    throw Commons::SerializationException(ss.str());
                 }
 
                 uint32_t redSize = reader.tell() - lastOffset;

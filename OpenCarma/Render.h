@@ -30,6 +30,8 @@ namespace OpenCarma
 
 	private:
 		void updateCameraUniforms();
+		void cursorCallback(double xpos, double ypos);
+		static void CursorCallbackStatic(GLFWwindow* window, double xpos, double ypos);
 
     private:
         std::shared_ptr<GLFWwindow> m_window;

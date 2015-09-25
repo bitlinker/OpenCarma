@@ -2,7 +2,7 @@
 #include <sstream>
 #include <Serialization/ActorSerializer.h>
 #include <BigEndianStreamReader.h>
-#include <Exception.h>
+#include <Exception/Exception.h>
 
 namespace OpenCarma
 {
@@ -11,7 +11,7 @@ namespace OpenCarma
         void ActorSerializer::DeserializeActor(std::istream& stream, std::vector<ActorPtr>& actors)
         {
             if (!stream)
-                throw IOException("Stream is not opened");
+                throw Commons::IOException("Stream is not opened");
 
             ActorPtr curActor;
             int32_t curLevel = 0;
@@ -78,7 +78,7 @@ namespace OpenCarma
                 else if (header.isNULL())
                 {
                     if (!curActor.get() || !curActor->isValid())
-                        throw SerializationException("Actor object is incorrect");
+                        throw Commons::SerializationException("Actor object is incorrect");
                     actors.push_back(curActor);
                     curActor.reset();
                 }
@@ -86,7 +86,7 @@ namespace OpenCarma
                 {
                     std::stringstream ss;
                     ss << "Unknown chunk: " << header.getMagic() << " at " << reader.tell();
-                    throw SerializationException(ss.str());
+                    throw Commons::SerializationException(ss.str());
                 }
 
                 uint32_t redSize = reader.tell() - lastOffset;
@@ -105,7 +105,7 @@ namespace OpenCarma
             assert(actor);
 
             if (!stream)
-                throw IOException("Stream is not opened");
+                throw Commons::IOException("Stream is not opened");
 
             // TODO
         }

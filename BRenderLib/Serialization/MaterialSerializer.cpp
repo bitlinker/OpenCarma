@@ -2,7 +2,7 @@
 #include <sstream>
 #include <Serialization/MaterialSerializer.h>
 #include <BigEndianStreamReader.h>
-#include <Exception.h>
+#include <Exception/Exception.h>
 
 namespace OpenCarma
 {
@@ -11,7 +11,7 @@ namespace OpenCarma
         void MaterialSerializer::DeserializeMaterial(std::istream& stream, std::vector<MaterialPtr>& materials)
         {
             if (!stream)
-                throw IOException("Stream is not opened");
+                throw Commons::IOException("Stream is not opened");
 
             MaterialPtr curMat;
 
@@ -51,7 +51,7 @@ namespace OpenCarma
                 else if (header.isNULL())
                 {
                     if (!curMat.get() || !curMat->isValid())
-                        throw SerializationException("Material object is incorrect");
+                        throw Commons::SerializationException("Material object is incorrect");
                     materials.push_back(curMat);
                     curMat.reset();
                 }
@@ -59,7 +59,7 @@ namespace OpenCarma
                 {
                     std::stringstream ss;
                     ss << "Unknown chunk: " << header.getMagic() << " at " << reader.tell();
-                    throw SerializationException(ss.str());
+                    throw Commons::SerializationException(ss.str());
                 }
 
                 uint32_t redSize = reader.tell() - lastOffset;
@@ -77,7 +77,7 @@ namespace OpenCarma
             assert(pal);
 
             if (!stream)
-                throw IOException("Stream is not opened");
+                throw Commons::IOException("Stream is not opened");
 
             // TODO
         }

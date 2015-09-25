@@ -1,6 +1,6 @@
 #include <Objects/ChunkHeader.h>
 #include <BigEndianStreamReader.h>
-#include <Exception.h>
+#include <Exception/Exception.h>
 
 
 namespace OpenCarma
@@ -168,7 +168,7 @@ namespace OpenCarma
             uint32_t faceMatCount = reader.readUInt32();
             uint32_t bytesPerEntry = reader.readUInt32();
             if (bytesPerEntry != 2)
-                throw SerializationException("Face material indexes is not 16 bit");
+                throw Commons::SerializationException("Face material indexes is not 16 bit");
 
             m_faceMats.reserve(faceMatCount);
             for (uint32_t i = 0; i < faceMatCount; ++i)

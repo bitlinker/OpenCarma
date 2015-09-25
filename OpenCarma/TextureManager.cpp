@@ -5,7 +5,6 @@ namespace OpenCarma
 {
     TextureManager::TextureManager()
         : m_textures()
-        , m_textureLoaders()
     {
     }
 
@@ -19,7 +18,7 @@ namespace OpenCarma
 		TTexturesMap::const_iterator it = m_textures.find(name);
 		if (it != m_textures.end())
 		{
-			result = it->second.lock();			
+			result = it->second.lock();
 		}
 
 		if (result == nullptr)

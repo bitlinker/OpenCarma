@@ -1,6 +1,6 @@
 #include <BigEndianStreamReader.h>
 #include <EndianConverter.h>
-#include <Exception.h>
+#include <Exception/Exception.h>
 
 
 namespace OpenCarma
