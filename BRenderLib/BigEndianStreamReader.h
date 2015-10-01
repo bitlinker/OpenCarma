@@ -31,7 +31,7 @@ namespace OpenCarma
             uint16_t readUInt16();
             uint8_t readUInt8();
             float readFloat();
-            string readString();
+            std::string readString();
 
         private:
             std::istream& m_stream;

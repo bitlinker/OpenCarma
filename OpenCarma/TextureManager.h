@@ -1,21 +1,22 @@
 #pragma once
-#include <Common.h>
-#include <Texture.h>
+#include <Render/Texture.h>
 #include <map>
-#include <set>
 
-namespace OpenCarma
+namespace Commons
 {
-    class TextureManager
-    {
-    public:
-        TextureManager();
-        ~TextureManager();
+	namespace Render
+	{
+		class TextureManager // TODO: really common?
+		{
+		public:
+			TextureManager();
+			~TextureManager();
 
-        TexturePtr getTexture(const string& name);
+			Commons::Render::TexturePtr getTexture(const std::string& name);
 
-    private:
-        typedef std::map<string, TextureWeakPtr> TTexturesMap;
-        TTexturesMap m_textures;
-    };
+		private:
+			typedef std::map<std::string, Commons::Render::TextureWeakPtr> TTexturesMap;
+			TTexturesMap m_textures;
+		};
+	}
 }

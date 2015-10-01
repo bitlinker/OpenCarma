@@ -8,6 +8,6 @@ namespace OpenCarma
         Init();
         ~Init();
     private:
-
+		// TODO: shared GLFW context initializer
     };
 }

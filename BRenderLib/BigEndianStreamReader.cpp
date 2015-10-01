@@ -1,5 +1,5 @@
 #include <BigEndianStreamReader.h>
-#include <EndianConverter.h>
+#include <Common/EndianUtils.h>
 #include <Exception/Exception.h>
 
 
@@ -67,14 +67,14 @@ namespace OpenCarma
         {
             uint32_t origVal;
             m_stream.read(reinterpret_cast<char*>(&origVal), sizeof(origVal));            
-            return EndianConverter::ByteSwapUInt32(origVal); // TODO: if needed
+            return Commons::EndianUtils::ByteSwapUInt32(origVal); // TODO: if needed
         }
 
         uint16_t BigEndianStreamReader::readUInt16()
         {
             uint16_t origVal;
             m_stream.read(reinterpret_cast<char*>(&origVal), sizeof(origVal));
-            return EndianConverter::ByteSwapUInt16(origVal);
+            return Commons::EndianUtils::ByteSwapUInt16(origVal);
         }
 
         uint8_t BigEndianStreamReader::readUInt8()
@@ -88,13 +88,13 @@ namespace OpenCarma
         {
             uint32_t origVal;
             m_stream.read(reinterpret_cast<char*>(&origVal), sizeof(origVal));
-            origVal = EndianConverter::ByteSwapUInt32(origVal);
+            origVal = Commons::EndianUtils::ByteSwapUInt32(origVal);
             return *reinterpret_cast<float*>(&origVal);
         }
 
-        string BigEndianStreamReader::readString()
+		std::string BigEndianStreamReader::readString()
         {
-            string res;
+			std::string res;
             char ch = 0;
             while (true)
             {

@@ -1,32 +1,35 @@
 #include <TextureManager.h>
 #include <cassert>
 
-namespace OpenCarma
+namespace Commons
 {
-    TextureManager::TextureManager()
-        : m_textures()
-    {
-    }
-
-    TextureManager::~TextureManager()
-    {
-    }
-
-    TexturePtr TextureManager::getTexture(const string& name)
-    {
-		TexturePtr result;
-		TTexturesMap::const_iterator it = m_textures.find(name);
-		if (it != m_textures.end())
+	namespace Render
+	{
+		TextureManager::TextureManager()
+			: m_textures()
 		{
-			result = it->second.lock();
 		}
 
-		if (result == nullptr)
+		TextureManager::~TextureManager()
 		{
-			result = TexturePtr(new Texture());
-			// TODO: load it
 		}
 
-		return result;
-    }
+		TexturePtr TextureManager::getTexture(const std::string& name)
+		{
+			TexturePtr result;
+			TTexturesMap::const_iterator it = m_textures.find(name);
+			if (it != m_textures.end())
+			{
+				result = it->second.lock();
+			}
+
+			if (result == nullptr)
+			{
+				result = TexturePtr(new Texture());
+				// TODO: load it
+			}
+
+			return result;
+		}
+	}
 }

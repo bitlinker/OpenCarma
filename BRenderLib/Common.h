@@ -8,5 +8,3 @@
 #include <memory>
 
 #define BR_API
-
-using std::string;

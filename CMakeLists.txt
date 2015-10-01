@@ -2,29 +2,49 @@ cmake_minimum_required (VERSION 2.6)
 project (OpenCarma)
 
 # Sources
+set(BITLINKER_COMMONS_SOURCES
+    BitlinkerCommons/Common/EndianUtils.cpp
+    
+    #Logger
+    BitlinkerCommons/Logger/Log.h
+    BitlinkerCommons/Logger/Log.cpp
+    
+    #Render
+    BitlinkerCommons/Render/BufferObject.h
+    BitlinkerCommons/Render/Camera.h
+    BitlinkerCommons/Render/Camera.cpp
+    BitlinkerCommons/Render/IBindable.h    
+    BitlinkerCommons/Render/RenderCommon.h
+    BitlinkerCommons/Render/ScopeBind.h
+    BitlinkerCommons/Render/Shader.h
+    BitlinkerCommons/Render/Shader.cpp
+    BitlinkerCommons/Render/ShaderProgram.h
+    BitlinkerCommons/Render/ShaderProgram.cpp
+    BitlinkerCommons/Render/Texture.h
+    BitlinkerCommons/Render/Texture.cpp
+    BitlinkerCommons/Render/VertexArrayObject.h
+    BitlinkerCommons/Render/RenderWindow.h
+    BitlinkerCommons/Render/RenderWindow.cpp
+    BitlinkerCommons/Render/RenderNode.h
+    BitlinkerCommons/Render/RenderNode.cpp
+)
+
 set(COMMON_SOURCES
     Common/TextDecoder.cpp
 )
 
 set(OPENCARMA_SOURCES
     OpenCarma/AxisDrawable.cpp
-    OpenCarma/Camera.cpp
     OpenCarma/CarmaTextureLoader.cpp
     OpenCarma/FreeFlyCameraController.cpp
     OpenCarma/Init.cpp
-    OpenCarma/Log.cpp
     OpenCarma/main.cpp
     OpenCarma/OpponentDescription.cpp
     OpenCarma/RaceDescription.cpp
     OpenCarma/Render.cpp
     OpenCarma/RenderMaterial.cpp
-    OpenCarma/RenderNode.cpp
-    OpenCarma/Scene.cpp
-    OpenCarma/Shader.cpp
-    OpenCarma/ShaderProgram.cpp
     OpenCarma/StaticModel.cpp
     OpenCarma/TextReader.cpp
-    OpenCarma/Texture.cpp
     OpenCarma/TextureManager.cpp
 	
 	OpenCarma/TextFiles/SoundTxt.cpp
@@ -35,7 +55,6 @@ set(OPENCARMA_SOURCES
 
 set(BRENDER_SOURCES
     BRenderLib/BigEndianStreamReader.cpp
-    BRenderLib/EndianConverter.cpp
     BRenderLib/Serialization/ActorSerializer.cpp
     BRenderLib/Serialization/MaterialSerializer.cpp
     BRenderLib/Serialization/ModelSerializer.cpp
@@ -54,12 +73,14 @@ set(INCLUDE_DIRS
 	BitlinkerCommons
     OpenCarma
 	OpenCarma/TextFiles
+    OpenCarma/Render
     BRenderLib
     BRenderLib/Serialization
     BRenderLib/Objects
 )
 INCLUDE_DIRECTORIES(${INCLUDE_DIRS})
 
+SOURCE_GROUP("BitlinkerCommons" FILES ${BITLINKER_COMMONS_SOURCES})
 SOURCE_GROUP("Common" FILES ${COMMON_SOURCES})
 SOURCE_GROUP("OpenCarma" FILES ${OPENCARMA_SOURCES})
 SOURCE_GROUP("BRender" FILES ${BRENDER_SOURCES})
@@ -79,7 +100,7 @@ FIND_PACKAGE (GLM REQUIRED)
 INCLUDE_DIRECTORIES (${GLFW3_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${GLM_INCLUDE_DIR})
 
 # Link
-add_executable(OpenCarma ${COMMON_SOURCES} ${OPENCARMA_SOURCES} ${BRENDER_SOURCES})
+add_executable(OpenCarma ${COMMON_SOURCES} ${BITLINKER_COMMONS_SOURCES} ${OPENCARMA_SOURCES} ${BRENDER_SOURCES})
 target_link_libraries(OpenCarma opengl32.lib ${GLFW3_LIBRARY} ${GLEW_LIBRARY})
 
 add_subdirectory("TextDecoder")

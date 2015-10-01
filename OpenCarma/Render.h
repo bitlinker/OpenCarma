@@ -1,47 +1,83 @@
 #pragma once
 
 #include <memory>
-#include <RenderCommon.h>
+#include <Render/RenderCommon.h>
 #include <TextureManager.h>
-#include <RenderNode.h>
-#include <Camera.h>
-#include <Shader.h>
-#include <ShaderProgram.h>
+#include <Render/RenderNode.h>
+#include <Render/Camera.h>
+#include <Render/Shader.h>
+#include <Render/ShaderProgram.h>
+#include <Render/RenderWindow.h>
 
-namespace OpenCarma
+namespace Commons
 {
-    class Render
-    {
-    public:
-        Render();
-        ~Render();
+	// TODO: divide into common & carma?
+	namespace Render
+	{
+		// TODO
+		class ModelPtr
+		{
+		};
+		class MaterialPtr
+		{
+		};
 
-        bool tick(float fTimeDelta);
-        void render();
+		// TODO
+		class ModelManager
+		{
+		public:
+			ModelPtr getModel(const std::string name)
+			{
+				return ModelPtr();
+			}
+		};
 
-        void setRootNode(RenderNodePtr& node);
-        RenderNodePtr getRootNode() const;
+		class MaterialManager
+		{
+		public:
+			MaterialPtr getMaterial(const std::string name)
+			{
+				return MaterialPtr();
+			}
+		};
 
-		void setCamera(const CameraPtr& camera) { m_camera = camera; }
-		CameraPtr getCamera() const { return m_camera; }
+		class Render
+		{
+		public:
+			Render();
+			~Render();
 
-        // TODO: replace
-        TextureManager& getTextureManager();
+			bool tick(float fTimeDelta);
+			// TODO: and framebuffer
+			void render(const CameraPtr& camera, const RenderNodePtr& rootNode, const RenderWindow& window);
 
-	private:
-		void updateCameraUniforms();
-		void cursorCallback(double xpos, double ypos);
-		static void CursorCallbackStatic(GLFWwindow* window, double xpos, double ypos);
+			// TODO: create all GL-related resources here...
+			// Use some loader as parameter
+			TexturePtr createTexture();
+			ShaderPtr createShader();
+			ShaderProgramPtr createShaderProgram();
 
-    private:
-        std::shared_ptr<GLFWwindow> m_window;
-        TextureManager m_texManager;
-		RenderNodePtr m_rootNode;
-		CameraPtr m_camera;
+			// TODO: replace
+			TextureManager& getTextureManager() { return m_texMgr; }
+			MaterialManager& getMaterialManager() { return m_mtlMgr; }
+			ModelManager& getModelManager() { return m_mdlMgr; }
 
 
-		// TODO: custom for every mesh
-		ShaderProgramPtr m_shader;
-		uint32_t m_uMVP;
-    };
+		private:
+			void updateCameraUniforms(const CameraPtr& camera);
+			//void cursorCallback(double xpos, double ypos);
+			//static void CursorCallbackStatic(GLFWwindow* window, double xpos, double ypos);
+
+		private:
+			// TODO: move out?
+			TextureManager m_texMgr;
+			ModelManager m_mdlMgr;
+			MaterialManager m_mtlMgr;
+
+
+			// TODO: custom for every mesh
+			ShaderProgramPtr m_shader;
+			uint32_t m_uMVP;
+		};
+	}
 }

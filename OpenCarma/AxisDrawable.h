@@ -1,9 +1,9 @@
 #pragma once
-#include "RenderNode.h"
+#include <Render/RenderNode.h>
 
 namespace OpenCarma
 {
-	class AxisDrawable : public RenderNode
+	class AxisDrawable : public Commons::Render::RenderNode
 	{
 	public:
 		AxisDrawable();

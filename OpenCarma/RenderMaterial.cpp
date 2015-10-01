@@ -2,28 +2,31 @@
 
 namespace OpenCarma
 {
-    RenderMaterial::RenderMaterial()
-    {
-    }
+	namespace Render
+	{
+		RenderMaterial::RenderMaterial(const BRender::MaterialPtr& material, Commons::Render::Render& render)
+		{
+			// TODO: init from material
+		}
 
+		RenderMaterial::~RenderMaterial()
+		{
+		}
 
-    RenderMaterial::~RenderMaterial()
-    {
-    }
+		void RenderMaterial::set()
+		{
+			if (m_shader)
+			{
+				m_shader->use();
 
-    void RenderMaterial::set()
-    {
-        if (m_shader)
-        {
-            m_shader->use();
+				// TODO: set states
+				//m_shader->setUniformMatrix()
+			}
 
-            // TODO: set states
-            //m_shader->setUniformMatrix()
-        }
-
-        for (auto tex : m_textures)
-        {
-            tex->bind();
-        }
-    }
+			for (auto tex : m_textures)
+			{
+				tex->bind();
+			}
+		}
+	}
 }

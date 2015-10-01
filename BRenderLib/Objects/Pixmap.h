@@ -33,7 +33,7 @@ namespace OpenCarma
             uint32_t getYOffset() const { return m_header.m_offsetY; }
             uint32_t getBPP() const { return m_data.m_BPP; }
             uint32_t getNumPixels() const { return m_data.m_numPixels; }
-            const string& getName() const { return m_header.m_name; }
+            const std::string& getName() const { return m_header.m_name; }
             bool isValid() const;
 
             inline const std::vector<uint8_t>& getPixels() const

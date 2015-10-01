@@ -17,7 +17,7 @@ namespace OpenCarma
 		return glm::vec2(p.x, p.y);
 	}
 
-	FreeFlyCameraController::FreeFlyCameraController(const CameraPtr& camera)
+	FreeFlyCameraController::FreeFlyCameraController(const Commons::Render::CameraPtr& camera)
 		: m_camera(camera)
 	{
 	}

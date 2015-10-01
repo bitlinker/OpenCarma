@@ -110,7 +110,7 @@ namespace OpenCarma
             uint16_t m_height;	        //!< Height
             uint16_t m_offsetX;         //!< oX
             uint16_t m_offsetY;         //!< oY
-            string m_name;              //!< Null-terminated name
+			std::string m_name;              //!< Null-terminated name
         };
 
         //! Texture data
@@ -199,7 +199,7 @@ namespace OpenCarma
             void read(BigEndianStreamReader& reader);
 
         public:
-            std::vector<string> m_materials;
+            std::vector<std::string> m_materials;
         };
 
         class BR_API ModelFaceMaterialsChunk : public ChunkBase
@@ -235,7 +235,7 @@ namespace OpenCarma
             float m_transform[6];	            //!< Transform matrix // TODO: use matrix type
             uint8_t m_indexBase;                //!< ???
             uint8_t m_indexRange;               //!< ???
-            string m_name;                      //!< Null-terminated name
+			std::string m_name;                 //!< Null-terminated name
         };
 
         //! Material attributes chunk version 2
@@ -255,7 +255,7 @@ namespace OpenCarma
             float m_transform[6];	            //!< Transform matrix // TODO: use matrix type
             uint32_t m_unk;                     //!< ???
             uint8_t m_unk2[13];                 //!< ???
-            string m_name;                      //!< Null-terminated name
+			std::string m_name;                 //!< Null-terminated name
         };
 
         //! Material pixelmap name chunk
@@ -269,7 +269,7 @@ namespace OpenCarma
             void read(BigEndianStreamReader& reader);
 
         public:
-            string m_name;                      //!< Null-terminated name
+			std::string m_name;                 //!< Null-terminated name
         };
 
         //! Material shadetab name chunk
@@ -283,7 +283,7 @@ namespace OpenCarma
             void read(BigEndianStreamReader& reader);
 
         public:
-            string m_name;                      //!< Null-terminated name
+			std::string m_name;                 //!< Null-terminated name
         };
             
         
@@ -299,7 +299,7 @@ namespace OpenCarma
 
         public:
             uint16_t m_flags;	                //!< Flags            
-            string m_name;                      //!< Null-terminated name
+			std::string m_name;                 //!< Null-terminated name
         };
         
         class BR_API ActorMatrixChunk : public ChunkHeader
@@ -344,7 +344,7 @@ namespace OpenCarma
             ActorModelChunk();
             void read(BigEndianStreamReader& reader);
         public:
-            string m_name;
+			std::string m_name;
         };
 
         class BR_API ActorEmptyChunk : public ChunkHeader
@@ -366,7 +366,7 @@ namespace OpenCarma
             ActorMaterialChunk();
             void read(BigEndianStreamReader& reader);
         public:
-            string m_name;
+			std::string m_name;
         };
 
         class BR_API ActorBBoxChunk : public ChunkHeader
