@@ -15,6 +15,8 @@ set(BITLINKER_COMMONS_SOURCES
     BitlinkerCommons/Render/Camera.cpp
     BitlinkerCommons/Render/IBindable.h    
     BitlinkerCommons/Render/RenderCommon.h
+    BitlinkerCommons/Render/GLContext.h
+    BitlinkerCommons/Render/GLContext.cpp
     BitlinkerCommons/Render/ScopeBind.h
     BitlinkerCommons/Render/Shader.h
     BitlinkerCommons/Render/Shader.cpp
@@ -34,21 +36,26 @@ set(COMMON_SOURCES
 )
 
 set(OPENCARMA_SOURCES
-    OpenCarma/AxisDrawable.cpp
-    OpenCarma/CarmaTextureLoader.cpp
-    OpenCarma/FreeFlyCameraController.cpp
+    OpenCarma/Render/AxisDrawable.cpp
+    OpenCarma/Render/CarmaTextureLoader.cpp
+    OpenCarma/Render/FreeFlyCameraController.cpp
+    OpenCarma/Render/Render.cpp
+    OpenCarma/Render/RenderMaterial.cpp
+    OpenCarma/Render/StaticModel.cpp
+    OpenCarma/Render/TextureManager.cpp
+    OpenCarma/Render/PlainShaderProgram.h
+    OpenCarma/Render/PlainShaderProgram.cpp
+    
     OpenCarma/Init.cpp
     OpenCarma/main.cpp
     OpenCarma/OpponentDescription.cpp
     OpenCarma/RaceDescription.cpp
-    OpenCarma/Render.cpp
-    OpenCarma/RenderMaterial.cpp
-    OpenCarma/StaticModel.cpp
-    OpenCarma/TextReader.cpp
-    OpenCarma/TextureManager.cpp
-	
+
+    OpenCarma/TextFiles/TextReader.cpp
 	OpenCarma/TextFiles/SoundTxt.cpp
-	OpenCarma/TextFiles/PedestrnTxt.cpp	
+	OpenCarma/TextFiles/PedestrnTxt.cpp    
+    OpenCarma/TextFiles/RaceTxt.cpp
+    OpenCarma/TextFiles/RaceTxt.h
 	
 	OpenCarma/Sound/SoundMgr.cpp
 )

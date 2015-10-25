@@ -8,6 +8,11 @@ inline static uint32_t ParseUint32(const std::string& str)
 	return static_cast<uint32_t>(std::stoi(str, 0, isHex ? 16 : 10));
 }
 
+inline static uint32_t ParseSInt32(const std::string& str)
+{
+	return static_cast<int32_t>(std::stoi(str, 0, 10));
+}
+
 inline static float ParseFloat(const std::string& str)
 {
 	return static_cast<float>(std::stof(str));
@@ -68,6 +73,37 @@ void TextReader::readUInt32(uint32_t& value) const
 	value = ParseUint32(line);
 }
 
+void TextReader::readSInt32(int32_t& value) const
+{
+	std::string line;
+	readLine(line);
+	value = ParseSInt32(line);
+}
+
+void TextReader::readFloat(float& value) const
+{
+	std::string line;
+	readLine(line);
+	value = ParseFloat(line);
+}
+
+void TextReader::readUInt32Vec(uint32_t* ptr, uint32_t count) const
+{
+	std::string line; // TODO: copy-paste
+	readLine(line);
+
+	std::stringstream ss(line);
+	for (uint32_t i = 0; i < count; ++i)
+	{
+		if (!ss.good())
+			throw Commons::IOException("Wrong number of values in string");
+
+		std::string tmp;
+		std::getline(ss, tmp, ',');
+		*ptr++ = ParseUint32(tmp);
+	}
+}
+
 void TextReader::readUInt32Vec(std::vector<uint32_t>& vec) const
 {
 	vec.clear();
@@ -81,6 +117,23 @@ void TextReader::readUInt32Vec(std::vector<uint32_t>& vec) const
 		std::getline(ss, tmp, ',');
 		uint32_t value = ParseUint32(tmp);
 		vec.push_back(value);
+	}
+}
+
+void TextReader::readFloatVec(float* ptr, uint32_t count) const
+{
+	std::string line;
+	readLine(line);
+
+	std::stringstream ss(line);
+	for (uint32_t i = 0; i < count; ++i)
+	{
+		if (!ss.good())
+			throw Commons::IOException("Wrong number of values in string");
+
+		std::string tmp;
+		std::getline(ss, tmp, ',');
+		*ptr++ = ParseFloat(tmp);
 	}
 }
 
@@ -112,6 +165,19 @@ void TextReader::readUInt32_2(uint32_t& v1, uint32_t& v2) const
 	v2 = vals[1];
 }
 
+// TODO: replace with array version
+void TextReader::readUInt32_3(uint32_t& v1, uint32_t& v2, uint32_t& v3) const
+{
+	std::vector<uint32_t> vals;
+	readUInt32Vec(vals);
+	if (vals.size() != 3)
+		throw Commons::IOException("Wrong number of values in string");
+
+	v1 = vals[0];
+	v2 = vals[1];
+	v3 = vals[2];
+}
+
 void TextReader::readFloat_2(float& v1, float& v2) const
 {
 	std::vector<float> vals;
@@ -121,4 +187,11 @@ void TextReader::readFloat_2(float& v1, float& v2) const
 
 	v1 = vals[0];
 	v2 = vals[1];
+}
+
+void TextReader::skipLines(uint32_t numLines) const
+{
+	std::string line;
+	for (uint32_t i = 0; i < numLines; ++i)
+		readLine(line);
 }

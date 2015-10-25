@@ -1,7 +1,7 @@
 #include <TextureManager.h>
 #include <cassert>
 
-namespace Commons
+namespace OpenCarma
 {
 	namespace Render
 	{
@@ -14,9 +14,9 @@ namespace Commons
 		{
 		}
 
-		TexturePtr TextureManager::getTexture(const std::string& name)
+		Commons::Render::TexturePtr TextureManager::getTexture(const std::string& name)
 		{
-			TexturePtr result;
+			Commons::Render::TexturePtr result;
 			TTexturesMap::const_iterator it = m_textures.find(name);
 			if (it != m_textures.end())
 			{
@@ -25,7 +25,7 @@ namespace Commons
 
 			if (result == nullptr)
 			{
-				result = TexturePtr(new Texture());
+				result = Commons::Render::TexturePtr(new Commons::Render::Texture());
 				// TODO: load it
 			}
 

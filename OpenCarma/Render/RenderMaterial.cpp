@@ -4,10 +4,10 @@ namespace OpenCarma
 {
 	namespace Render
 	{
-		RenderMaterial::RenderMaterial(const BRender::MaterialPtr& material, Commons::Render::Render& render)
+		/*RenderMaterial::RenderMaterial(const BRender::MaterialPtr& material, Commons::Render::GLContext& render)
 		{
 			// TODO: init from material
-		}
+		}*/
 
 		RenderMaterial::~RenderMaterial()
 		{

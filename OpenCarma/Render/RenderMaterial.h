@@ -3,7 +3,7 @@
 #include <Render/ShaderProgram.h>
 #include <Render/Texture.h>
 #include <Objects/Material.h>
-#include <Render.h>
+#include <Render/GLContext.h>
 
 namespace OpenCarma
 {
@@ -13,7 +13,7 @@ namespace OpenCarma
 		class RenderMaterial
 		{
 		public:
-			RenderMaterial(const BRender::MaterialPtr& material, Commons::Render::Render& render);
+			//RenderMaterial(const BRender::MaterialPtr& material, Commons::Render::GLRender& render);
 			~RenderMaterial();
 
 			void set();

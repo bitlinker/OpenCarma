@@ -2,7 +2,7 @@
 #include <Render/Texture.h>
 #include <map>
 
-namespace Commons
+namespace OpenCarma
 {
 	namespace Render
 	{
