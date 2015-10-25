@@ -412,7 +412,7 @@ namespace OpenCarma
 
 	void RaceTxt::readFooter(const TextReader& reader)
 	{
-		reader.readUInt32(m_yonMultiplier);
+		reader.readFloat(m_yonMultiplier);
 		reader.readLine(m_selfName);
 	}
 }

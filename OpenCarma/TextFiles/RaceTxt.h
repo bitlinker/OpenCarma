@@ -259,7 +259,7 @@ namespace OpenCarma
 		std::vector<std::string> m_splashScreenFiles;
 
 		// Footer
-		uint32_t m_yonMultiplier;
+		float m_yonMultiplier;
 		std::string m_selfName;
 	};
 }
