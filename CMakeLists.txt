@@ -29,6 +29,10 @@ set(BITLINKER_COMMONS_SOURCES
     BitlinkerCommons/Render/RenderWindow.cpp
     BitlinkerCommons/Render/RenderNode.h
     BitlinkerCommons/Render/RenderNode.cpp
+    
+    #Streams
+    BitlinkerCommons/Streams/FileStream.h
+    BitlinkerCommons/Streams/FileStream.cpp
 )
 
 set(COMMON_SOURCES
@@ -46,7 +50,6 @@ set(OPENCARMA_SOURCES
     OpenCarma/Render/PlainShaderProgram.h
     OpenCarma/Render/PlainShaderProgram.cpp
     
-    OpenCarma/Init.cpp
     OpenCarma/main.cpp
     OpenCarma/OpponentDescription.cpp
     OpenCarma/RaceDescription.cpp
