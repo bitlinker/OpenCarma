@@ -96,7 +96,7 @@ namespace OpenCarma
 
         void PlainShaderProgram::setMVP(const glm::mat4& matrix)
         {
-            setUniformMatrix(m_uMVP, matrix);
+            setUniformMat4(m_uMVP, matrix);
         }
 
         void PlainShaderProgram::setTex1Sampler(uint32_t sampler)

@@ -4,6 +4,8 @@ project (OpenCarma)
 # Sources
 set(BITLINKER_COMMONS_SOURCES
     BitlinkerCommons/Common/EndianUtils.cpp
+    BitlinkerCommons/Common/StringUtils.cpp
+    BitlinkerCommons/Common/StringUtils.h
     
     #Logger
     BitlinkerCommons/Logger/Log.h
@@ -29,10 +31,14 @@ set(BITLINKER_COMMONS_SOURCES
     BitlinkerCommons/Render/RenderWindow.cpp
     BitlinkerCommons/Render/RenderNode.h
     BitlinkerCommons/Render/RenderNode.cpp
+    BitlinkerCommons/Render/Frustum.h
+    BitlinkerCommons/Render/Frustum.cpp
     
     #Streams
     BitlinkerCommons/Streams/FileStream.h
     BitlinkerCommons/Streams/FileStream.cpp
+    BitlinkerCommons/Streams/MemoryStream.h
+    BitlinkerCommons/Streams/MemoryStream.cpp
 )
 
 set(COMMON_SOURCES

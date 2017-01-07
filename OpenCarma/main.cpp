@@ -2,7 +2,6 @@
 #include <Render.h>
 #include <Render/RenderWindow.h>
 #include <StaticModel.h>
-#include <Init.h>
 #include <Logger/Log.h>
 #include <Exception/Exception.h>
 #include <AxisDrawable.h>
