@@ -1,0 +1,27 @@
+http://rr2000.toshiba-3.com/R4/BRENDER/UGBK_1.HTM
+
+BRender here!!!
+https://github.com/foone/3dmmInternals/tree/master/generate/brender_sdk/include
+
+# Comment
+#
+# Fields may be specified in any order, or omitted
+# Where fields are omitted, sensible defaults will be supplied
+# Extra white spaces are ignored
+
+material =	[
+		identifier = "block";
+		flags = [light,prelit,smooth,environment,
+		   environment_local,perspective,decal,
+		   always_visible,two-sided,force_z_0];
+		colour = [0,0,255];
+		ambient = 0.05;
+		diffuse = 0.55;
+		specular = 0.4;
+		power = 20;
+		map_transform = [[1,0], [0,1], [0,0]];
+		index_base = 0;
+		index_range = 0;
+		colour_map = "brick"
+		index_shade = "shade.tab"
+	];

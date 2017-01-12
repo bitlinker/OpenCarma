@@ -1,13 +1,14 @@
 #include <cassert>
 #include <sstream>
 #include <Serialization/ActorSerializer.h>
-#include <BigEndianStreamReader.h>
+#include <EndianStreamReader.h>
 #include <Exception/Exception.h>
 
 namespace OpenCarma
 {
     namespace BRender
     {
+        // TODO: my streams
         void ActorSerializer::DeserializeActor(std::istream& stream, std::vector<ActorPtr>& actors)
         {
             if (!stream)
@@ -16,7 +17,7 @@ namespace OpenCarma
             ActorPtr curActor;
             int32_t curLevel = 0;
 
-            BigEndianStreamReader reader(stream);
+            EndianStreamReader reader(stream);
 
             FileHeaderChunk fileHeader;
             ChunkHeader header;

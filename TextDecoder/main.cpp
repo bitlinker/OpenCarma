@@ -34,7 +34,7 @@ int main(int argc, char **argv)
         outFileName = inFileName + "_decoded.txt";
 
     std::ifstream iStrm;
-    iStrm.open(inFileName, std::ios_base::in);
+    iStrm.open(inFileName.c_str(), std::ios_base::in);
     if (!iStrm.is_open())
     {
         std::cout << "Can't open file for reading: " << inFileName << std::endl;
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
     }
 
     std::ofstream oStrm;
-    oStrm.open(outFileName, std::ios_base::out);
+    oStrm.open(outFileName.c_str(), std::ios_base::out);
     if (!oStrm.is_open())
     {
         std::cout << "Can't open file for writing: " << outFileName << std::endl;

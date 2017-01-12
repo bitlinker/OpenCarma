@@ -1,7 +1,7 @@
 #include <Render/RenderCommon.h>
 #include <PlainShaderProgram.h>
 #include <Logger/Log.h>
-#include <Exception/exception.h>
+#include <Exception/Exception.h>
 
 namespace OpenCarma
 {

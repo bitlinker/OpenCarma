@@ -7,6 +7,7 @@
 class TextReader
 {
 public:
+    // TODO: use my streams...
     TextReader(std::istream& stream, TextDecoder::DecoderType decoderType);
     ~TextReader();
 

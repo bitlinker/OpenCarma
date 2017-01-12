@@ -1,7 +1,7 @@
 #include <cassert>
 #include <sstream>
 #include <Serialization/MaterialSerializer.h>
-#include <BigEndianStreamReader.h>
+#include <EndianStreamReader.h>
 #include <Exception/Exception.h>
 
 namespace OpenCarma
@@ -15,7 +15,7 @@ namespace OpenCarma
 
             MaterialPtr curMat;
 
-            BigEndianStreamReader reader(stream);
+            EndianStreamReader reader(stream);
 
             FileHeaderChunk fileHeader;
             ChunkHeader header;

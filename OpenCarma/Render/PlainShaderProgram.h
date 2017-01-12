@@ -5,6 +5,8 @@ namespace OpenCarma
 {
     namespace Render
     {
+        // TODO: rename to blinn/phong?
+        // add material properties
         class PlainShaderProgram : public Commons::Render::ShaderProgram
         {
         public:

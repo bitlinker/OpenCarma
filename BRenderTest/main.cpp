@@ -1,46 +1,21 @@
 #include <iostream>
 #include <fstream>
-#include <cstdio>
 #include <cassert>
 
+#include <Imaging/TgaImageEncoder.h>
+#include <Streams/FileStream.h>
 #include <Serialization/TextureSerializer.h>
 #include <Serialization/ModelSerializer.h>
-#include <Exception.h>
+#include <Exception/Exception.h>
 
+using namespace Commons;
+using namespace Commons::Imaging;
 using namespace OpenCarma::BRender;
 
-
-static bool Write32BitTga(const string& filename, uint32_t width, uint32_t height, const uint8_t* data)
-{
-    FILE *fTile;
-    fopen_s(&fTile, filename.c_str(), "wb");
-    if (!fTile)
-        return false;
-
-    putc(0, fTile);
-    putc(0, fTile);
-    putc(2, fTile);                         /* uncompressed RGB */
-    putc(0, fTile); putc(0, fTile);
-    putc(0, fTile); putc(0, fTile);
-    putc(0, fTile);
-    putc(0, fTile); putc(0, fTile);           /* X origin */
-    putc(0, fTile); putc(0, fTile);           /* y origin */
-    putc((width & 0x00FF), fTile);
-    putc((width & 0xFF00) / 256, fTile);
-    putc((height & 0x00FF), fTile);
-    putc((height & 0xFF00) / 256, fTile);
-    putc(32, fTile);                        /* 32 bit bitmap */
-    putc(0, fTile);
-
-    fwrite(data, width * height * 4, 1, fTile);
-    fclose(fTile);
-    return true;
-}
-
-static bool WritePixmap2Tga(const string& filename, const PixmapPtr& pixmap, const PixmapPtr& pal)
+static void WritePixmap2Tga(const std::string& filename, const PixmapPtr& pixmap, const PixmapPtr& pal)
 {    
-    assert(pixmap->getPixelFormat() == Pixmap::PF_PAL8);
-    assert(pal->getPixelFormat() == Pixmap::PF_XRGB);
+    assert(pixmap->getPixelFormat() == Pixmap::BR_PMT_INDEX_8);
+    assert(pal->getPixelFormat() == Pixmap::BR_PMT_RGBA_8888);
 
     uint32_t width = pixmap->getWidth();
     uint32_t height = pixmap->getHeight();
@@ -64,8 +39,11 @@ static bool WritePixmap2Tga(const string& filename, const PixmapPtr& pixmap, con
             dstChannel[3] = srcChannel[0]; // A
         }
     }
-    
-    return Write32BitTga(filename, width, height, (uint8_t*)&rgbPixmap[0]);
+
+    FileStreamPtr streamPtr(new FileStream(filename, FileStream::MODE_WRITE));
+    TgaImageEncoder encoder(streamPtr);
+    ImageInfo info(width, height, 4);
+    encoder.write(info, (uint8_t*)&rgbPixmap[0]);
 }
 
 
@@ -73,9 +51,6 @@ static bool WritePixmap2Tga(const string& filename, const PixmapPtr& pixmap, con
 int main()
 {    
     std::cout << "BRender test" << std::endl;
-
-    //ObjectFactory factory;
-    //bool bRes = factory.load(std::string());
 
     // TODO: try/catch
     try

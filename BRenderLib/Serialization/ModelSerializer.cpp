@@ -1,7 +1,7 @@
 #include <cassert>
 #include <sstream>
 #include <Serialization/ModelSerializer.h>
-#include <BigEndianStreamReader.h>
+#include <EndianStreamReader.h>
 #include <Exception/Exception.h>
 
 namespace OpenCarma
@@ -16,7 +16,7 @@ namespace OpenCarma
 
             ModelPtr curModel;
 
-            BigEndianStreamReader reader(stream);
+            EndianStreamReader reader(stream);
 
             FileHeaderChunk fileHeader;
             ChunkHeader header;

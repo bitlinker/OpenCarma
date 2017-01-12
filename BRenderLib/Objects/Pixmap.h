@@ -11,16 +11,48 @@ namespace OpenCarma
             friend class TextureSerializer;
 
         public:
-            enum PixelFormat
+            enum PixelFormat 
             {
-                PF_PAL8 = 3,
-                PF_RGB555_BE = 4,
-                PF_RGB565_BE = 5,
-                PF_RGB24 = 6,
-                PF_XRGB = 7,
-                PF_ARGB = 8,
-                PF_Y400A = 18,
+                /*
+                * Each pixel is an index into a colour map
+                */
+                BR_PMT_INDEX_1,
+                BR_PMT_INDEX_2,
+                BR_PMT_INDEX_4,
+                BR_PMT_INDEX_8,
+
+                /*
+                * True colour RGB
+                */
+                BR_PMT_RGB_555,		/* 16 bits per pixel */
+                BR_PMT_RGB_565,		/* 16 bits per pixel */
+                BR_PMT_RGB_888,		/* 24 bits per pixel */
+                BR_PMT_RGBX_888,	/* 32 bits per pixel */
+                BR_PMT_RGBA_8888,	/* 32 bits per pixel */
+
+                                    /*
+                                    * YUV
+                                    */
+                BR_PMT_YUYV_8888,	/* YU YV YU YV ... */
+                BR_PMT_YUV_888,
+
+                /*
+                * Depth
+                */
+                BR_PMT_DEPTH_16,
+                BR_PMT_DEPTH_32,
+
+                /*
+                * Opacity
+                */
+                BR_PMT_ALPHA_8,
+
+                /*
+                * Opacity + Index
+                */
+                BR_PMT_INDEXA_88
             };
+
         public:
             // Creates an empty pixel map
             Pixmap();
@@ -41,12 +73,12 @@ namespace OpenCarma
                 return m_data.m_data;
             }
 
-            inline uint8_t Pixmap::getColorPAL8(uint32_t index) const
+            inline uint8_t getColorPAL8(uint32_t index) const
             {
                 return m_data.m_data[index];
             }
 
-            inline uint32_t Pixmap::getColorARGB(uint32_t index) const
+            inline uint32_t getColorARGB(uint32_t index) const
             {
                 return reinterpret_cast<const uint32_t*>(&m_data.m_data[0])[index];
             }

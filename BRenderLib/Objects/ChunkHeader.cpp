@@ -1,5 +1,5 @@
 #include <Objects/ChunkHeader.h>
-#include <BigEndianStreamReader.h>
+#include <EndianStreamReader.h>
 #include <Exception/Exception.h>
 
 
@@ -13,7 +13,7 @@ namespace OpenCarma
         {
         }
 
-        void ChunkHeader::read(BigEndianStreamReader& reader)
+        void ChunkHeader::read(EndianStreamReader& reader)
         {
             if (!reader.isEOF())
                 m_magic = reader.readUInt32();
@@ -30,7 +30,7 @@ namespace OpenCarma
         {
         }
 
-        void FileHeaderChunk::read(BigEndianStreamReader& reader)
+        void FileHeaderChunk::read(EndianStreamReader& reader)
         {
             m_version1 = reader.readUInt32();
             m_version2 = reader.readUInt32();
@@ -47,7 +47,7 @@ namespace OpenCarma
         {
         }
 
-        void TextureHeadChunk::read(BigEndianStreamReader& reader)
+        void TextureHeadChunk::read(EndianStreamReader& reader)
         {
             m_pixelFormat = reader.readUInt8();
             m_stride = reader.readUInt16();
@@ -66,7 +66,7 @@ namespace OpenCarma
         {
         }
 
-        void TextureDataChunk::read(BigEndianStreamReader& reader)
+        void TextureDataChunk::read(EndianStreamReader& reader)
         {
             m_numPixels = reader.readUInt32();
             m_BPP = reader.readUInt32();
@@ -80,7 +80,7 @@ namespace OpenCarma
         {
         }
 
-        void ModelHeadChunk::read(BigEndianStreamReader& reader)
+        void ModelHeadChunk::read(EndianStreamReader& reader)
         {
             m_unkonwn = reader.readUInt16();
             m_name = reader.readString();
@@ -91,7 +91,7 @@ namespace OpenCarma
         {
         }
 
-        void ModelVerticesChunk::read(BigEndianStreamReader& reader)
+        void ModelVerticesChunk::read(EndianStreamReader& reader)
         {
             uint32_t vertexCount = reader.readUInt32();
             m_vertices.resize(vertexCount);
@@ -109,7 +109,7 @@ namespace OpenCarma
         {
         }
 
-        void ModelUVsChunk::read(BigEndianStreamReader& reader)
+        void ModelUVsChunk::read(EndianStreamReader& reader)
         {
             uint32_t uvCount = reader.readUInt32();
             m_uv.resize(uvCount);
@@ -126,7 +126,7 @@ namespace OpenCarma
         {
         }
 
-        void ModelFacesChunk::read(BigEndianStreamReader& reader)
+        void ModelFacesChunk::read(EndianStreamReader& reader)
         {
             uint32_t facesCount = reader.readUInt32();
             m_faces.resize(facesCount);
@@ -148,7 +148,7 @@ namespace OpenCarma
         {
         }
 
-        void ModelMaterialsChunk::read(BigEndianStreamReader& reader)
+        void ModelMaterialsChunk::read(EndianStreamReader& reader)
         {
             uint32_t materialsCount = reader.readUInt32();
             m_materials.reserve(materialsCount);
@@ -163,7 +163,7 @@ namespace OpenCarma
         {
         }
 
-        void ModelFaceMaterialsChunk::read(BigEndianStreamReader& reader)
+        void ModelFaceMaterialsChunk::read(EndianStreamReader& reader)
         {
             uint32_t faceMatCount = reader.readUInt32();
             uint32_t bytesPerEntry = reader.readUInt32();
@@ -188,7 +188,7 @@ namespace OpenCarma
         {
         }
 
-        void MaterialAttributesV1Chunk::read(BigEndianStreamReader& reader)
+        void MaterialAttributesV1Chunk::read(EndianStreamReader& reader)
         {
             m_color = reader.readUInt32();
             for (int i = 0; i < 4; ++i)
@@ -212,7 +212,7 @@ namespace OpenCarma
         {
         }
 
-        void MaterialAttributesV2Chunk::read(BigEndianStreamReader& reader)
+        void MaterialAttributesV2Chunk::read(EndianStreamReader& reader)
         {
             m_color = reader.readUInt32();
             for (int i = 0; i < 4; ++i)
@@ -230,7 +230,7 @@ namespace OpenCarma
         {
         }
 
-        void MaterialPixmapNameChunk::read(BigEndianStreamReader& reader)
+        void MaterialPixmapNameChunk::read(EndianStreamReader& reader)
         {
             m_name = reader.readString();
         }
@@ -240,7 +240,7 @@ namespace OpenCarma
         {
         }
 
-        void MaterialShadetabNameChunk::read(BigEndianStreamReader& reader)
+        void MaterialShadetabNameChunk::read(EndianStreamReader& reader)
         {
             m_name = reader.readString();
         }
@@ -251,7 +251,7 @@ namespace OpenCarma
         {
         }
         
-        void ActorNameChunk::read(BigEndianStreamReader& reader)
+        void ActorNameChunk::read(EndianStreamReader& reader)
         {
             m_flags = reader.readUInt16();
             m_name = reader.readString();
@@ -263,7 +263,7 @@ namespace OpenCarma
             m_matrix[15] = 1.F;
         }
 
-        void ActorMatrixChunk::read(BigEndianStreamReader& reader)
+        void ActorMatrixChunk::read(EndianStreamReader& reader)
         {
             for (int i = 0; i < 12; ++i)
                 m_matrix[i] = reader.readFloat();
@@ -275,7 +275,7 @@ namespace OpenCarma
         {
         }
 
-        void ActorPushChunk::read(BigEndianStreamReader& reader)
+        void ActorPushChunk::read(EndianStreamReader& reader)
         {
         }
         
@@ -283,7 +283,7 @@ namespace OpenCarma
         {
         }
 
-        void ActorPopChunk::read(BigEndianStreamReader& reader)
+        void ActorPopChunk::read(EndianStreamReader& reader)
         {
         }
      
@@ -293,7 +293,7 @@ namespace OpenCarma
         {
         }
 
-        void ActorModelChunk::read(BigEndianStreamReader& reader)
+        void ActorModelChunk::read(EndianStreamReader& reader)
         {
             m_name = reader.readString();
         }
@@ -302,7 +302,7 @@ namespace OpenCarma
         {
         }
 
-        void ActorEmptyChunk::read(BigEndianStreamReader& reader)
+        void ActorEmptyChunk::read(EndianStreamReader& reader)
         {
         }
                         
@@ -311,7 +311,7 @@ namespace OpenCarma
         {
         }
 
-        void ActorMaterialChunk::read(BigEndianStreamReader& reader)
+        void ActorMaterialChunk::read(EndianStreamReader& reader)
         {
             m_name = reader.readString();
         }
@@ -323,7 +323,7 @@ namespace OpenCarma
             // TODO
         }
 
-        void ActorBBoxChunk::read(BigEndianStreamReader& reader)
+        void ActorBBoxChunk::read(EndianStreamReader& reader)
         {
             for (uint32_t i = 0; i < 3; ++i)
                 m_pos[i] = reader.readFloat();

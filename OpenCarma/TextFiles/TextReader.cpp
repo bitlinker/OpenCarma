@@ -1,6 +1,9 @@
 #include <TextReader.h>
 #include <sstream>
+#include <iostream>
+#include <string>
 #include <Exception/Exception.h>
+#include <cstdlib>
 
 inline static uint32_t ParseUint32(const std::string& str)
 {

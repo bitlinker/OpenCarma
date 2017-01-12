@@ -1,5 +1,4 @@
 #include <StaticModel.h>
-#include <Render/Render.h>
 #include <Render/ScopeBind.h>
 
 namespace OpenCarma
@@ -20,7 +19,7 @@ namespace OpenCarma
 			auto mats = model->getMaterials();
 			for (auto it = mats.begin(); it != mats.end(); ++it)
 			{
-				auto mat = renderPtr->getMaterialManager().getMaterial(*it);
+				//auto mat = renderPtr->getMaterialManager().getMaterial(*it);
 				// TODO: check
 
 				//render.getTextureManager().getTexture();
@@ -93,6 +92,8 @@ namespace OpenCarma
 			//shaderProg->setMVP(matrix);
 			//shaderProg->setTex1Sampler(0);
 			//shaderProg->use(); // TODO: in materials?
+
+            //m_renderPtr->drawElements();
 
 			glDrawElements(GL_TRIANGLES, m_numIndices, GL_UNSIGNED_SHORT, 0);
 		}

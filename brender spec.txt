@@ -46,7 +46,7 @@ The chunks following. Chunks are stopping at eof and 8-zeroes chunk
 uint8_t u1; //0x3 - always 3 for pixel maps, 3 also for shade tabs, 7 for palette
 uint16_t width1; // 0x14, 4 for palette - number of color components
 uint16_t width2; // 0x14 // stride???, 1 for palette
-uint16_t height; // 0x19,  256 for palette
+uint16_t mHeight; // 0x19,  256 for palette
 uint16_t u2; // 0x0A
 uint16_t u3; // 0x0C
 char* name (null-terminated)

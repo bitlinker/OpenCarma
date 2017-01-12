@@ -6,9 +6,10 @@ namespace OpenCarma
 {
     namespace BRender
     {
+        // TODO: to commons
         // BRender chunk stream reader
         // throws istream::failure
-        class BR_API BigEndianStreamReader
+        class BR_API EndianStreamReader
         {
         public:
             enum SeekOrigin
@@ -18,8 +19,8 @@ namespace OpenCarma
                 SeekOrigin_END,
             };
         public:
-            BigEndianStreamReader(std::istream& stream);
-            ~BigEndianStreamReader();
+            EndianStreamReader(std::istream& stream, Endianness::EndiannessType endiannessType);
+            ~EndianStreamReader();
 
             void seek(int32_t size, SeekOrigin origin);
             void read(uint8_t* buf, size_t size);
@@ -35,6 +36,7 @@ namespace OpenCarma
 
         private:
             std::istream& m_stream;
+            bool mNeedSwap;
         };
     }
 }

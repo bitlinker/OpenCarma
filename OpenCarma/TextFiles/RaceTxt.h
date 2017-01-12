@@ -19,7 +19,7 @@ namespace OpenCarma
 			glm::vec3 points[4];
 
 		public:
-			void CheckpointQuad::parse(const TextReader& reader);
+			void parse(const TextReader& reader);
 		};
 
 		class Checkpoint

@@ -46,5 +46,6 @@ namespace OpenCarma
 		private:
 			StaticModelPtr m_node;
 		};
+        typedef std::shared_ptr<StaticModelNode> StaticModelNodePtr;
 	}
 }
