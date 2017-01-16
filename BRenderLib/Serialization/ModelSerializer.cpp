@@ -16,7 +16,7 @@ namespace OpenCarma
 
             ModelPtr curModel;
 
-            EndianStreamReader reader(stream);
+            EndianStreamReader reader(stream, Commons::Endianness::BIG_ENDIAN);
 
             FileHeaderChunk fileHeader;
             ChunkHeader header;

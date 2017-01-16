@@ -17,7 +17,7 @@ namespace OpenCarma
             ActorPtr curActor;
             int32_t curLevel = 0;
 
-            EndianStreamReader reader(stream);
+            EndianStreamReader reader(stream, Commons::Endianness::BIG_ENDIAN);
 
             FileHeaderChunk fileHeader;
             ChunkHeader header;

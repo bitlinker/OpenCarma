@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{ece728d8-cec9-4e1a-88fd-e2ed3b307534}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Serialziation">
+      <UniqueIdentifier>{4ebe4c45-35f2-47de-9ef8-2be08fa5a48a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Serialization\ActorSerializer.cpp">
+      <Filter>Serialziation</Filter>
+    </ClCompile>
+    <ClCompile Include="Serialization\MaterialSerializer.cpp">
+      <Filter>Serialziation</Filter>
+    </ClCompile>
+    <ClCompile Include="Serialization\ModelSerializer.cpp">
+      <Filter>Serialziation</Filter>
+    </ClCompile>
+    <ClCompile Include="Serialization\TextureSerializer.cpp">
+      <Filter>Serialziation</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Actor.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\ChunkHeader.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Material.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Model.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Pixmap.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="EndianStreamReader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Serialization\ActorSerializer.h">
+      <Filter>Serialziation</Filter>
+    </ClInclude>
+    <ClInclude Include="Serialization\MaterialSerializer.h">
+      <Filter>Serialziation</Filter>
+    </ClInclude>
+    <ClInclude Include="Serialization\ModelSerializer.h">
+      <Filter>Serialziation</Filter>
+    </ClInclude>
+    <ClInclude Include="Serialization\TextureSerializer.h">
+      <Filter>Serialziation</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Actor.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\ChunkHeader.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Material.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Model.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Pixmap.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="EndianStreamReader.h" />
+  </ItemGroup>
+</Project>

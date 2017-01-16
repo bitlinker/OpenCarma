@@ -41,30 +41,39 @@ static void WritePixmap2Tga(const std::string& filename, const PixmapPtr& pixmap
     }
 
     FileStreamPtr streamPtr(new FileStream(filename, FileStream::MODE_WRITE));
-    TgaImageEncoder encoder(streamPtr);
+    TgaImageEncoder encoder;
     ImageInfo info(width, height, 4);
-    encoder.write(info, (uint8_t*)&rgbPixmap[0]);
+    encoder.writeImage(streamPtr, info, (uint8_t*)&rgbPixmap[0]);
 }
 
 
 
-int main()
+int main(int argc, char **argv)
 {    
     std::cout << "BRender test" << std::endl;
+
+	if (argc < 2) 
+	{
+		std::cout << "Usage: BRenderTest [carmaPath]" << std::endl;
+		return -1;
+	}
+
+	std::string carmaPath(argv[1]);
 
     // TODO: try/catch
     try
     {
-        /*std::ifstream strm_pal("e:/Games/Carma/DATA/REG/PALETTES/DRRENDER.PAL", std::ifstream::binary);
-        auto pal = PaletteSerializer::DeserializePalette(strm_pal);
+		std::vector<PixmapPtr> palletes;
+        std::ifstream strm_pal(carmaPath + "/DATA/REG/PALETTES/DRRENDER.PAL", std::ifstream::binary);
+		TextureSerializer::DeserializePixelmap(strm_pal, palletes);
 
-        std::ifstream strm_pixmap("e:/Games/Carma/DATA/PIXELMAP/DEZRACE2.PIX", std::ifstream::binary);
+        std::ifstream strm_pixmap(carmaPath + "/DATA/PIXELMAP/DEZRACE2.PIX", std::ifstream::binary);
         //FileStream strm_pixmap("e:/Games/Carma/DATA/PIXELMAP/DEZRACE2.PIX");
 
         std::vector<PixmapPtr> pixelMaps;
         TextureSerializer::DeserializePixelmap(strm_pixmap, pixelMaps);
 
-        WritePixmap2Tga("d:/test.tga", pixelMaps[1], pal);*/
+        //WritePixmap2Tga("d:/test.tga", pixelMaps[1], pal);
 
         /*FileStream strm_mat("e:/Games/Carma/DATA/MATERIAL/MERC8.MAT");
         auto mat = TextureSerializer::DeserializeMaterial(strm_mat);*/

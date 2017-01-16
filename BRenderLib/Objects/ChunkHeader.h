@@ -110,7 +110,7 @@ namespace OpenCarma
             uint16_t m_height;	        //!< Height
             uint16_t m_offsetX;         //!< oX
             uint16_t m_offsetY;         //!< oY
-			std::string m_name;              //!< Null-terminated name
+			std::string m_name;         //!< Null-terminated name
         };
 
         //! Texture data

@@ -15,13 +15,13 @@ namespace OpenCarma
 
             PixmapPtr curPixmap;
 
-            EndianStreamReader reader(stream);
+            EndianStreamReader reader(stream, Commons::Endianness::BIG_ENDIAN);
 
             FileHeaderChunk fileHeader;
             ChunkHeader header;
             while (!reader.isEOF())
             {
-                header.read(reader);                
+                header.read(reader);
 
                 uint32_t lastOffset = reader.tell();
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <Common.h>
+#include <Common/Endianness.h>
 #include <iostream>
 
 namespace OpenCarma
@@ -19,7 +20,7 @@ namespace OpenCarma
                 SeekOrigin_END,
             };
         public:
-            EndianStreamReader(std::istream& stream, Endianness::EndiannessType endiannessType);
+            EndianStreamReader(std::istream& stream, Commons::Endianness::EndiannessType endiannessType);
             ~EndianStreamReader();
 
             void seek(int32_t size, SeekOrigin origin);
