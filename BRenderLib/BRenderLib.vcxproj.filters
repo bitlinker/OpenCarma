@@ -36,7 +36,6 @@
     <ClCompile Include="Objects\Pixmap.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="EndianStreamReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Serialization\ActorSerializer.h">
@@ -67,6 +66,5 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Common.h" />
-    <ClInclude Include="EndianStreamReader.h" />
   </ItemGroup>
 </Project>

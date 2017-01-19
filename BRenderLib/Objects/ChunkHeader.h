@@ -4,6 +4,10 @@
 
 // All chunks should be packed
 //#pragma pack(push, 1)
+namespace Commons
+{
+    class StreamReader;
+}
 
 namespace OpenCarma
 {
@@ -47,8 +51,6 @@ namespace OpenCarma
             uint8_t m_unknown[3];
         };
 
-        class EndianStreamReader;
-
         class BR_API ChunkHeader
         {
         public:
@@ -63,8 +65,7 @@ namespace OpenCarma
             const bool isNULL() const { return (m_size == 0 && m_magic == 0); }
 
         public:
-            // Returns false on eof
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
 
         private:
             uint32_t m_magic;
@@ -86,7 +87,7 @@ namespace OpenCarma
         public:
             FileHeaderChunk();
 
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
 
         public:
             uint32_t m_version1;
@@ -101,7 +102,7 @@ namespace OpenCarma
 
         public:
             TextureHeadChunk();
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
 
         public:
             uint8_t m_pixelFormat;      //!< Pixel format
@@ -122,7 +123,7 @@ namespace OpenCarma
         public:
             TextureDataChunk();
 
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
 
         public:
             uint32_t m_numPixels;
@@ -139,7 +140,7 @@ namespace OpenCarma
         public:
             ModelHeadChunk();
 
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
 
         public:
             uint16_t m_unkonwn;
@@ -154,7 +155,7 @@ namespace OpenCarma
         public:
             ModelVerticesChunk();
 
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
 
         public:
             std::vector<Vertex3f> m_vertices;
@@ -168,7 +169,7 @@ namespace OpenCarma
         public:
             ModelUVsChunk();
 
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
 
         public:
             std::vector<Vertex2f> m_uv;
@@ -182,7 +183,7 @@ namespace OpenCarma
         public:
             ModelFacesChunk();
 
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
 
         public:
             std::vector<Face> m_faces;
@@ -196,7 +197,7 @@ namespace OpenCarma
         public:
             ModelMaterialsChunk();
 
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
 
         public:
             std::vector<std::string> m_materials;
@@ -210,7 +211,7 @@ namespace OpenCarma
         public:
             ModelFaceMaterialsChunk();
 
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
 
         public:
             std::vector<uint16_t> m_faceMats; // 1-based
@@ -224,7 +225,7 @@ namespace OpenCarma
 
         public:
             MaterialAttributesV1Chunk();
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
 
         public:
             uint32_t m_color;		            //!< Color, RGBA
@@ -247,7 +248,7 @@ namespace OpenCarma
 
         public:
             MaterialAttributesV2Chunk();
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
 
         public:
             uint32_t m_color;		            //!< Color, RGBA
@@ -267,7 +268,7 @@ namespace OpenCarma
 
         public:
             MaterialPixmapNameChunk();
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
 
         public:
 			std::string m_name;                 //!< Null-terminated name
@@ -281,7 +282,7 @@ namespace OpenCarma
 
         public:
             MaterialShadetabNameChunk();
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
 
         public:
 			std::string m_name;                 //!< Null-terminated name
@@ -296,7 +297,7 @@ namespace OpenCarma
 
         public:
             ActorNameChunk();
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
 
         public:
             uint16_t m_flags;	                //!< Flags            
@@ -310,7 +311,7 @@ namespace OpenCarma
 
         public:
             ActorMatrixChunk();
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
 
         public:
             float m_matrix[16];	                //!< Transform matrix
@@ -323,7 +324,7 @@ namespace OpenCarma
 
         public:
             ActorPushChunk();
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
         };
 
         class BR_API ActorPopChunk : public ChunkHeader
@@ -333,7 +334,7 @@ namespace OpenCarma
 
         public:
             ActorPopChunk();
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
         };     
 
         class BR_API ActorModelChunk : public ChunkHeader
@@ -343,7 +344,7 @@ namespace OpenCarma
 
         public:
             ActorModelChunk();
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
         public:
 			std::string m_name;
         };
@@ -355,7 +356,7 @@ namespace OpenCarma
 
         public:
             ActorEmptyChunk();
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
         };
 
         class BR_API ActorMaterialChunk : public ChunkHeader
@@ -365,7 +366,7 @@ namespace OpenCarma
 
         public:
             ActorMaterialChunk();
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
         public:
 			std::string m_name;
         };
@@ -377,7 +378,7 @@ namespace OpenCarma
 
         public:
             ActorBBoxChunk();
-            void read(EndianStreamReader& reader);
+            void read(Commons::StreamReader& reader);
 
         public:
             float m_pos[3];

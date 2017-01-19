@@ -1,75 +1,72 @@
 #include <cassert>
-#include <sstream>
+#include <Common/StringUtils.h>
 #include <Serialization/TextureSerializer.h>
-#include <EndianStreamReader.h>
+#include <Streams/StreamReader.h>
 #include <Exception/Exception.h>
+
+using namespace Commons;
 
 namespace OpenCarma
 {
     namespace BRender
     {
-        void TextureSerializer::DeserializePixelmap(std::istream& stream, std::vector<PixmapPtr>& pixelmaps)
+        void TextureSerializer::DeserializePixelmap(const IOStreamPtr& stream, std::vector<PixmapPtr>& pixelmaps)
         {
-            if (!stream)
-                throw Commons::IOException("Stream is not opened");
+            assert(stream);
 
             PixmapPtr curPixmap;
 
-            EndianStreamReader reader(stream, Commons::Endianness::BIG_ENDIAN);
+            StreamReader reader(stream, Endianness::BIG_ENDIAN);
 
+            // TODO: common code for this stuff
+            // TODO: logger
             FileHeaderChunk fileHeader;
             ChunkHeader header;
-            while (!reader.isEOF())
+            IOStream::size_type streamSize = reader.size();
+            while (reader.tell() < streamSize)
             {
                 header.read(reader);
-
                 uint32_t lastOffset = reader.tell();
 
-                if (header.getMagic() == FileHeaderChunk::MAGIC)
+                switch (header.getMagic())
                 {
+                case FileHeaderChunk::MAGIC:
                     fileHeader.read(reader);
-                }
-                else if (header.getMagic() == TextureHeadChunk::MAGIC)
-                {
+                    break;
+                case TextureHeadChunk::MAGIC:
                     curPixmap = PixmapPtr(new Pixmap());
-                    assert(curPixmap.get());
+                    assert(curPixmap.get()); // TODO: checks, not asserts
                     curPixmap->m_header.read(reader);
-                }
-                else if (header.getMagic() == TextureDataChunk::MAGIC)
-                {
+                    break;
+                case TextureDataChunk::MAGIC:
                     assert(curPixmap.get());
                     curPixmap->m_data.read(reader);
-                }
-                else if (header.isNULL())
-                {
+                    break;
+                case 0: // Null header
+                    assert(header.getSize() == 0);
                     if (!curPixmap.get() || !curPixmap->isValid())
-                        throw Commons::SerializationException("Pixelmap object is incorrect");
+                        throw SerializationException("Pixelmap object is incorrect");
                     pixelmaps.push_back(curPixmap);
                     curPixmap.reset();
-                }
-                else
-                {
-                    std::stringstream ss;
-                    ss << "Unknown chunk: " << header.getMagic() << " at " << reader.tell();
-                    throw Commons::SerializationException(ss.str());
+                    break;
+                default:
+                    throw SerializationException(StringUtils::FormatString("Unknown chunk: %d at %d", header.getMagic(), reader.tell()));
                 }
 
-                uint32_t redSize = reader.tell() - lastOffset;
+                IOStream::size_type redSize = reader.tell() - lastOffset;
                 if (redSize != header.getSize())
-                {
-                    std::stringstream ss;
-                    ss << "Incorrect chunk size red: required: " << header.getSize() << " current " << redSize;
-                    throw Commons::SerializationException(ss.str());
+                {                   
+                    throw SerializationException(StringUtils::FormatString("Incorrect chunk size read: required: %d, current %d", header.getSize(), redSize));
                 }
             }
         }
 
-        void TextureSerializer::SerializePixelmap(const PixmapPtr& pal, std::ostream& stream)
+        void TextureSerializer::SerializePixelmap(const PixmapPtr& pal, const IOStreamPtr& stream)
         {
             assert(pal);
 
             if (!stream)
-                throw Commons::IOException("Stream is not opened");
+                throw IOException("Stream is not opened");
 
             // TODO
         }

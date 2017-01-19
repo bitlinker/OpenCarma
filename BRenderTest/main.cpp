@@ -46,8 +46,6 @@ static void WritePixmap2Tga(const std::string& filename, const PixmapPtr& pixmap
     encoder.writeImage(streamPtr, info, (uint8_t*)&rgbPixmap[0]);
 }
 
-
-
 int main(int argc, char **argv)
 {    
     std::cout << "BRender test" << std::endl;
@@ -64,14 +62,15 @@ int main(int argc, char **argv)
     try
     {
 		std::vector<PixmapPtr> palletes;
-        std::ifstream strm_pal(carmaPath + "/DATA/REG/PALETTES/DRRENDER.PAL", std::ifstream::binary);
+        IOStreamPtr strm_pal(new FileStream(carmaPath + "/DATA/REG/PALETTES/DRRENDER.PAL", FileStream::MODE_READ));
 		TextureSerializer::DeserializePixelmap(strm_pal, palletes);
 
-        std::ifstream strm_pixmap(carmaPath + "/DATA/PIXELMAP/DEZRACE2.PIX", std::ifstream::binary);
-        //FileStream strm_pixmap("e:/Games/Carma/DATA/PIXELMAP/DEZRACE2.PIX");
+        IOStreamPtr strm_pixmap(new FileStream(carmaPath + "/DATA/PIXELMAP/DEZRACE2.PIX", FileStream::MODE_READ));
 
         std::vector<PixmapPtr> pixelMaps;
         TextureSerializer::DeserializePixelmap(strm_pixmap, pixelMaps);
+
+        int k = 0;
 
         //WritePixmap2Tga("d:/test.tga", pixelMaps[1], pal);
 
@@ -88,7 +87,7 @@ int main(int argc, char **argv)
     }
     catch (const IOException& ioe)
     {
-        std::cout << "IO Exception" << ioe.what() << std::endl;
+        std::cout << "IO Exception: " << ioe.what() << std::endl;
     }
     
     

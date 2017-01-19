@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EndianStreamReader.cpp" />
     <ClCompile Include="Objects\Actor.cpp" />
     <ClCompile Include="Objects\ChunkHeader.cpp" />
     <ClCompile Include="Objects\Material.cpp" />
@@ -32,7 +31,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
-    <ClInclude Include="EndianStreamReader.h" />
     <ClInclude Include="Objects\Actor.h" />
     <ClInclude Include="Objects\ChunkHeader.h" />
     <ClInclude Include="Objects\Material.h" />

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Common.h>
-#include <iostream>
+#include <Streams/IOStream.h>
 
 #include <Objects/Pixmap.h>
 
@@ -16,8 +16,8 @@ namespace OpenCarma
             ~TextureSerializer() {};
 
         public:
-            static void DeserializePixelmap(std::istream& stream, std::vector<PixmapPtr>& pixelmaps);
-            static void SerializePixelmap(const PixmapPtr& pal, std::ostream& stream);
+            static void DeserializePixelmap(const Commons::IOStreamPtr& stream, std::vector<PixmapPtr>& pixelmaps);
+            static void SerializePixelmap(const PixmapPtr& pal, const Commons::IOStreamPtr& stream);
         };
     }
 }
