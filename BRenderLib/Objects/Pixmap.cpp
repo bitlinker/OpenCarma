@@ -5,8 +5,16 @@ namespace OpenCarma
 	namespace BRender
 	{
 		Pixmap::Pixmap()
-            : m_header()
-            , m_data()
+			: mPixelFormat(BR_PMT_INDEX_8)
+			, mStride(0)
+			, mWidth(0)
+			, mHeight(0)
+			, mOffsetX(0)
+			, mOffsetY(0)
+			, mName()
+			, mNumPixels(0)
+			, mBpp(1)
+			, mData()
 		{
 		}
 
@@ -14,7 +22,7 @@ namespace OpenCarma
         {
             // TODO: more complex checks
             // TODO: logging
-            if (!m_header.m_pixelFormat)
+            /*if (!m_header.m_pixelFormat)
                 return false;
 
             if (!m_header.m_width || !m_header.m_height)
@@ -30,7 +38,7 @@ namespace OpenCarma
                 return false;
 
             if (m_data.m_data.size() != m_data.m_numPixels * m_data.m_BPP)
-                return false;
+                return false;*/
 
             return true;
         }

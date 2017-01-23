@@ -8,13 +8,13 @@ namespace OpenCarma
     {
         class BR_API Pixmap
         {
-            friend class TextureSerializer;
+            friend class PixmapSerializer;
 
         public:
             enum PixelFormat 
             {
                 /*
-                * Each pixel is an index into a colour map
+                * Each pixel is an index into a color map
                 */
                 BR_PMT_INDEX_1,
                 BR_PMT_INDEX_2,
@@ -22,7 +22,7 @@ namespace OpenCarma
                 BR_PMT_INDEX_8,
 
                 /*
-                * True colour RGB
+                * True color RGB
                 */
                 BR_PMT_RGB_555,		/* 16 bits per pixel */
                 BR_PMT_RGB_565,		/* 16 bits per pixel */
@@ -57,35 +57,46 @@ namespace OpenCarma
             // Creates an empty pixel map
             Pixmap();
 
-            PixelFormat getPixelFormat() { return static_cast<PixelFormat>(m_header.m_pixelFormat); }
-            uint32_t getStride() const { return m_header.m_stride; }
-            uint32_t getWidth() const { return m_header.m_width; }
-            uint32_t getHeight() const { return m_header.m_height; }
-            uint32_t getXOffset() const { return m_header.m_offsetX; }
-            uint32_t getYOffset() const { return m_header.m_offsetY; }
-            uint32_t getBPP() const { return m_data.m_BPP; }
-            uint32_t getNumPixels() const { return m_data.m_numPixels; }
-            const std::string& getName() const { return m_header.m_name; }
+            PixelFormat getPixelFormat() { return static_cast<PixelFormat>(mPixelFormat); }
+            int32_t getStride() const { return mStride; }
+            uint32_t getWidth() const { return mWidth; }
+            uint32_t getHeight() const { return mHeight; }
+            int32_t getXOffset() const { return mOffsetX; }
+            int32_t getYOffset() const { return mOffsetY; }
+            uint32_t getBPP() const { return mBpp; }
+            uint32_t getNumPixels() const { return mNumPixels; }
+            const std::string& getName() const { return mName; }
             bool isValid() const;
 
             inline const std::vector<uint8_t>& getPixels() const
             {
-                return m_data.m_data;
+                return mData;
             }
 
             inline uint8_t getColorPAL8(uint32_t index) const
             {
-                return m_data.m_data[index];
+                return mData[index];
             }
 
             inline uint32_t getColorARGB(uint32_t index) const
             {
-                return reinterpret_cast<const uint32_t*>(&m_data.m_data[0])[index];
+                return reinterpret_cast<const uint32_t*>(&mData[0])[index];
             }
 
         private:
-            TextureHeadChunk m_header;
-            TextureDataChunk m_data;
+			// Texture head:
+			uint8_t mPixelFormat;    //!< Pixel format
+			int16_t mStride;	     //!< Stride
+			uint16_t mWidth;		 //!< Width
+			uint16_t mHeight;	     //!< Height
+			int16_t mOffsetX;        //!< oX
+			int16_t mOffsetY;		 //!< oY
+			std::string mName;       //!< Null-terminated name
+
+			// Texture data:
+			uint32_t mNumPixels;
+			uint32_t mBpp;
+			std::vector<uint8_t> mData;
         };
 
         typedef std::shared_ptr<Pixmap> PixmapPtr;

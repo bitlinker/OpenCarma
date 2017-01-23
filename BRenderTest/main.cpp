@@ -4,7 +4,7 @@
 
 #include <Imaging/TgaImageEncoder.h>
 #include <Streams/FileStream.h>
-#include <Serialization/TextureSerializer.h>
+#include <Serialization/PixmapSerializer.h>
 #include <Serialization/ModelSerializer.h>
 #include <Exception/Exception.h>
 
@@ -63,12 +63,12 @@ int main(int argc, char **argv)
     {
 		std::vector<PixmapPtr> palletes;
         IOStreamPtr strm_pal(new FileStream(carmaPath + "/DATA/REG/PALETTES/DRRENDER.PAL", FileStream::MODE_READ));
-		TextureSerializer::DeserializePixelmap(strm_pal, palletes);
+		PixmapSerializer::DeserializePixelmap(strm_pal, palletes);
 
         IOStreamPtr strm_pixmap(new FileStream(carmaPath + "/DATA/PIXELMAP/DEZRACE2.PIX", FileStream::MODE_READ));
 
         std::vector<PixmapPtr> pixelMaps;
-        TextureSerializer::DeserializePixelmap(strm_pixmap, pixelMaps);
+        PixmapSerializer::DeserializePixelmap(strm_pixmap, pixelMaps);
 
         int k = 0;
 

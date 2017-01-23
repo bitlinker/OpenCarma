@@ -21,67 +21,54 @@ namespace OpenCarma
             //printf("Magic: %x(%d), len: %d at: %d\n", m_magic, m_magic, m_size, reader.tell());
         }
 
-
-        FileHeaderChunk::FileHeaderChunk()
-            : m_version1(0)
-            , m_version2(0)
-        {
-        }
-
-        void FileHeaderChunk::read(Commons::StreamReader& reader)
-        {
-            m_version1 = reader.readUInt32();
-            m_version2 = reader.readUInt32();
-        }
-
         TextureHeadChunk::TextureHeadChunk()
-            : m_pixelFormat(0)
-            , m_stride(0)
-            , m_width(0)
-            , m_height(0)
-            , m_offsetX(0)
-            , m_offsetY(0)
-            , m_name()
+            : mPixelFormat(0)
+            , mStride(0)
+            , mWidth(0)
+            , mHeight(0)
+            , mOffsetX(0)
+            , mOffsetY(0)
+            , mName()
         {
         }
 
         void TextureHeadChunk::read(Commons::StreamReader& reader)
         {
-            m_pixelFormat = reader.readUInt8();
-            m_stride = reader.readUInt16();
-            m_width = reader.readUInt16();
-            m_height = reader.readUInt16();
-            m_offsetX = reader.readUInt16();
-            m_offsetY = reader.readUInt16();
-            m_name = reader.readNullTermString();
+            mPixelFormat = reader.readUInt8();
+            mStride = reader.readUInt16();
+            mWidth = reader.readUInt16();
+            mHeight = reader.readUInt16();
+            mOffsetX = reader.readUInt16();
+            mOffsetY = reader.readUInt16();
+            mName = reader.readNullTermString();
         }
 
 
         TextureDataChunk::TextureDataChunk()
-            : m_numPixels(0)
-            , m_BPP(0)
-            , m_data()
+            : mNumPixels(0)
+            , mBpp(0)
+            , mData()
         {
         }
 
         void TextureDataChunk::read(Commons::StreamReader& reader)
         {
-            m_numPixels = reader.readUInt32();
-            m_BPP = reader.readUInt32();
-            m_data.resize(m_BPP * m_numPixels);
-            reader.read(&m_data[0], m_numPixels * m_BPP);
+            mNumPixels = reader.readUInt32();
+            mBpp = reader.readUInt32();
+            mData.resize(mBpp * mNumPixels);
+            reader.read(&mData[0], mNumPixels * mBpp);
         }
 
         ModelHeadChunk::ModelHeadChunk()
             : m_unkonwn(0)
-            , m_name()
+            , mName()
         {
         }
 
         void ModelHeadChunk::read(Commons::StreamReader& reader)
         {
             m_unkonwn = reader.readUInt16();
-            m_name = reader.readNullTermString();
+            mName = reader.readNullTermString();
         }
 
         ModelVerticesChunk::ModelVerticesChunk()            
@@ -182,7 +169,7 @@ namespace OpenCarma
             , m_transform()
             , m_indexBase(0)
             , m_indexRange(0)
-            , m_name()
+            , mName()
         {
         }
 
@@ -196,7 +183,7 @@ namespace OpenCarma
                 m_transform[i] = reader.readFloat();
             m_indexBase = reader.readUInt8();
             m_indexRange = reader.readUInt8();
-            m_name = reader.readNullTermString();
+            mName = reader.readNullTermString();
         }
 
         MaterialAttributesV2Chunk::MaterialAttributesV2Chunk()
@@ -206,7 +193,7 @@ namespace OpenCarma
             , m_transform() // TODO
             , m_unk(0)
             , m_unk2()
-            , m_name()
+            , mName()
         {
         }
 
@@ -220,39 +207,39 @@ namespace OpenCarma
                 m_transform[i] = reader.readFloat();
             m_unk = reader.readUInt32();
             reader.read(m_unk2, 13);
-            m_name = reader.readNullTermString();
+            mName = reader.readNullTermString();
         }
 
         MaterialPixmapNameChunk::MaterialPixmapNameChunk()
-            : m_name()
+            : mName()
         {
         }
 
         void MaterialPixmapNameChunk::read(Commons::StreamReader& reader)
         {
-            m_name = reader.readNullTermString();
+            mName = reader.readNullTermString();
         }
 
         MaterialShadetabNameChunk::MaterialShadetabNameChunk()
-            : m_name()
+            : mName()
         {
         }
 
         void MaterialShadetabNameChunk::read(Commons::StreamReader& reader)
         {
-            m_name = reader.readNullTermString();
+            mName = reader.readNullTermString();
         }
 
         ActorNameChunk::ActorNameChunk()
             : m_flags(0)
-            , m_name()
+            , mName()
         {
         }
         
         void ActorNameChunk::read(Commons::StreamReader& reader)
         {
             m_flags = reader.readUInt16();
-            m_name = reader.readNullTermString();
+            mName = reader.readNullTermString();
         }
 
         ActorMatrixChunk::ActorMatrixChunk()
@@ -287,13 +274,13 @@ namespace OpenCarma
      
         
         ActorModelChunk::ActorModelChunk()
-            : m_name()
+            : mName()
         {
         }
 
         void ActorModelChunk::read(Commons::StreamReader& reader)
         {
-            m_name = reader.readNullTermString();
+            mName = reader.readNullTermString();
         }
 
         ActorEmptyChunk::ActorEmptyChunk()
@@ -305,13 +292,13 @@ namespace OpenCarma
         }
                         
         ActorMaterialChunk::ActorMaterialChunk()
-            : m_name()
+            : mName()
         {
         }
 
         void ActorMaterialChunk::read(Commons::StreamReader& reader)
         {
-            m_name = reader.readNullTermString();
+            mName = reader.readNullTermString();
         }
         
         ActorBBoxChunk::ActorBBoxChunk()

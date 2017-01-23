@@ -25,9 +25,10 @@
     <ClCompile Include="Objects\Model.cpp" />
     <ClCompile Include="Objects\Pixmap.cpp" />
     <ClCompile Include="Serialization\ActorSerializer.cpp" />
+    <ClCompile Include="Serialization\ChunkReader.cpp" />
     <ClCompile Include="Serialization\MaterialSerializer.cpp" />
     <ClCompile Include="Serialization\ModelSerializer.cpp" />
-    <ClCompile Include="Serialization\TextureSerializer.cpp" />
+    <ClCompile Include="Serialization\PixmapSerializer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
@@ -37,9 +38,10 @@
     <ClInclude Include="Objects\Model.h" />
     <ClInclude Include="Objects\Pixmap.h" />
     <ClInclude Include="Serialization\ActorSerializer.h" />
+    <ClInclude Include="Serialization\ChunkReader.h" />
     <ClInclude Include="Serialization\MaterialSerializer.h" />
     <ClInclude Include="Serialization\ModelSerializer.h" />
-    <ClInclude Include="Serialization\TextureSerializer.h" />
+    <ClInclude Include="Serialization\PixmapSerializer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{AB283419-DF6E-479B-A2D6-F35F108E797D}</ProjectGuid>

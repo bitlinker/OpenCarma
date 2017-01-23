@@ -15,7 +15,7 @@ namespace OpenCarma
 
             bool isValid() const;
 
-            const std::string& getName() const { return m_header.m_name; }
+            const std::string& getName() const { return m_header.mName; }
             const std::vector<Vertex3f>& getVertices() const { return m_vertices.m_vertices; }
             const std::vector<Vertex2f>& getUVs() const { return m_uv.m_uv; }
             const std::vector<Face>& getFaces() const { return m_faces.m_faces; }

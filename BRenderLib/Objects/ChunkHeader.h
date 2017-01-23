@@ -78,21 +78,7 @@ namespace OpenCarma
             static const uint32_t MAGIC;
         };
 
-        //! File header
-        class BR_API FileHeaderChunk : public ChunkBase
-        {
-        public:
-            static const uint32_t MAGIC = 0x12;
-
-        public:
-            FileHeaderChunk();
-
-            void read(Commons::StreamReader& reader);
-
-        public:
-            uint32_t m_version1;
-            uint32_t m_version2;
-        };
+        
 
         //! Texture or palette or shadetab header chunk
         class BR_API TextureHeadChunk : public ChunkBase
@@ -105,13 +91,13 @@ namespace OpenCarma
             void read(Commons::StreamReader& reader);
 
         public:
-            uint8_t m_pixelFormat;      //!< Pixel format
-            uint16_t m_stride;	        //!< Stride
-            uint16_t m_width;	        //!< Width
-            uint16_t m_height;	        //!< Height
-            uint16_t m_offsetX;         //!< oX
-            uint16_t m_offsetY;         //!< oY
-			std::string m_name;         //!< Null-terminated name
+            uint8_t mPixelFormat;      //!< Pixel format
+            uint16_t mStride;	        //!< Stride
+            uint16_t mWidth;	        //!< Width
+            uint16_t mHeight;	        //!< Height
+            uint16_t mOffsetX;         //!< oX
+            uint16_t mOffsetY;         //!< oY
+			std::string mName;         //!< Null-terminated name
         };
 
         //! Texture data
@@ -126,9 +112,9 @@ namespace OpenCarma
             void read(Commons::StreamReader& reader);
 
         public:
-            uint32_t m_numPixels;
-            uint32_t m_BPP;
-            std::vector<uint8_t> m_data;
+            uint32_t mNumPixels;
+            uint32_t mBpp;
+            std::vector<uint8_t> mData;
         };
 
         //! Model name
@@ -144,7 +130,7 @@ namespace OpenCarma
 
         public:
             uint16_t m_unkonwn;
-            std::string m_name;
+            std::string mName;
         };
 
         class BR_API ModelVerticesChunk : public ChunkBase
@@ -237,7 +223,7 @@ namespace OpenCarma
             float m_transform[6];	            //!< Transform matrix // TODO: use matrix type
             uint8_t m_indexBase;                //!< ???
             uint8_t m_indexRange;               //!< ???
-			std::string m_name;                 //!< Null-terminated name
+			std::string mName;                 //!< Null-terminated name
         };
 
         //! Material attributes chunk version 2
@@ -257,7 +243,7 @@ namespace OpenCarma
             float m_transform[6];	            //!< Transform matrix // TODO: use matrix type
             uint32_t m_unk;                     //!< ???
             uint8_t m_unk2[13];                 //!< ???
-			std::string m_name;                 //!< Null-terminated name
+			std::string mName;                 //!< Null-terminated name
         };
 
         //! Material pixelmap name chunk
@@ -271,7 +257,7 @@ namespace OpenCarma
             void read(Commons::StreamReader& reader);
 
         public:
-			std::string m_name;                 //!< Null-terminated name
+			std::string mName;                 //!< Null-terminated name
         };
 
         //! Material shadetab name chunk
@@ -285,7 +271,7 @@ namespace OpenCarma
             void read(Commons::StreamReader& reader);
 
         public:
-			std::string m_name;                 //!< Null-terminated name
+			std::string mName;                 //!< Null-terminated name
         };
             
         
@@ -301,7 +287,7 @@ namespace OpenCarma
 
         public:
             uint16_t m_flags;	                //!< Flags            
-			std::string m_name;                 //!< Null-terminated name
+			std::string mName;                 //!< Null-terminated name
         };
         
         class BR_API ActorMatrixChunk : public ChunkHeader
@@ -346,7 +332,7 @@ namespace OpenCarma
             ActorModelChunk();
             void read(Commons::StreamReader& reader);
         public:
-			std::string m_name;
+			std::string mName;
         };
 
         class BR_API ActorEmptyChunk : public ChunkHeader
@@ -368,7 +354,7 @@ namespace OpenCarma
             ActorMaterialChunk();
             void read(Commons::StreamReader& reader);
         public:
-			std::string m_name;
+			std::string mName;
         };
 
         class BR_API ActorBBoxChunk : public ChunkHeader
