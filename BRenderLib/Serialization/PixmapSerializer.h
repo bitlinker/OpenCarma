@@ -1,30 +1,35 @@
 #pragma once
-
 #include <Common.h>
+#include <Serialization/ChunkReader.h>
 #include <Streams/IOStream.h>
-
 #include <Objects/Pixmap.h>
+#include <functional>
 
 namespace OpenCarma
 {
     namespace BRender
     {
-		class BR_API PixmapSerializer : protected ChunkReaderListener
+		class BR_API PixmapSerializer : protected  ChunkReader
         {
-        private:
-            PixmapSerializer() {};
+        public:
+            typedef std::function<void(const PixmapPtr&)> TReadCallback;
+            typedef std::function<const PixmapPtr()> TWriteCallback; // Return null to finish
+            
+        public:
+            PixmapSerializer();
             virtual ~PixmapSerializer() {};
 
-        public:
-            const std::vector<PixmapPtr>& deserialize(const Commons::IOStreamPtr& stream);
-            void serialize(const PixmapPtr& pal, const Commons::IOStreamPtr& stream);
+            void read(const Commons::IOStreamPtr& stream, TReadCallback callback);
+            void write(const Commons::IOStreamPtr& stream, TWriteCallback callback);
 
 		protected:
-			virtual bool onChunk(const ChunkHeader& header, StreamReader& reader);
+            virtual bool onChunkRead(const ChunkHeader& header, Commons::StreamReader& reader);
 
 		private:
 			PixmapPtr mCurPixmap;
-			std::vector<PixmapPtr> mPixelmaps;
+            bool mHasHeaderChunk;
+            bool mHasDataChunk;
+            TReadCallback mReadCallback;
         };
     }
 }

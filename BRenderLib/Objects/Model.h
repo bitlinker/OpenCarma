@@ -1,34 +1,60 @@
 #pragma once
 #include <Common.h>
-#include <Objects/ChunkHeader.h>
 
 namespace OpenCarma
 {
 	namespace BRender
 	{
-		class BR_API Model
+        class BR_API Model
 		{
-            friend class ModelSerializer;
+        public:
+            class BR_API Vertex3f
+            {
+            public:
+                float mValue[3];
+            };
+
+            class BR_API Vertex2f
+            {
+            public:
+                float mValue[2];
+            };
+
+            class BR_API Face
+            {
+            public:
+                uint16_t mV[3];
+                uint8_t mUnknown[3]; // TODO: Normal???
+            };
+
 		public:
-			Model();
-			~Model();
+            Model()
+                : mName()
+                , mVertices()
+                , mUv()
+                , mFaces()
+                , mMaterials()
+                , mFaceMats()
+            {
+            }
 
-            bool isValid() const;
+            void setName(const std::string& name) { mName = name; }
+            const std::string& getName() const { return mName; }
 
-            const std::string& getName() const { return m_header.mName; }
-            const std::vector<Vertex3f>& getVertices() const { return m_vertices.m_vertices; }
-            const std::vector<Vertex2f>& getUVs() const { return m_uv.m_uv; }
-            const std::vector<Face>& getFaces() const { return m_faces.m_faces; }
-            const std::vector<std::string>& getMaterials() const { return m_materials.m_materials; }
-            const std::vector<uint16_t>& getFaceMats() const { return m_faceMats.m_faceMats; }
+            std::vector<Vertex3f>& getVertices() { return mVertices; }
+            std::vector<Vertex2f>& getUVs() { return mUv; }
+            std::vector<Face>& getFaces() { return mFaces; }
+            std::vector<std::string>& getMaterials() { return mMaterials; }
+            std::vector<uint16_t>& getFaceMats() { return mFaceMats; }
 
         private:
-            ModelHeadChunk m_header;
-            ModelVerticesChunk m_vertices;
-            ModelUVsChunk m_uv;
-            ModelFacesChunk m_faces;
-            ModelMaterialsChunk m_materials;
-            ModelFaceMaterialsChunk m_faceMats;
+            //uint16_t mUnkonwn; // TODO: rm?? check
+            std::string mName;
+            std::vector<Vertex3f> mVertices;
+            std::vector<Vertex2f> mUv;
+            std::vector<Face> mFaces;
+            std::vector<std::string> mMaterials;
+            std::vector<uint16_t> mFaceMats; // 1-based
 		};
 
         typedef std::shared_ptr<Model> ModelPtr;

@@ -18,25 +18,19 @@
     <ClCompile Include="Serialization\ModelSerializer.cpp">
       <Filter>Serialziation</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\Actor.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\ChunkHeader.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\Material.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\Model.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Objects\Pixmap.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Serialization\PixmapSerializer.cpp">
+    <ClCompile Include="Serialization\ChunkReader.cpp">
       <Filter>Serialziation</Filter>
     </ClCompile>
-    <ClCompile Include="Serialization\ChunkReader.cpp">
+    <ClCompile Include="Serialization\ChunkHeader.cpp">
+      <Filter>Serialziation</Filter>
+    </ClCompile>
+    <ClCompile Include="Serialization\ChunkWriter.cpp">
+      <Filter>Serialziation</Filter>
+    </ClCompile>
+    <ClCompile Include="Serialization\PixmapSerializer.cpp">
       <Filter>Serialziation</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,9 +47,6 @@
     <ClInclude Include="Objects\Actor.h">
       <Filter>Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\ChunkHeader.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Objects\Material.h">
       <Filter>Objects</Filter>
     </ClInclude>
@@ -66,10 +57,16 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Common.h" />
-    <ClInclude Include="Serialization\PixmapSerializer.h">
+    <ClInclude Include="Serialization\ChunkReader.h">
       <Filter>Serialziation</Filter>
     </ClInclude>
-    <ClInclude Include="Serialization\ChunkReader.h">
+    <ClInclude Include="Serialization\ChunkHeader.h">
+      <Filter>Serialziation</Filter>
+    </ClInclude>
+    <ClInclude Include="Serialization\ChunkWriter.h">
+      <Filter>Serialziation</Filter>
+    </ClInclude>
+    <ClInclude Include="Serialization\PixmapSerializer.h">
       <Filter>Serialziation</Filter>
     </ClInclude>
   </ItemGroup>

@@ -4,44 +4,46 @@ namespace OpenCarma
 {
 	namespace BRender
 	{
-		Pixmap::Pixmap()
-			: mPixelFormat(BR_PMT_INDEX_8)
-			, mStride(0)
-			, mWidth(0)
-			, mHeight(0)
+		Pixmap::Pixmap(PixelFormat format, uint32_t width, uint32_t height, int32_t stride)
+			: mPixelFormat(format)
+			, mStride(stride)
+			, mWidth(width)
+			, mHeight(height)
 			, mOffsetX(0)
 			, mOffsetY(0)
 			, mName()
-			, mNumPixels(0)
-			, mBpp(1)
-			, mData()
+			, mData(stride * height)
 		{
 		}
 
-        bool Pixmap::isValid() const
+        uint32_t Pixmap::getBpp() const
         {
-            // TODO: more complex checks
-            // TODO: logging
-            /*if (!m_header.m_pixelFormat)
-                return false;
-
-            if (!m_header.m_width || !m_header.m_height)
-                return false;
-
-            if (m_header.m_width * m_data.m_BPP != m_header.m_stride)
-                return false;
-
-            if (m_header.m_width * m_header.m_height != m_data.m_numPixels)
-                return false;
-
-            if (!m_data.m_numPixels || !m_data.m_BPP)
-                return false;
-
-            if (m_data.m_data.size() != m_data.m_numPixels * m_data.m_BPP)
-                return false;*/
-
-            return true;
+            switch (mPixelFormat)
+            {
+            case BR_PMT_INDEX_1:
+            case BR_PMT_INDEX_2:
+            case BR_PMT_INDEX_4:
+            case BR_PMT_INDEX_8:
+            case BR_PMT_ALPHA_8:
+                return 1; // TODO: check
+            case BR_PMT_RGB_555:
+            case BR_PMT_RGB_565:
+            case BR_PMT_DEPTH_16:
+            case BR_PMT_INDEXA_88:
+                return 2;
+            case BR_PMT_RGB_888:
+            case BR_PMT_YUV_888:
+                return 3;
+            case BR_PMT_RGBX_888:
+            case BR_PMT_RGBA_8888:
+            case BR_PMT_YUYV_8888:
+            case BR_PMT_DEPTH_32:
+                return 4;
+            }
+            return 0;
         }
+
+      
 
         // TODO: Pixmap utils
         /*const uint32_t* src = reinterpret_cast<const uint32_t*>(&m_data.m_data[0]);

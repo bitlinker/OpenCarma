@@ -1,9 +1,9 @@
-#include <cassert>
-#include <Common/StringUtils.h>
 #include <Serialization/PixmapSerializer.h>
-#include <Serialization/ChunkReader.h>
+#include <Common/StringUtils.h>
+#include <Serialization/ChunkWriter.h>
 #include <Streams/StreamReader.h>
 #include <Exception/Exception.h>
+#include <cassert>
 
 using namespace Commons;
 
@@ -11,77 +11,133 @@ namespace OpenCarma
 {
     namespace BRender
     {
-		class BR_API FileHeaderChunk : public ChunkHeader
-		{
-		public:
-			static const uint32_t MAGIC = 0x12;
+        class TextureHeadChunk : NonObject
+        {
+        public:            
+            static void read(StreamReader& reader, PixmapPtr& pixmap)
+            {
+                uint8_t pixelFormat = reader.readUInt8();
+                int16_t stride = reader.readUInt16();
+                uint16_t width = reader.readUInt16();
+                uint16_t height = reader.readUInt16();
+                int16_t offsetX = reader.readUInt16();
+                int16_t offsetY = reader.readUInt16();
+                std::string name = reader.readNullTermString();
 
-		public:
-			FileHeaderChunk();
+                Pixmap::PixelFormat pixFormat = static_cast<Pixmap::PixelFormat>(pixelFormat);
+                if (pixFormat >= Pixmap::BR_PMT_MAX)
+                    throw SerializationException(StringUtils::FormatString("Unknown pixel format: %d", pixFormat));
+                pixmap.reset(new Pixmap(pixFormat, width, height, stride));
+                pixmap->setXOffset(offsetX);
+                pixmap->setYOffset(offsetY);
+                pixmap->setName(name);
+            }
 
-			void read(Commons::StreamReader& reader);
+            static void write(ChunkWriter& writer, const Pixmap& pixmap)
+            {
+                writer.beginChunk(ChunkHeader::CHUNK_TEXTURE_HEAD);
+                StreamWriter& streamWriter = writer.getStreamWriter();
+                streamWriter.writeUInt8(static_cast<uint8_t>(pixmap.getPixelFormat()));
+                streamWriter.writeUInt16(pixmap.getStride());
+                streamWriter.writeUInt16(pixmap.getWidth());
+                streamWriter.writeUInt16(pixmap.getHeight());
+                streamWriter.writeUInt16(pixmap.getXOffset());
+                streamWriter.writeUInt16(pixmap.getYOffset());
+                streamWriter.writeNullTermString(pixmap.getName());
+                writer.endChunk();
+            }
+        };
 
-		public:
-			uint32_t m_version1;
-			uint32_t m_version2;
-		};
+        class TextureDataChunk : NonObject
+        {
+        public:
+            static void read(StreamReader& reader, PixmapPtr& pixmap)
+            {
+                uint32_t numPixels = reader.readUInt32();
+                uint32_t bpp = reader.readUInt32();
+                uint32_t size = bpp * numPixels;
+                if (pixmap->getBpp() != bpp)
+                    throw SerializationException(StringUtils::FormatString("Bpp mismatch: need %d, got %d", pixmap->getBpp(), bpp));
 
-		FileHeaderChunk::FileHeaderChunk()
-			: ChunkHeader()
-			, m_version1(0)
-			, m_version2(0)
-		{
-		}
+                if (pixmap->getRawSize() != size)
+                    throw SerializationException(StringUtils::FormatString("Raw size mismatch: need %d, got %d", pixmap->getRawSize(), size));
 
-		void FileHeaderChunk::read(Commons::StreamReader& reader)
-		{
-			ChunkHeader::read(reader);
-			if (getMagic() != MAGIC)
-			{
-				throw SerializationException("Incorrect magic");
-			}
-			m_version1 = reader.readUInt32();
-			m_version2 = reader.readUInt32();
-		}
+                reader.read(pixmap->getRawBuf(), size);
+            }
 
-		bool PixmapSerializer::onChunk(const ChunkHeader& header, StreamReader& reader)
+            static void write(ChunkWriter& writer, const Pixmap& pixmap)
+            {
+                writer.beginChunk(ChunkHeader::CHUNK_TEXTURE_DATA);
+                StreamWriter& streamWriter = writer.getStreamWriter();
+                uint32_t bpp = pixmap.getBpp();
+                uint32_t numPixels = pixmap.getRawSize() / bpp;
+                streamWriter.writeUInt32(numPixels);
+                streamWriter.writeUInt32(bpp);
+                streamWriter.write(pixmap.getRawBufConst(), pixmap.getRawSize());
+                writer.endChunk();
+            }
+        };
+
+        PixmapSerializer::PixmapSerializer()
+            : ChunkReader()
+            , mCurPixmap()
+            , mHasHeaderChunk(false)
+            , mHasDataChunk(false)
+            , mReadCallback()
+        {
+        }
+
+        bool PixmapSerializer::onChunkRead(const ChunkHeader& header, StreamReader& reader)
 		{
 			switch (header.getMagic())
 			{
-			case TextureHeadChunk::MAGIC:
-				mCurPixmap = PixmapPtr(new Pixmap());
-				assert(mCurPixmap.get()); // TODO: checks, not asserts
-				//reader.readUInt32();
-				// TODO
-				//mCurPixmap->m_header.read(reader);
+			case ChunkHeader::CHUNK_TEXTURE_HEAD:
+                TextureHeadChunk::read(reader, mCurPixmap);
+                mHasHeaderChunk = true;
 				break;
-			case TextureDataChunk::MAGIC:
-				assert(mCurPixmap.get());
-				// TODO
-				//mCurPixmap->mData.read(reader);
+            case ChunkHeader::CHUNK_TEXTURE_DATA:
+                if (!mHasHeaderChunk)
+                    throw SerializationException(StringUtils::FormatString("CHUNK_TEXTURE_DATA before CHUNK_TEXTURE_HEAD at %d", reader.tell()));
+                TextureDataChunk::read(reader, mCurPixmap);
+                mHasDataChunk = true;
 				break;
-			case 0: // Null header
-				assert(header.getSize() == 0);
-				if (!mCurPixmap.get() || !mCurPixmap->isValid())
-					throw SerializationException("Pixelmap object is incorrect");
-				mPixelmaps.push_back(mCurPixmap);
-				mCurPixmap.reset();
+            case ChunkHeader::CHUNK_NULL:
+                if (!mHasHeaderChunk || !mHasDataChunk)
+                    throw SerializationException("Pixelmap object is empty, but null chunk is found");
+                mReadCallback(mCurPixmap);
+                mCurPixmap.reset();
+                mHasDataChunk = false;
+                mHasHeaderChunk = false;
 				break;
+            default:
+                return false;
 			}
+            return true;
 		}
 
-		const std::vector<PixmapPtr>& PixmapSerializer::deserialize(const IOStreamPtr& stream)
+        void PixmapSerializer::read(const IOStreamPtr& stream, TReadCallback callback)
         {
-			ChunkReader reader;
-			reader.deserialize(stream, this);
-			return mPixelmaps;
+            assert(stream);
+            assert(callback);
+
+            mReadCallback = callback;
+			doRead(stream);
         }
 
-        void PixmapSerializer::serialize(const PixmapPtr& pal, const IOStreamPtr& stream)
+        void PixmapSerializer::write(const IOStreamPtr& stream, TWriteCallback callback)
         {
-            assert(pal);
-			// TODO
-			throw Exception("not implemented");
+            assert(stream);
+            assert(callback);
+
+            FileHeader header;
+            ChunkWriter writer(stream, header);
+            while (const PixmapPtr pixmap = callback())
+            {
+                TextureHeadChunk::write(writer, *pixmap);
+                TextureDataChunk::write(writer, *pixmap);
+                writer.writeNullChunk();
+            }                        
+            writer.finish();
         }
     }
 }

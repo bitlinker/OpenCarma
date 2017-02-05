@@ -1,29 +1,19 @@
 #pragma once
 #include <Common.h>
-#include <Objects/ChunkHeader.h>
 
 namespace OpenCarma
 {
 	namespace BRender
 	{
+        /*
+        * Material description is here:
+        * http://rr2000.toshiba-3.com/R4/BRENDER/TEBK_43.HTM
+        */
         class BR_API Material
 		{
         public:
-            //static const uint16_t FLAG_DOUBLESIDED = 0x10;
-            //static const uint16_t FLAG_ALWAYS_VISIBLE = 0x0; // TODO: update constants
-            //static const uint16_t FLAG_LIGHT = 0x0; // TODO: update constants
-            //static const uint16_t FLAG_SMOOTH = 0x0; // TODO: update constants
-            //static const uint16_t FLAG_PERSPECTIVE = 0x0; // TODO: update constants
-            //static const uint16_t FLAG_PRELIT = 0x0; // TODO: update constants
-            //static const uint16_t FLAG_ENVIRONMENT = 0x0; // TODO: update constants
-            //static const uint16_t FLAG_ENVIRONMENT_LOCAL = 0x0; // TODO: update constants
-            //static const uint16_t FLAG_DECAL = 0x0; // TODO: update constants
-            //static const uint16_t FLAG_FORCE_Z0 = 0x0; // TODO: update constants
-
-            /*
-            * Bits for br_material->flags
-            */
-            enum {
+            enum Flags
+            {
                 BR_MATF_LIGHT = 0x00000001,
                 BR_MATF_PRELIT = 0x00000002,
 
@@ -47,34 +37,85 @@ namespace OpenCarma
                 BR_MATF_DITHER = 0x00004000
             };
 
+            // TODO:
+            // BR_MATF_SMOOTH == GOURAND; https://en.wikipedia.org/wiki/Gouraud_shading
+            // Normals interpolation
+            // either specified for each vertex or found by averaging the surface normals of the polygons that meet at each vertex
+            // Or flat shading...
+
+            // Phong model:
+            // ambient + diffuse + specular * power?
 
 		public:
-			Material();
+            Material::Material()
+                : mName()
+                , mColor()
+                , mAmbient(0.F)
+                , mDiffuse(0.F)
+                , mSpecular(0.F)
+                , mSpecularPower(0.F)
+                , mFlags(BR_MATF_SMOOTH | BR_MATF_LIGHT)
+                , mIndexBase(0)
+                , mIndexRange(0)
+                , mShadetab()
+                , mPixelmap()
+                , mTransform()
+            {
+            }
 
-            bool isValid() const;
+            const std::string& getName() const { return mName; }
+            void setName(const std::string& name) { mName = name; }
 
+            const std::string& getPixmap() const { return mPixelmap; }
+            void setPixmap(const std::string& name) { mPixelmap = name; }
+
+            const std::string& getShadetab() const { return mShadetab; }
+            void setShadetab(const std::string& name) { mShadetab = name; }
+
+            uint32_t getFlags() const { return mFlags; }
+            void setFlags(uint32_t value) { mFlags = value; }
+
+            void setColor(const Color& color) { mColor = color; }
+            const Color& getColor() const { return mColor; }
+
+            void setIndexedColor(uint8_t base, uint8_t range) { mIndexBase = base; mIndexRange = range; }
+            uint8_t getIndexedBase() const { return mIndexBase; }
+            uint8_t getIndexedRange() const { return mIndexRange; }
+
+            void setPhong(float ambient, float diffuse, float specular, float specularPower)
+            {
+                mAmbient = ambient;
+                mDiffuse = diffuse;
+                mSpecular = specular;
+                mSpecularPower = specularPower;
+            }
+            void setAmbient(float ambient) { mAmbient = ambient; }
+            void setDiffuse(float diffuse) { mDiffuse = diffuse; }
+            void setSpecular(float specular) { mSpecular = specular; }
+            void setSpecularPower(float power) { mSpecularPower = power; }
+            float getAmbient() const { return mAmbient; }
+            float getDiffuse() const { return mDiffuse; }
+            float getSpecular() const { return mSpecular; }
+            float getSpecularPower() const { return mSpecularPower; }
+
+            const Matrix23& getTransform() const { return mTransform; }
+            void setTransform(const Matrix23& transform) { mTransform = transform; }
+            
         public:
-            MaterialAttributesV1Chunk m_header;
-            // TODO: v2?
-            MaterialPixmapNameChunk m_pixelmap;
-            MaterialShadetabNameChunk m_shadetab;
+            std::string mName;
+            Color mColor;
+            float mAmbient;
+            float mDiffuse;
+            float mSpecular;
+            float mSpecularPower;
+            uint32_t mFlags;
+            uint8_t mIndexBase;
+            uint8_t mIndexRange;
+            std::string mShadetab;
+            std::string mPixelmap;
+            Matrix23 mTransform;
 		};
 
         typedef std::shared_ptr<Material> MaterialPtr;
 	}
 }
-//
-//material = [
-//    identifier = "charles";
-//    colour = [173, 173, 173];
-//    ambient = 0.15;
-//    diffuse = 0.35;
-//    specular = 0.15;
-//    power = 10;
-//    flags = [always_visible, two_sided, light, smooth, perspective];
-//    colour_map = "charles.pix";
-//    index_base = 0;
-//    index_range = 168;
-//    index_shade = "charles.tab";
-//    map_transform = [[1.0, 0], [0, 1.0], [0.0, 0.0]];
-//];

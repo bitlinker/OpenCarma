@@ -19,13 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Objects\Actor.cpp" />
-    <ClCompile Include="Objects\ChunkHeader.cpp" />
-    <ClCompile Include="Objects\Material.cpp" />
-    <ClCompile Include="Objects\Model.cpp" />
     <ClCompile Include="Objects\Pixmap.cpp" />
     <ClCompile Include="Serialization\ActorSerializer.cpp" />
+    <ClCompile Include="Serialization\ChunkHeader.cpp" />
     <ClCompile Include="Serialization\ChunkReader.cpp" />
+    <ClCompile Include="Serialization\ChunkWriter.cpp" />
     <ClCompile Include="Serialization\MaterialSerializer.cpp" />
     <ClCompile Include="Serialization\ModelSerializer.cpp" />
     <ClCompile Include="Serialization\PixmapSerializer.cpp" />
@@ -33,12 +31,13 @@
   <ItemGroup>
     <ClInclude Include="Common.h" />
     <ClInclude Include="Objects\Actor.h" />
-    <ClInclude Include="Objects\ChunkHeader.h" />
     <ClInclude Include="Objects\Material.h" />
     <ClInclude Include="Objects\Model.h" />
     <ClInclude Include="Objects\Pixmap.h" />
     <ClInclude Include="Serialization\ActorSerializer.h" />
+    <ClInclude Include="Serialization\ChunkHeader.h" />
     <ClInclude Include="Serialization\ChunkReader.h" />
+    <ClInclude Include="Serialization\ChunkWriter.h" />
     <ClInclude Include="Serialization\MaterialSerializer.h" />
     <ClInclude Include="Serialization\ModelSerializer.h" />
     <ClInclude Include="Serialization\PixmapSerializer.h" />

@@ -6,6 +6,7 @@
 #include <Streams/FileStream.h>
 #include <Serialization/PixmapSerializer.h>
 #include <Serialization/ModelSerializer.h>
+#include <Serialization/MaterialSerializer.h>
 #include <Exception/Exception.h>
 
 using namespace Commons;
@@ -46,6 +47,16 @@ static void WritePixmap2Tga(const std::string& filename, const PixmapPtr& pixmap
     encoder.writeImage(streamPtr, info, (uint8_t*)&rgbPixmap[0]);
 }
 
+class ReaderCallback
+{
+public:
+    void callback(const PixmapPtr& pixmap)
+    {
+        int k = 0;
+    }
+    
+};
+
 int main(int argc, char **argv)
 {    
     std::cout << "BRender test" << std::endl;
@@ -61,22 +72,34 @@ int main(int argc, char **argv)
     // TODO: try/catch
     try
     {
-		std::vector<PixmapPtr> palletes;
+        ReaderCallback cb;
+        std::vector<PixmapPtr> palletes;
         IOStreamPtr strm_pal(new FileStream(carmaPath + "/DATA/REG/PALETTES/DRRENDER.PAL", FileStream::MODE_READ));
-		PixmapSerializer::DeserializePixelmap(strm_pal, palletes);
+        PixmapSerializer serializer;
+        serializer.read(strm_pal, [&palletes, &cb](const PixmapPtr& pixmap) {
+            palletes.push_back(pixmap); 
+            cb.callback(pixmap);
+        });
 
-        IOStreamPtr strm_pixmap(new FileStream(carmaPath + "/DATA/PIXELMAP/DEZRACE2.PIX", FileStream::MODE_READ));
+  //      //IOStreamPtr strm_pal_out(new FileStream(carmaPath + "/DATA/REG/PALETTES/DRRENDER.PAL2", FileStream::MODE_WRITE));
+  //      //serilizer.serialize(palletes[0], strm_pal_out);
 
-        std::vector<PixmapPtr> pixelMaps;
-        PixmapSerializer::DeserializePixelmap(strm_pixmap, pixelMaps);
+  //      IOStreamPtr strm_pixmap(new FileStream(carmaPath + "/DATA/PIXELMAP/DEZRACE2.PIX", FileStream::MODE_READ));
+
+  //      std::vector<PixmapPtr> pixelMaps;
+  //      pixelMaps = serilizer.deserialize(strm_pixmap);
+
+        //IOStreamPtr strm_mat(new FileStream(carmaPath + "/DATA/MATERIAL/MERC8.MAT", FileStream::MODE_READ));
+        //MaterialSerializer serializer;
+        //std::vector<MaterialPtr> mats = serializer.deserialize(strm_mat);
+        //auto mat = TextureSerializer::DeserializeMaterial(strm_mat);*/
+
 
         int k = 0;
 
         //WritePixmap2Tga("d:/test.tga", pixelMaps[1], pal);
 
-        /*FileStream strm_mat("e:/Games/Carma/DATA/MATERIAL/MERC8.MAT");
-        auto mat = TextureSerializer::DeserializeMaterial(strm_mat);*/
-
+        
         /*std::vector<ModelPtr> models;
         std::ifstream strm_model("e:\\Games\\Carma\\DATA\\MODELS\\EAGBLAK.DAT", std::ifstream::binary);
         ModelSerializer::DeserializeModels(strm_model, models);        */
