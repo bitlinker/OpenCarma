@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <cassert>
 
 #include <Imaging/TgaImageEncoder.h>
@@ -48,19 +47,6 @@ static void WritePixmap2Tga(const std::string& filename, const PixmapPtr& pixmap
     encoder.writeImage(streamPtr, info, (uint8_t*)&rgbPixmap[0]);
 }
 
-void dumpActor(const ActorPtr& actor, uint32_t level)
-{
-	for (uint32_t i = 0; i < level; ++i) std::cout << ' ';
-	std::cout << "Actor: " << actor->getName();
-	if (actor->getHierarchyStartFlag()) std::cout << ", H";
-	std::cout << std::endl;
-	const auto children = actor->getChildren();
-	for (auto it = children.begin(); it != children.end(); ++it)
-	{
-		dumpActor(*it, level + 1);
-	}
-}
-
 int main(int argc, char **argv)
 {    
     std::cout << "BRender test" << std::endl;
@@ -96,11 +82,7 @@ int main(int argc, char **argv)
         //std::vector<MaterialPtr> mats = serializer.deserialize(strm_mat);
         //auto mat = TextureSerializer::DeserializeMaterial(strm_mat);*/
 
-		ActorSerializer actorSerializer;
-		IOStreamPtr strm_act(new FileStream(carmaPath + "/DATA/ACTORS/CITYA1.ACT", FileStream::MODE_READ));
-		actorSerializer.read(strm_act, [](const ActorPtr& actor) {
-			dumpActor(actor, 0);
-		});
+		
 
         int k = 0;
 
