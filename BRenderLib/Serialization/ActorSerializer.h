@@ -26,8 +26,13 @@ namespace OpenCarma
         protected:
             virtual bool onChunkRead(const ChunkHeader& header, Commons::StreamReader& reader);
 
+		private:
+			void checkCurActor();
+
         private:
+			ActorPtr mRootActor;
             ActorPtr mCurActor;
+			uint32_t mCurLevel;
             TReadCallback mReadCallback;
         };
     }

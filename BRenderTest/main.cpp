@@ -7,6 +7,7 @@
 #include <Serialization/PixmapSerializer.h>
 #include <Serialization/ModelSerializer.h>
 #include <Serialization/MaterialSerializer.h>
+#include <Serialization/ActorSerializer.h>
 #include <Exception/Exception.h>
 
 using namespace Commons;
@@ -47,16 +48,6 @@ static void WritePixmap2Tga(const std::string& filename, const PixmapPtr& pixmap
     encoder.writeImage(streamPtr, info, (uint8_t*)&rgbPixmap[0]);
 }
 
-class ReaderCallback
-{
-public:
-    void callback(const PixmapPtr& pixmap)
-    {
-        int k = 0;
-    }
-    
-};
-
 int main(int argc, char **argv)
 {    
     std::cout << "BRender test" << std::endl;
@@ -72,14 +63,12 @@ int main(int argc, char **argv)
     // TODO: try/catch
     try
     {
-        ReaderCallback cb;
-        std::vector<PixmapPtr> palletes;
-        IOStreamPtr strm_pal(new FileStream(carmaPath + "/DATA/REG/PALETTES/DRRENDER.PAL", FileStream::MODE_READ));
-        PixmapSerializer serializer;
-        serializer.read(strm_pal, [&palletes, &cb](const PixmapPtr& pixmap) {
-            palletes.push_back(pixmap); 
-            cb.callback(pixmap);
-        });
+        //std::vector<PixmapPtr> palletes;
+        //IOStreamPtr strm_pal(new FileStream(carmaPath + "/DATA/REG/PALETTES/DRRENDER.PAL", FileStream::MODE_READ));
+        //PixmapSerializer serializer;
+        //serializer.read(strm_pal, [&palletes](const PixmapPtr& pixmap) {
+        //    palletes.push_back(pixmap); 
+        //});
 
   //      //IOStreamPtr strm_pal_out(new FileStream(carmaPath + "/DATA/REG/PALETTES/DRRENDER.PAL2", FileStream::MODE_WRITE));
   //      //serilizer.serialize(palletes[0], strm_pal_out);
@@ -94,6 +83,12 @@ int main(int argc, char **argv)
         //std::vector<MaterialPtr> mats = serializer.deserialize(strm_mat);
         //auto mat = TextureSerializer::DeserializeMaterial(strm_mat);*/
 
+		ActorSerializer actorSerializer;
+		IOStreamPtr strm_act(new FileStream(carmaPath + "/DATA/ACTORS/CITY2.ACT", FileStream::MODE_READ));
+		actorSerializer.read(strm_act, [](const ActorPtr& actor) {
+			// TODO
+			int m = 0;
+		});
 
         int k = 0;
 

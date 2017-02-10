@@ -1,7 +1,9 @@
 #include <Serialization/ChunkWriter.h>
 #include <Serialization/ActorSerializer.h>
 #include <Streams/StreamReader.h>
+#include <Common/StringUtils.h>
 #include <Exception/Exception.h>
+#include <Logger/Log.h>
 #include <cassert>
 
 using namespace Commons;
@@ -156,7 +158,7 @@ namespace OpenCarma
             {
                 // TODO: header
                 // TODO: check if has?
-                WriteBBox(writer.getStreamWriter(), actor->getBbox());
+                //WriteBBox(writer.getStreamWriter(), actor->getBbox());
             }
         };
 
@@ -164,22 +166,78 @@ namespace OpenCarma
         ActorSerializer::ActorSerializer()
             : ChunkReader()
             , mCurActor()
+			, mCurLevel(0)
             , mReadCallback()
         {
         }
+
+		void ActorSerializer::checkCurActor()
+		{
+			if (!mCurActor) throw SerializationException("Current actor is null");
+		}
 
         bool ActorSerializer::onChunkRead(const ChunkHeader& header, Commons::StreamReader& reader)
         {
             switch (header.getMagic())
             {
             case ChunkHeader::CHUNK_ACTOR_NAME:
-                mCurActor.reset(new Actor());
-                ActorNameChunk::read(reader, mCurActor);
-                break;
-           
+			{
+				ActorPtr parent = mCurActor;
+				mCurActor.reset(new Actor());
+				if (parent)
+				{
+					parent->addChild(mCurActor);
+					mCurActor->setParent(parent);
+				}
+				else
+				{
+					// TODO: check if can be multiple roots
+					mRootActor = mCurActor;
+				}
+				ActorNameChunk::read(reader, mCurActor);
+				LOG_DEBUG("Actor name: %s", mCurActor->getName().c_str());
+				++mCurLevel;
+				break;
+			}
+			case ChunkHeader::CHUNK_ACTOR_TRANSFORM_MATRIX:
+				checkCurActor();
+				ActorMatrixChunk::read(reader, mCurActor);
+				LOG_DEBUG("Actor matrix");
+				break;
+			case ChunkHeader::CHUNK_ACTOR_HIERARCHY_BEGIN:
+				LOG_DEBUG("Actor push");
+				// TODO: push/pull
+				//++mCurLevel;
+				break;
+			case ChunkHeader::CHUNK_ACTOR_HIERARCHY_END:
+				LOG_DEBUG("Actor pop");
+				--mCurLevel;
+				mCurActor = mCurActor->getParent().lock();
+				// TODO: check lvl match
+				break;
+			case ChunkHeader::CHUNK_ACTOR_MATERIAL_NAMES:
+				checkCurActor();
+				ActorMaterialChunk::read(reader, mCurActor); // TODO: multiple materials?
+				LOG_DEBUG("Material names");
+				break;
+			case ChunkHeader::CHUNK_ACTOR_MODEL_NAME:
+				checkCurActor();
+				ActorModelChunk::read(reader, mCurActor);
+				LOG_DEBUG("Model: %s", mCurActor->getModel().c_str());
+				break;
+			case ChunkHeader::CHUNK_ACTOR_UNKNOWN:
+				LOG_DEBUG("Unk");
+				// TODO: log
+				break;
+			case ChunkHeader::CHUNK_ACTOR_BOUNDING_BOX:
+				checkCurActor();
+				ActorBBoxChunk::read(reader, mCurActor);
+				LOG_DEBUG("BBox");
+				break;
             case ChunkHeader::CHUNK_NULL:
-                //checkCurMat();
-                mReadCallback(mCurActor);
+				if (mCurLevel != 1) throw SerializationException(StringUtils::FormatString("Hierarchy level mismatch: %d", mCurLevel));					
+				checkCurActor();
+                mReadCallback(mCurActor); // TODO: single root callback?				
                 mCurActor.reset();
                 break;
             default:
@@ -216,94 +274,3 @@ namespace OpenCarma
         }
     }
 }
-
-//        // TODO: my streams
-//        void ActorSerializer::DeserializeActor(std::istream& stream, std::vector<ActorPtr>& actors)
-//        {
-//            if (!stream)
-//                throw Commons::IOException("Stream is not opened");
-//
-//            ActorPtr curActor;
-//            int32_t curLevel = 0;
-//
-//            EndianStreamReader reader(stream, Commons::Endianness::BIG_ENDIAN);
-//
-//            FileHeaderChunk fileHeader;
-//            ChunkHeader header;
-//            while (!reader.isEOF())
-//            {
-//                header.read(reader);
-//
-//                uint32_t lastOffset = reader.tell();
-//
-//                if (header.getMagic() == FileHeaderChunk::MAGIC)
-//                {
-//                    fileHeader.read(reader);                    
-//                }
-//                else if (header.getMagic() == ActorNameChunk::MAGIC)
-//                {
-//                    curActor = ActorPtr(new Actor());
-//                    assert(curActor.get());
-//                    curActor->m_header.read(reader);
-//
-//                    ++curLevel;
-//                    printf("%d: %s\n", curLevel, curActor->m_header.m_name.data());
-//                }
-//                else if (header.getMagic() == ActorMatrixChunk::MAGIC)
-//                {
-//                    assert(curActor.get());
-//                    curActor->m_matrix.read(reader);
-//                }
-//                else if (header.getMagic() == ActorPushChunk::MAGIC)
-//                {
-//                    assert(curActor.get());
-//                    // TODO: push
-//                }
-//                else if (header.getMagic() == ActorPopChunk::MAGIC)
-//                {
-//                    assert(curActor.get());
-//                    // TODO: pop
-//                    --curLevel;
-//                }
-//                else if (header.getMagic() == ActorMaterialChunk::MAGIC)
-//                {
-//                    assert(curActor.get());
-//                    curActor->m_materials.read(reader);
-//                }
-//                else if (header.getMagic() == ActorModelChunk::MAGIC)
-//                {
-//                    assert(curActor.get());
-//                    curActor->m_models.read(reader);
-//                }
-//                else if (header.getMagic() == ActorEmptyChunk::MAGIC)
-//                {
-//                    assert(curActor.get());
-//                    curActor->m_empty.read(reader);
-//                }
-//                else if (header.getMagic() == ActorBBoxChunk::MAGIC)
-//                {
-//                    assert(curActor.get());
-//                    curActor->m_bbox.read(reader);
-//                }
-//                else if (header.isNULL())
-//                {
-//                    if (!curActor.get() || !curActor->isValid())
-//                        throw Commons::SerializationException("Actor object is incorrect");
-//                    actors.push_back(curActor);
-//                    curActor.reset();
-//                }
-//                else
-
-//        }
-//
-//        void ActorSerializer::SerializeActor(const ActorPtr& actor, std::ostream& stream)
-//        {
-//            assert(actor);
-//
-//            if (!stream)
-//                throw Commons::IOException("Stream is not opened");
-//
-//            // TODO
-//        }
-//    }
-//}
