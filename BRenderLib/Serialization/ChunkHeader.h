@@ -28,12 +28,12 @@ namespace OpenCarma
             static const uint32_t CHUNK_MODEL_FACES = 0x35;
             static const uint32_t CHUNK_MODEL_MATERIALS = 0x16;
             static const uint32_t CHUNK_MODEL_FACE_MATERIALS = 0x1A;
-            static const uint32_t CHUNK_ACTOR_NAME = 0x23;
+            static const uint32_t CHUNK_ACTOR_START = 0x23;
             static const uint32_t CHUNK_ACTOR_MODEL_NAME = 0x24;
             static const uint32_t CHUNK_ACTOR_UNKNOWN = 0x25;
-            static const uint32_t CHUNK_ACTOR_MATERIAL_NAMES = 0x26;
-            static const uint32_t CHUNK_ACTOR_HIERARCHY_BEGIN = 0x29;
-            static const uint32_t CHUNK_ACTOR_HIERARCHY_END = 0x2A;
+            static const uint32_t CHUNK_ACTOR_MATERIAL_NAME = 0x26;
+            static const uint32_t CHUNK_ACTOR_HIERARCHY_START = 0x29;
+            static const uint32_t CHUNK_ACTOR_HIERARCHY_POP = 0x2A;
             static const uint32_t CHUNK_ACTOR_TRANSFORM_MATRIX = 0x2B;
             static const uint32_t CHUNK_ACTOR_BOUNDING_BOX = 0x32;
 

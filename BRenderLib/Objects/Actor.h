@@ -45,6 +45,8 @@ namespace OpenCarma
                 , mBbox()
                 , mParent()
                 , mChildren()
+				, mHStartFlag(false)
+				, mUnknownFlag(false)
             {
             }
 
@@ -73,6 +75,12 @@ namespace OpenCarma
             void addChild(const ActorPtr& child) { mChildren.push_back(child); }
             const std::vector<ActorPtr>& getChildren() const { return mChildren; }
 
+			void setHierarchyStartFlag(bool value) { mHStartFlag = value; }
+			bool getHierarchyStartFlag() const { return mHStartFlag; }
+
+			void setUnknownFlag(bool value) { mUnknownFlag = value; }
+			bool getUnknownFlag() const { return mUnknownFlag; }
+
         private:
             uint16_t mFlags;
             std::string mName;
@@ -82,6 +90,8 @@ namespace OpenCarma
             BBox mBbox;
             ActorWeakPtr mParent;
             std::vector<ActorPtr> mChildren;
+			bool mHStartFlag; // Creates chunk 0x29 before children
+			bool mUnknownFlag; // Creates empty chunk 0x25
         };
     }
 }

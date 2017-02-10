@@ -8,6 +8,8 @@
 
 using namespace Commons;
 
+// #define CHUNK_READER_DEBUG
+
 namespace OpenCarma
 {
 	namespace BRender
@@ -15,17 +17,16 @@ namespace OpenCarma
 		void ChunkReader::doRead(const IOStreamPtr& stream)
 		{
 			assert(stream);
-            LOG_DEBUG("Begin reading stream %d", stream);
-
 			StreamReader reader(stream, Endianness::BIG_ENDIAN);
-
             ChunkHeader header;
 			IOStream::size_type streamSize = reader.size();
             bool hasFileHeader = false;
 			while (reader.tell() < streamSize)
 			{
 				header.read(reader);
+#ifdef CHUNK_READER_DEBUG
                 LOG_DEBUG("Chunk type %d, size %d at %d", header.getMagic(), header.getSize(), reader.tell());
+#endif
 				uint32_t lastOffset = reader.tell();
 
                 if (header.getMagic() == ChunkHeader::CHUNK_FILE_HEADER)
@@ -49,8 +50,8 @@ namespace OpenCarma
 				IOStream::size_type redSize = reader.tell() - lastOffset;
 				if (redSize != header.getSize()	&&
 					(header.getMagic() != ChunkHeader::CHUNK_ACTOR_MODEL_NAME
-					&& header.getMagic() != ChunkHeader::CHUNK_ACTOR_MATERIAL_NAMES
-					&& header.getMagic() != ChunkHeader::CHUNK_ACTOR_MATERIAL_NAMES)
+					&& header.getMagic() != ChunkHeader::CHUNK_ACTOR_MATERIAL_NAME
+					&& header.getMagic() != ChunkHeader::CHUNK_ACTOR_MATERIAL_NAME)
 				) // BUGFIX: Model name or material name in actor has incorrect size
 				{
 					throw SerializationException(StringUtils::FormatString("Incorrect chunk size read: required: %d, current %d", header.getSize(), redSize));

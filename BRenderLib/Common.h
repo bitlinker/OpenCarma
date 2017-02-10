@@ -50,6 +50,11 @@ public:
             mPos[i] = mSize[i] = 0.F;
     }
 
+	bool empty() const
+	{
+		return mSize[0] == 0.F && mSize[1] == 0.F && mSize[2] == 0.F;
+	}
+
 public:
     float mPos[3];
     float mSize[3];

@@ -13,8 +13,9 @@ namespace OpenCarma
     {
         class ModelHeadChunk : NonObject
         {
-            // TODO: move chunk constant here?
         public:
+			static const uint32_t MAGIC = ChunkHeader::CHUNK_MODEL_HEAD;
+
             static void read(StreamReader& reader, ModelPtr& model)
             {
                 model.reset(new Model());
@@ -24,7 +25,7 @@ namespace OpenCarma
 
             static void write(ChunkWriter& writer, const ModelPtr& model)
             {
-                writer.beginChunk(ChunkHeader::CHUNK_MODEL_HEAD);
+                writer.beginChunk(MAGIC);
                 StreamWriter& streamWriter = writer.getStreamWriter();
                 streamWriter.writeUInt16(0); // TODO needed?
                 streamWriter.writeNullTermString(model->getName());
@@ -35,6 +36,8 @@ namespace OpenCarma
         class ModelVerticesChunk : NonObject
         {
         public:
+			static const uint32_t MAGIC = ChunkHeader::CHUNK_MODEL_VERTICES;
+
             static void read(StreamReader& reader, ModelPtr& model)
             {
                 uint32_t count = reader.readUInt32();
@@ -50,7 +53,7 @@ namespace OpenCarma
             {
                 const std::vector<Model::Vertex3f>& vertices = model->getVertices();
                 if (vertices.empty()) return;
-                writer.beginChunk(ChunkHeader::CHUNK_MODEL_VERTICES);
+                writer.beginChunk(MAGIC);
                 StreamWriter& streamWriter = writer.getStreamWriter();                
                 streamWriter.writeUInt32(vertices.size());
                 std::for_each(vertices.begin(), vertices.end(), [&streamWriter](const Model::Vertex3f& vertex) {
@@ -64,6 +67,8 @@ namespace OpenCarma
         class ModelUVsChunk : NonObject
         {
         public:
+			static const uint32_t MAGIC = ChunkHeader::CHUNK_MODEL_UVS;
+
             static void read(StreamReader& reader, ModelPtr& model)
             {
                 uint32_t count = reader.readUInt32();
@@ -79,7 +84,7 @@ namespace OpenCarma
             {
                 const std::vector<Model::Vertex2f>& uvs = model->getUVs();
                 if (uvs.empty()) return;
-                writer.beginChunk(ChunkHeader::CHUNK_MODEL_UVS);
+                writer.beginChunk(MAGIC);
                 StreamWriter& streamWriter = writer.getStreamWriter();
                 streamWriter.writeUInt32(uvs.size());
                 std::for_each(uvs.begin(), uvs.end(), [&streamWriter](const Model::Vertex2f& uv) {
@@ -93,6 +98,8 @@ namespace OpenCarma
         class ModelFacesChunk : NonObject
         {
         public:
+			static const uint32_t MAGIC = ChunkHeader::CHUNK_MODEL_FACES;
+
             static void read(StreamReader& reader, ModelPtr& model)
             {
                 uint32_t count = reader.readUInt32();               
@@ -110,7 +117,7 @@ namespace OpenCarma
             {
                 const std::vector<Model::Face>& faces = model->getFaces();
                 if (faces.empty()) return;
-                writer.beginChunk(ChunkHeader::CHUNK_MODEL_FACES);
+                writer.beginChunk(MAGIC);
                 StreamWriter& streamWriter = writer.getStreamWriter();
                 streamWriter.writeUInt32(faces.size());
                 std::for_each(faces.begin(), faces.end(), [&streamWriter](const Model::Face& face) {
@@ -126,6 +133,8 @@ namespace OpenCarma
         class ModelMaterialsChunk : NonObject
         {
         public:
+			static const uint32_t MAGIC = ChunkHeader::CHUNK_MODEL_MATERIALS;
+
             static void read(StreamReader& reader, ModelPtr& model)
             {
                 uint32_t count = reader.readUInt32();
@@ -140,7 +149,7 @@ namespace OpenCarma
             {
                 const std::vector<std::string>& materials = model->getMaterials();
                 if (materials.empty()) return;
-                writer.beginChunk(ChunkHeader::CHUNK_MODEL_MATERIALS);
+                writer.beginChunk(MAGIC);
                 StreamWriter& streamWriter = writer.getStreamWriter();
                 streamWriter.writeUInt32(materials.size());
                 std::for_each(materials.begin(), materials.end(), [&streamWriter](const std::string& mat) {
@@ -153,6 +162,8 @@ namespace OpenCarma
         class ModelFaceMaterialsChunk : NonObject
         {
         public:
+			static const uint32_t MAGIC = ChunkHeader::CHUNK_MODEL_FACE_MATERIALS;
+
             static void read(StreamReader& reader, ModelPtr& model)
             {
                 uint32_t faceMatCount = reader.readUInt32();
@@ -169,7 +180,7 @@ namespace OpenCarma
             {
                 const std::vector<uint16_t>& faceMats = model->getFaceMats();
                 if (faceMats.empty()) return;
-                writer.beginChunk(ChunkHeader::CHUNK_MODEL_FACE_MATERIALS);
+                writer.beginChunk(MAGIC);
                 StreamWriter& streamWriter = writer.getStreamWriter();
                 streamWriter.writeUInt32(faceMats.size());
                 streamWriter.writeUInt32(2);
@@ -195,26 +206,26 @@ namespace OpenCarma
         {
             switch (header.getMagic())
             {
-            case ChunkHeader::CHUNK_MODEL_HEAD:
+			case ModelHeadChunk::MAGIC:
                 ModelHeadChunk::read(reader, mCurModel);
                 break;
-            case ChunkHeader::CHUNK_MODEL_VERTICES:
+            case ModelVerticesChunk::MAGIC:
                 checkCurModel();
                 ModelVerticesChunk::read(reader, mCurModel);
                 break;
-            case ChunkHeader::CHUNK_MODEL_UVS:
+            case ModelUVsChunk::MAGIC:
                 checkCurModel();
                 ModelUVsChunk::read(reader, mCurModel);
                 break;
-            case ChunkHeader::CHUNK_MODEL_FACES:
+            case ModelFacesChunk::MAGIC:
                 checkCurModel();
                 ModelFacesChunk::read(reader, mCurModel);
                 break;
-            case ChunkHeader::CHUNK_MODEL_MATERIALS:
+            case ModelMaterialsChunk::MAGIC:
                 checkCurModel();
                 ModelMaterialsChunk::read(reader, mCurModel);
                 break;
-            case ChunkHeader::CHUNK_MODEL_FACE_MATERIALS:
+            case ModelFaceMaterialsChunk::MAGIC:
                 checkCurModel();
                 ModelFaceMaterialsChunk::read(reader, mCurModel);
                 break;

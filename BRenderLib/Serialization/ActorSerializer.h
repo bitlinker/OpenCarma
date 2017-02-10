@@ -5,11 +5,14 @@
 #include <Streams/IOStream.h>
 #include <Serialization/ChunkReader.h>
 #include <functional>
+#include <stack>
 
 namespace OpenCarma
 {
     namespace BRender
     {
+		class ChunkWriter;
+
         class BR_API ActorSerializer : protected ChunkReader
         {
         public:
@@ -28,11 +31,12 @@ namespace OpenCarma
 
 		private:
 			void checkCurActor();
+			void writeActor(ChunkWriter& writer, const ActorPtr actor);
 
         private:
-			ActorPtr mRootActor;
+			std::vector<ActorPtr> mActorRoots;
+			std::stack<ActorPtr> mActorsStack;
             ActorPtr mCurActor;
-			uint32_t mCurLevel;
             TReadCallback mReadCallback;
         };
     }

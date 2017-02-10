@@ -25,6 +25,8 @@ namespace OpenCarma
         class MaterialAttributesV1Chunk : NonObject
         {
         public:
+			static const uint32_t MAGIC = ChunkHeader::CHUNK_MATERIAL_ATTRIBUTES_V1;
+
             static void read(Commons::StreamReader& reader, MaterialPtr& material)
             {
                 material->setColor(Color(reader.readUInt32()));
@@ -43,7 +45,7 @@ namespace OpenCarma
             static void write(ChunkWriter& writer, const MaterialPtr& material)
             {
                 Commons::StreamWriter& streamWriter = writer.getStreamWriter();
-                writer.beginChunk(ChunkHeader::CHUNK_MATERIAL_ATTRIBUTES_V1);
+                writer.beginChunk(MAGIC);
                 streamWriter.writeUInt32(material->getColor().mValue);
                 streamWriter.writeFloat(material->getAmbient());
                 streamWriter.writeFloat(material->getDiffuse());
@@ -62,6 +64,8 @@ namespace OpenCarma
         class MaterialAttributesV2Chunk : NonObject
         {
         public:
+			static const uint32_t MAGIC = ChunkHeader::CHUNK_MATERIAL_ATTRIBUTES_V2;
+
             static void read(Commons::StreamReader& reader, MaterialPtr& material)
             {
                 material->setColor(Color(reader.readUInt32()));
@@ -83,6 +87,8 @@ namespace OpenCarma
         class MaterialPixmapNameChunk : NonObject
         {
         public:
+			static const uint32_t MAGIC = ChunkHeader::CHUNK_MATERIAL_PIXELMAP_NAME;
+
             static void read(Commons::StreamReader& reader, const MaterialPtr& material)
             {
                 std::string value = reader.readNullTermString();
@@ -91,8 +97,8 @@ namespace OpenCarma
 
             static void write(ChunkWriter& writer, const MaterialPtr& material)
             {
-                if (!material->getPixmap().empty()) return;
-                writer.beginChunk(ChunkHeader::CHUNK_MATERIAL_PIXELMAP_NAME);
+                if (material->getPixmap().empty()) return;
+                writer.beginChunk(MAGIC);
                 writer.getStreamWriter().writeNullTermString(material->getPixmap());
                 writer.endChunk();
             }
@@ -101,6 +107,8 @@ namespace OpenCarma
         class MaterialShadetabNameChunk : NonObject
         {
         public:
+			static const uint32_t MAGIC = ChunkHeader::CHUNK_MATERIAL_SHADETAB_NAME;
+
             static void read(Commons::StreamReader& reader, const MaterialPtr& material)
             {
                 std::string value = reader.readNullTermString();
@@ -109,8 +117,8 @@ namespace OpenCarma
 
             static void write(ChunkWriter& writer, const MaterialPtr& material)
             {
-                if (!material->getShadetab().empty())
-                writer.beginChunk(ChunkHeader::CHUNK_MATERIAL_SHADETAB_NAME);
+				if (material->getShadetab().empty()) return;
+                writer.beginChunk(MAGIC);
                 writer.getStreamWriter().writeNullTermString(material->getShadetab());
                 writer.endChunk();
             }
@@ -132,18 +140,20 @@ namespace OpenCarma
         {
             switch (header.getMagic())
             {
-            case ChunkHeader::CHUNK_MATERIAL_ATTRIBUTES_V1:
+			case MaterialAttributesV1Chunk::MAGIC:
                 mCurMaterial.reset(new Material());
                 MaterialAttributesV1Chunk::read(reader, mCurMaterial);
                 break;
-            case ChunkHeader::CHUNK_MATERIAL_ATTRIBUTES_V2:
+			case MaterialAttributesV2Chunk::MAGIC:
+				// TODO: check if used
                 throw SerializationException("CHUNK_MATERIAL_ATTRIBUTES_V2 not implemented");
+				//MaterialAttributesV2Chunk.read(reader, mCurMaterial);
                 break;
-            case ChunkHeader::CHUNK_MATERIAL_PIXELMAP_NAME:
+			case MaterialPixmapNameChunk::MAGIC:
                 checkCurMat();
                 MaterialPixmapNameChunk::read(reader, mCurMaterial);
                 break;
-            case ChunkHeader::CHUNK_MATERIAL_SHADETAB_NAME:
+			case MaterialShadetabNameChunk::MAGIC:
                 checkCurMat();
                 MaterialShadetabNameChunk::read(reader, mCurMaterial);
                 break;

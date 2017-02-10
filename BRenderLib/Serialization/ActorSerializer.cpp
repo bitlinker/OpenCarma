@@ -40,9 +40,11 @@ namespace OpenCarma
                 writer.writeFloat(box.mSize[i]);
         }
 
-        class ActorNameChunk : NonObject
+        class ActorStartChunk : NonObject
         {
         public:
+			static const uint32_t MAGIC = ChunkHeader::CHUNK_ACTOR_START;
+
             static void read(Commons::StreamReader& reader, ActorPtr& actor)
             {
                 actor->setFlags(reader.readUInt16());
@@ -51,25 +53,19 @@ namespace OpenCarma
 
             static void write(ChunkWriter& writer, const ActorPtr& actor)
             {
-                //Commons::StreamWriter& streamWriter = writer.getStreamWriter();
-                //        writer.beginChunk(ChunkHeader::CHUNK_MATERIAL_ATTRIBUTES_V1);
-                //        streamWriter.writeUInt32(material->getColor().mValue);
-                //        streamWriter.writeFloat(material->getAmbient());
-                //        streamWriter.writeFloat(material->getDiffuse());
-                //        streamWriter.writeFloat(material->getSpecular());
-                //        streamWriter.writeFloat(material->getSpecularPower());
-                //        streamWriter.writeUInt8(material->getIndexedBase());
-                //        streamWriter.writeUInt8(material->getIndexedRange());
-                //        streamWriter.writeUInt32(material->getFlags());
-                //        WriteMatrix23(streamWriter, material->getTransform());
-                //        streamWriter.writeNullTermString(material->getName());
-                //        writer.endChunk();
+                Commons::StreamWriter& streamWriter = writer.getStreamWriter();
+                writer.beginChunk(MAGIC);
+				streamWriter.writeUInt16(actor->getFlags());
+				streamWriter.writeNullTermString(actor->getName());
+                writer.endChunk();
             }
         };
 
         class ActorMatrixChunk : NonObject
         {
         public:
+			static const uint32_t MAGIC = ChunkHeader::CHUNK_ACTOR_TRANSFORM_MATRIX;
+
             static void read(Commons::StreamReader& reader, ActorPtr& actor)
             {
                 Matrix34 matrix;
@@ -79,36 +75,49 @@ namespace OpenCarma
 
             static void write(ChunkWriter& writer, const ActorPtr& actor)
             {
+				// TODO: check if identity
+				writer.beginChunk(MAGIC);
+				WriteMatrix34(writer.getStreamWriter(), actor->getTransform());
+				writer.endChunk();
             }
         };
 
-        class ActorPushChunk : NonObject
+        class ActorHierarchyStart : NonObject
         {
         public:
+			static const uint32_t MAGIC = ChunkHeader::CHUNK_ACTOR_HIERARCHY_START;
+
             static void read(Commons::StreamReader& reader, ActorPtr& actor)
             {
+				// It is called for NOT every chunk with children
+				actor->setHierarchyStartFlag(true);
             }
 
             static void write(ChunkWriter& writer, const ActorPtr& actor)
             {
+				if (!actor->getHierarchyStartFlag()) return;
+				writer.beginChunk(MAGIC);
+				writer.endChunk();
             }
         };
 
-        class ActorPopChunk : NonObject
+        class ActorHierarchyPop : NonObject
         {
         public:
-            static void read(Commons::StreamReader& reader, ActorPtr& actor)
-            {
-            }
+			static const uint32_t MAGIC = ChunkHeader::CHUNK_ACTOR_HIERARCHY_POP;
 
-            static void write(ChunkWriter& writer, const ActorPtr& actor)
+            static void write(ChunkWriter& writer)
             {
+				writer.beginChunk(MAGIC);
+				writer.endChunk();
             }
         };
 
         class ActorModelChunk : NonObject
         {
         public:
+			static const uint32_t MAGIC = ChunkHeader::CHUNK_ACTOR_MODEL_NAME;
+
             static void read(Commons::StreamReader& reader, ActorPtr& actor)
             {
                 actor->setModel(reader.readNullTermString());
@@ -116,24 +125,31 @@ namespace OpenCarma
 
             static void write(ChunkWriter& writer, const ActorPtr& actor)
             {
+				if (actor->getModel().empty()) return;
+				writer.beginChunk(MAGIC);
+				writer.getStreamWriter().writeNullTermString(actor->getModel());
+				writer.endChunk();
             }
         };
 
         class ActorEmptyChunk : NonObject
         {
         public:
-            static void read(Commons::StreamReader& reader, ActorPtr& actor)
-            {
-            }
+			static const uint32_t MAGIC = ChunkHeader::CHUNK_ACTOR_UNKNOWN;
 
             static void write(ChunkWriter& writer, const ActorPtr& actor)
             {
+				if (!actor->getUnknownFlag()) return;
+				writer.beginChunk(MAGIC);
+				writer.endChunk();
             }
         };
           
         class ActorMaterialChunk : NonObject
         {
         public:
+			static const uint32_t MAGIC = ChunkHeader::CHUNK_ACTOR_MATERIAL_NAME;
+
             static void read(Commons::StreamReader& reader, ActorPtr& actor)
             {
                 actor->setMaterial(reader.readNullTermString());
@@ -141,12 +157,18 @@ namespace OpenCarma
 
             static void write(ChunkWriter& writer, const ActorPtr& actor)
             {
+				if (actor->getMaterial().empty()) return;
+				writer.beginChunk(MAGIC);
+				writer.getStreamWriter().writeNullTermString(actor->getMaterial());
+				writer.endChunk();
             }
         };
 
         class ActorBBoxChunk : NonObject
         {
         public:
+			static const uint32_t MAGIC = ChunkHeader::CHUNK_ACTOR_BOUNDING_BOX;
+
             static void read(Commons::StreamReader& reader, ActorPtr& actor)
             {
                 BBox box;
@@ -156,17 +178,18 @@ namespace OpenCarma
 
             static void write(ChunkWriter& writer, const ActorPtr& actor)
             {
-                // TODO: header
-                // TODO: check if has?
-                //WriteBBox(writer.getStreamWriter(), actor->getBbox());
+				if (actor->getBbox().empty()) return;
+				writer.beginChunk(MAGIC);
+				WriteBBox(writer.getStreamWriter(), actor->getBbox());
+				writer.endChunk();
             }
         };
 
-
         ActorSerializer::ActorSerializer()
             : ChunkReader()
+			, mActorRoots()
+			, mActorsStack()
             , mCurActor()
-			, mCurLevel(0)
             , mReadCallback()
         {
         }
@@ -180,64 +203,56 @@ namespace OpenCarma
         {
             switch (header.getMagic())
             {
-            case ChunkHeader::CHUNK_ACTOR_NAME:
+			case ActorStartChunk::MAGIC:
 			{
-				ActorPtr parent = mCurActor;
 				mCurActor.reset(new Actor());
-				if (parent)
+				if (mActorsStack.empty())
 				{
-					parent->addChild(mCurActor);
-					mCurActor->setParent(parent);
+					mActorRoots.push_back(mCurActor);
 				}
 				else
 				{
-					// TODO: check if can be multiple roots
-					mRootActor = mCurActor;
+					ActorPtr parent = mActorsStack.top();
+					mCurActor->setParent(parent);
+					parent->addChild(mCurActor);
 				}
-				ActorNameChunk::read(reader, mCurActor);
-				LOG_DEBUG("Actor name: %s", mCurActor->getName().c_str());
-				++mCurLevel;
+				mActorsStack.push(mCurActor);
+				ActorStartChunk::read(reader, mCurActor);
 				break;
 			}
-			case ChunkHeader::CHUNK_ACTOR_TRANSFORM_MATRIX:
+			case ActorMatrixChunk::MAGIC:
 				checkCurActor();
 				ActorMatrixChunk::read(reader, mCurActor);
-				LOG_DEBUG("Actor matrix");
 				break;
-			case ChunkHeader::CHUNK_ACTOR_HIERARCHY_BEGIN:
-				LOG_DEBUG("Actor push");
-				// TODO: push/pull
-				//++mCurLevel;
-				break;
-			case ChunkHeader::CHUNK_ACTOR_HIERARCHY_END:
-				LOG_DEBUG("Actor pop");
-				--mCurLevel;
-				mCurActor = mCurActor->getParent().lock();
-				// TODO: check lvl match
-				break;
-			case ChunkHeader::CHUNK_ACTOR_MATERIAL_NAMES:
+			case ActorHierarchyStart::MAGIC:
 				checkCurActor();
-				ActorMaterialChunk::read(reader, mCurActor); // TODO: multiple materials?
-				LOG_DEBUG("Material names");
+				ActorHierarchyStart::read(reader, mCurActor);
 				break;
-			case ChunkHeader::CHUNK_ACTOR_MODEL_NAME:
+			case ActorHierarchyPop::MAGIC:
+				if (mActorsStack.empty()) throw SerializationException("Actor hierarchy pop violation");
+				mActorsStack.pop();
+				break;
+			case ActorMaterialChunk::MAGIC:
+				checkCurActor();
+				ActorMaterialChunk::read(reader, mCurActor);
+				break;
+			case ActorModelChunk::MAGIC:
 				checkCurActor();
 				ActorModelChunk::read(reader, mCurActor);
-				LOG_DEBUG("Model: %s", mCurActor->getModel().c_str());
 				break;
-			case ChunkHeader::CHUNK_ACTOR_UNKNOWN:
-				LOG_DEBUG("Unk");
-				// TODO: log
+			case ActorEmptyChunk::MAGIC:
+				checkCurActor();
+				// It is called for every actor. TODO: flag not needed?
+				mCurActor->setUnknownFlag(true);
 				break;
-			case ChunkHeader::CHUNK_ACTOR_BOUNDING_BOX:
+			case ActorBBoxChunk::MAGIC:
 				checkCurActor();
 				ActorBBoxChunk::read(reader, mCurActor);
-				LOG_DEBUG("BBox");
 				break;
             case ChunkHeader::CHUNK_NULL:
-				if (mCurLevel != 1) throw SerializationException(StringUtils::FormatString("Hierarchy level mismatch: %d", mCurLevel));					
+				if (mActorsStack.size() != 1) throw SerializationException(StringUtils::FormatString("Hierarchy level mismatch: %d", mActorsStack.size()));
 				checkCurActor();
-                mReadCallback(mCurActor); // TODO: single root callback?				
+                mReadCallback(mActorsStack.top());
                 mCurActor.reset();
                 break;
             default:
@@ -255,6 +270,30 @@ namespace OpenCarma
             doRead(stream);
         }
 
+		void ActorSerializer::writeActor(ChunkWriter& writer, const ActorPtr actor)
+		{
+			ActorStartChunk::write(writer, actor);
+			ActorMatrixChunk::write(writer, actor);
+			ActorEmptyChunk::write(writer, actor);
+			ActorModelChunk::write(writer, actor);
+			ActorMaterialChunk::write(writer, actor);
+			ActorBBoxChunk::write(writer, actor);
+			const auto children = actor->getChildren();
+			if (!children.empty())
+			{
+				ActorHierarchyStart::write(writer, mCurActor);
+				
+				auto it = children.begin();
+				const auto itEnd = children.end();
+				while (it != itEnd)
+				{
+					writeActor(writer, *it);
+					++it;
+				}
+				ActorHierarchyPop::write(writer);
+			}
+		}
+
         void ActorSerializer::write(const Commons::IOStreamPtr& stream, TWriteCallback callback)
         {
             assert(stream);
@@ -262,14 +301,12 @@ namespace OpenCarma
 
             FileHeader header;
             ChunkWriter writer(stream, header);
-            // TODO
-           /* while (const MaterialPtr material = callback())
+           
+			while (const ActorPtr actor = callback())
             {
-                MaterialAttributesV1Chunk::write(writer, material);
-                MaterialPixmapNameChunk::write(writer, material);
-                MaterialShadetabNameChunk::write(writer, material);
-                writer.writeNullChunk();
-            }*/
+				writeActor(writer, actor);
+			}
+			writer.writeNullChunk();
             writer.finish();
         }
     }

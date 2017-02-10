@@ -13,7 +13,9 @@ namespace OpenCarma
     {
         class TextureHeadChunk : NonObject
         {
-        public:            
+        public:
+			static const uint32_t MAGIC = ChunkHeader::CHUNK_TEXTURE_HEAD;
+
             static void read(StreamReader& reader, PixmapPtr& pixmap)
             {
                 uint8_t pixelFormat = reader.readUInt8();
@@ -35,7 +37,7 @@ namespace OpenCarma
 
             static void write(ChunkWriter& writer, const Pixmap& pixmap)
             {
-                writer.beginChunk(ChunkHeader::CHUNK_TEXTURE_HEAD);
+                writer.beginChunk(MAGIC);
                 StreamWriter& streamWriter = writer.getStreamWriter();
                 streamWriter.writeUInt8(static_cast<uint8_t>(pixmap.getPixelFormat()));
                 streamWriter.writeUInt16(pixmap.getStride());
@@ -51,6 +53,8 @@ namespace OpenCarma
         class TextureDataChunk : NonObject
         {
         public:
+			static const uint32_t MAGIC = ChunkHeader::CHUNK_TEXTURE_DATA;
+
             static void read(StreamReader& reader, PixmapPtr& pixmap)
             {
                 uint32_t numPixels = reader.readUInt32();
@@ -67,7 +71,7 @@ namespace OpenCarma
 
             static void write(ChunkWriter& writer, const Pixmap& pixmap)
             {
-                writer.beginChunk(ChunkHeader::CHUNK_TEXTURE_DATA);
+                writer.beginChunk(MAGIC);
                 StreamWriter& streamWriter = writer.getStreamWriter();
                 uint32_t bpp = pixmap.getBpp();
                 uint32_t numPixels = pixmap.getRawSize() / bpp;
@@ -91,11 +95,11 @@ namespace OpenCarma
 		{
 			switch (header.getMagic())
 			{
-			case ChunkHeader::CHUNK_TEXTURE_HEAD:
+			case TextureHeadChunk::MAGIC:
                 TextureHeadChunk::read(reader, mCurPixmap);
                 mHasHeaderChunk = true;
 				break;
-            case ChunkHeader::CHUNK_TEXTURE_DATA:
+			case TextureDataChunk::MAGIC:
                 if (!mHasHeaderChunk)
                     throw SerializationException(StringUtils::FormatString("CHUNK_TEXTURE_DATA before CHUNK_TEXTURE_HEAD at %d", reader.tell()));
                 TextureDataChunk::read(reader, mCurPixmap);
