@@ -16,7 +16,6 @@ namespace OpenCarma
         class BR_API ActorSerializer : protected ChunkReader
         {
         public:
-            typedef std::function<void(const ActorPtr&)> TReadCallback;
             typedef std::function<const ActorPtr()> TWriteCallback; // Return null to finish
 
         public:
@@ -37,7 +36,6 @@ namespace OpenCarma
 			std::vector<ActorPtr> mActorRoots;
 			std::stack<ActorPtr> mActorsStack;
             ActorPtr mCurActor;
-            TReadCallback mReadCallback;
         };
     }
 }

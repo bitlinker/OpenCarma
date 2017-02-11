@@ -190,7 +190,6 @@ namespace OpenCarma
 			, mActorRoots()
 			, mActorsStack()
             , mCurActor()
-            , mReadCallback()
         {
         }
 

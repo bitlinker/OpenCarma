@@ -37,10 +37,9 @@ int main(int argc, char **argv)
 	{
 		ActorSerializer actorSerializer;
 		IOStreamPtr strm_act(new FileStream(actorPath, FileStream::MODE_READ));
-		actorSerializer.read(strm_act, [](const ActorPtr& actor) {
-			dumpActor(actor, 0);
-		});
-		}
+		ActorPtr actor = actorSerializer.read(strm_act);
+		dumpActor(actor, 0);
+	}
 	catch (const SerializationException se)
 	{
 		std::cout << "Serialization exception: " << se.what() << std::endl;
