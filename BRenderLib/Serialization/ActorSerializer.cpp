@@ -252,7 +252,6 @@ namespace OpenCarma
             case ChunkHeader::CHUNK_NULL:
 				if (mActorsStack.size() != 1) throw SerializationException(StringUtils::FormatString("Hierarchy level mismatch: %d", mActorsStack.size()));
 				checkCurActor();
-                mReadCallback(mActorsStack.top());
                 mCurActor.reset();
                 break;
             default:
@@ -261,13 +260,11 @@ namespace OpenCarma
             return true;
         }
 
-        void ActorSerializer::read(const Commons::IOStreamPtr& stream, TReadCallback callback)
+        ActorPtr ActorSerializer::read(const Commons::IOStreamPtr& stream)
         {
             assert(stream);
-            assert(callback);
-
-            mReadCallback = callback;
             doRead(stream);
+			return mActorsStack.top();
         }
 
 		void ActorSerializer::writeActor(ChunkWriter& writer, const ActorPtr actor)

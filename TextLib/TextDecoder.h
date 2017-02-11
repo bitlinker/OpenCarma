@@ -2,7 +2,6 @@
 #include <string>
 #include <stdint.h>
 
-// TODO: move to common carma lib?
 class TextDecoder
 {
 public:

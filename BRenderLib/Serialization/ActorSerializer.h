@@ -23,7 +23,7 @@ namespace OpenCarma
             ActorSerializer();
             virtual ~ActorSerializer() {};
 
-            void read(const Commons::IOStreamPtr& stream, TReadCallback callback);
+			ActorPtr read(const Commons::IOStreamPtr& stream);
             void write(const Commons::IOStreamPtr& stream, TWriteCallback callback);
 
         protected:

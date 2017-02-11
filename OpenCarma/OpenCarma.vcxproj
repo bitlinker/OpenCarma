@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{444D083E-7BE7-4149-8F94-0A05DA10BEDA}</ProjectGuid>
+    <ProjectGuid>{5A5AD4E5-778C-40A7-9072-7B00C9A20F3D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>TextDecoder</RootNamespace>
+    <RootNamespace>OpenCarma</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -87,14 +87,14 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../Common;../TextLib</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;../BitlinkerCommons;../BRenderLib;../TextLib;Render;TextFiles;Sound;$(GLFW)\include;$(GLM);$(GLEW)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>TextLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../$(Configuration);$(GLFW)\lib-vc2015;$(GLEW)\lib\release\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>BitlinkerCommons.lib;BRenderLib.lib;TextLib.lib;opengl32.lib;glew32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -103,14 +103,14 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../Common;../TextLib</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;../BitlinkerCommons;../BRenderLib;../TextLib;Render;TextFiles;Sound;$(GLFW)\include;$(GLM);$(GLEW)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>TextLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../$(Configuration);$(GLFW)\lib-vc2015;$(GLEW)\lib\release\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>BitlinkerCommons.lib;BRenderLib.lib;TextLib.lib;opengl32.lib;glew32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -121,16 +121,16 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../Common;../TextLib</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;../BitlinkerCommons;../BRenderLib;../TextLib;Render;TextFiles;Sound;$(GLFW)\include;$(GLM);$(GLEW)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>TextLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../$(Configuration);$(GLFW)\lib-vc2015;$(GLEW)\lib\release\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>BitlinkerCommons.lib;BRenderLib.lib;TextLib.lib;opengl32.lib;glew32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -141,20 +141,52 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../Common;../TextLib</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;../BitlinkerCommons;../BRenderLib;../TextLib;Render;TextFiles;Sound;$(GLFW)\include;$(GLM);$(GLEW)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>TextLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../$(Configuration);$(GLFW)\lib-vc2015;$(GLEW)\lib\release\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>BitlinkerCommons.lib;BRenderLib.lib;TextLib.lib;opengl32.lib;glew32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Render\ActorMgr.cpp" />
+    <ClCompile Include="Render\AxisDrawable.cpp" />
+    <ClCompile Include="Render\MaterialMgr.cpp" />
+    <ClCompile Include="Render\ModelMgr.cpp" />
+    <ClCompile Include="Render\TextureMgr.cpp" />
+    <ClCompile Include="Render\FreeFlyCameraController.cpp" />
+    <ClCompile Include="Render\PlainShaderProgram.cpp" />
+    <ClCompile Include="Render\Material.cpp" />
+    <ClCompile Include="Render\StaticModel.cpp" />
+    <ClCompile Include="Sound\SoundMgr.cpp" />
+    <ClCompile Include="TextFiles\OpponentTxt.cpp" />
+    <ClCompile Include="TextFiles\PedestrnTxt.cpp" />
+    <ClCompile Include="TextFiles\RaceTxt.cpp" />
+    <ClCompile Include="TextFiles\SoundTxt.cpp" />
+    <ClCompile Include="TextFiles\TextReader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Render\ActorMgr.h" />
+    <ClInclude Include="Render\AxisDrawable.h" />
+    <ClInclude Include="Render\MaterialMgr.h" />
+    <ClInclude Include="Render\ModelMgr.h" />
+    <ClInclude Include="Render\TextureMgr.h" />
+    <ClInclude Include="Render\FreeFlyCameraController.h" />
+    <ClInclude Include="Render\PlainShaderProgram.h" />
+    <ClInclude Include="Render\Material.h" />
+    <ClInclude Include="Render\StaticModel.h" />
+    <ClInclude Include="Sound\SoundMgr.h" />
+    <ClInclude Include="TextFiles\OpponentTxt.h" />
+    <ClInclude Include="TextFiles\PedestrnTxt.h" />
+    <ClInclude Include="TextFiles\RaceTxt.h" />
+    <ClInclude Include="TextFiles\SoundTxt.h" />
+    <ClInclude Include="TextFiles\TextReader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

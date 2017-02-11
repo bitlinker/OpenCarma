@@ -1,6 +1,6 @@
 #pragma once
 #include <Common.h>
-#include <RenderMaterial.h>
+#include <Material.h>
 #include <Objects/Model.h>
 #include <Render/RenderNode.h>
 #include <Render/BufferObject.h>
@@ -21,7 +21,7 @@ namespace OpenCarma
 			void render(const glm::mat4& matrix);
 
 		private:
-			std::vector<RenderMaterialPtr> m_materials;
+			std::vector<MaterialPtr> m_materials;
 			Commons::Render::BufferObject m_vertBuf;
 			Commons::Render::BufferObject m_UVBuf;
 			Commons::Render::BufferObject m_indexBuf;

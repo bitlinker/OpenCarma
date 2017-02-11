@@ -17,7 +17,7 @@ private:
 };
 
 
-class OpponentDescription
+class OpponentTxt
 {
 public:
     enum NetworkAvailability
@@ -29,8 +29,8 @@ public:
     };
 
 public:
-    OpponentDescription();
-    ~OpponentDescription();
+    OpponentTxt();
+    ~OpponentTxt();
     void read(TextReader& reader);
 
 private:

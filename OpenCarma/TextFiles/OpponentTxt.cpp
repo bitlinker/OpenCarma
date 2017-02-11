@@ -1,36 +1,36 @@
-#include "OpponentDescription.h"
+#include "OpponentTxt.h"
 
 static const std::string STR_NA_NEVER("never");
 static const std::string STR_NA_EAGLE("eagle");
 static const std::string STR_NA_HAWK("hawk");
 static const std::string STR_NA_ALL("all");
 
-OpponentDescription::OpponentDescription()
+OpponentTxt::OpponentTxt()
 {
 }
 
 
-OpponentDescription::~OpponentDescription()
+OpponentTxt::~OpponentTxt()
 {
 }
 
-OpponentDescription::NetworkAvailability parseNetAvail(std::string& str)
+OpponentTxt::NetworkAvailability parseNetAvail(std::string& str)
 {
     if (str == STR_NA_NEVER)
-        return OpponentDescription::NA_NEVER;
+        return OpponentTxt::NA_NEVER;
     else if (str == STR_NA_EAGLE)
-        return OpponentDescription::NA_EAGLE;
+        return OpponentTxt::NA_EAGLE;
     else if (str == STR_NA_HAWK)
-        return OpponentDescription::NA_HAWK;
+        return OpponentTxt::NA_HAWK;
     else if (str == STR_NA_ALL)
-        return OpponentDescription::NA_ALL;
+        return OpponentTxt::NA_ALL;
     
-    return OpponentDescription::NA_NEVER; // TODO
+    return OpponentTxt::NA_NEVER; // TODO
     //throw 
 }
 
 
-void OpponentDescription::read(TextReader& reader)
+void OpponentTxt::read(TextReader& reader)
 {
     // TODO: throw on error
     reader.readLine(m_opponentName);

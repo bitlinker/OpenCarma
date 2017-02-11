@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Render\AxisDrawable.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\FreeFlyCameraController.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\PlainShaderProgram.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\StaticModel.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound\SoundMgr.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="TextFiles\OpponentTxt.cpp">
+      <Filter>TextFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="TextFiles\PedestrnTxt.cpp">
+      <Filter>TextFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="TextFiles\RaceTxt.cpp">
+      <Filter>TextFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="TextFiles\SoundTxt.cpp">
+      <Filter>TextFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="TextFiles\TextReader.cpp">
+      <Filter>TextFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\TextureMgr.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\MaterialMgr.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Material.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\ActorMgr.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\ModelMgr.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="TextFiles">
+      <UniqueIdentifier>{78079f7a-219a-498a-887c-096300a9357b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{6ab29292-12fa-452d-a6f1-453fc3e607e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render">
+      <UniqueIdentifier>{15d9fcda-3a31-431f-a720-e542416cb18f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Render\AxisDrawable.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\FreeFlyCameraController.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\PlainShaderProgram.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\StaticModel.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound\SoundMgr.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="TextFiles\OpponentTxt.h">
+      <Filter>TextFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="TextFiles\PedestrnTxt.h">
+      <Filter>TextFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="TextFiles\RaceTxt.h">
+      <Filter>TextFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="TextFiles\SoundTxt.h">
+      <Filter>TextFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="TextFiles\TextReader.h">
+      <Filter>TextFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\TextureMgr.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\MaterialMgr.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Material.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\ActorMgr.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\ModelMgr.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

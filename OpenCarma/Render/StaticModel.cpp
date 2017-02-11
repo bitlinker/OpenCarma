@@ -37,10 +37,10 @@ namespace OpenCarma
 			// TODO: vertex structure
 
 			// Vertices
-			m_vertBuf.setData(vertices.size() * sizeof(BRender::Vertex3f), &vertices[0], GL_STATIC_DRAW);
+			m_vertBuf.setData(vertices.size() * sizeof(BRender::Model::Vertex3f), &vertices[0], GL_STATIC_DRAW);
 
 			// UVs
-			m_UVBuf.setData(uvs.size() * sizeof(BRender::Vertex2f), &uvs[0], GL_STATIC_DRAW);
+			m_UVBuf.setData(uvs.size() * sizeof(BRender::Model::Vertex2f), &uvs[0], GL_STATIC_DRAW);
 
 			// TODO: normals
 
@@ -49,9 +49,9 @@ namespace OpenCarma
 			uint16_t* face = &indexes[0];
 			for (auto it = faces.begin(); it != faces.end(); ++it)
 			{
-				*face++ = it->m_v[0];
-				*face++ = it->m_v[1];
-				*face++ = it->m_v[2];
+				*face++ = it->mV[0];
+				*face++ = it->mV[1];
+				*face++ = it->mV[2];
 			}
 
 			m_indexBuf.setData(indexes.size() * sizeof(uint16_t), &indexes[0], GL_STATIC_DRAW);

@@ -9,7 +9,7 @@ namespace OpenCarma
     {
         static bool CheckKey(int key)
         {
-            return ::GetAsyncKeyState(key) & 0x8000 > 0;
+            return (::GetAsyncKeyState(key) & 0x8000) > 0;
         }
 
         static glm::vec2 GetMousePos()
