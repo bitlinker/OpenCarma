@@ -4,6 +4,8 @@
 #include <Serialization/ActorSerializer.h>
 #include <algorithm>
 
+#include <Render/StaticModel.h>
+
 using namespace Commons;
 using namespace Commons::Render;
 using namespace OpenCarma::BRender;
@@ -66,12 +68,19 @@ namespace OpenCarma
 
 		RenderNodePtr ActorMgr::actor2Node(const ActorPtr& actor)
 		{
-			// TODO: static model node...
 			RenderNodePtr node = std::make_shared<RenderNode>(actor->getName());
 			node->setTranslation(TranslateMatrix(actor->getTransform()));
 			node->setBBox(TranslateBBox(actor->getBbox()));
 			actor->getFlags(); // TODO: check
 			actor->getMaterial(); // TODO: load?
+
+            const auto model = actor->getModel();
+            if (!model.empty())
+            {
+                // TODO: load model using MDL manager
+                StaticModelPtr staticModel = std::make_shared<StaticModel>(mdl, mContext);
+                node->setRenderable(staticModel);
+            }
 			
 			auto children = actor->getChildren();
 			std::for_each(children.begin(), children.end(), [this, &node](const ActorPtr& child) {

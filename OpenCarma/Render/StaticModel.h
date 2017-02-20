@@ -12,13 +12,13 @@ namespace OpenCarma
 	{
 		class Render;
 
-		class StaticModel
+		class StaticModel : public Commons::Render::IRenderable
 		{
 		public:
-			StaticModel(const BRender::ModelPtr& model, Render* renderPtr);
-			~StaticModel();
+			StaticModel(const BRender::ModelPtr& model, Commons::Render::Context* context);
+			virtual ~StaticModel();
 
-			void render(const glm::mat4& matrix);
+            virtual void render(const glm::mat4& matrix);
 
 		private:
 			std::vector<MaterialPtr> m_materials;
@@ -28,24 +28,9 @@ namespace OpenCarma
 			Commons::Render::VertexArrayObject m_vao;
 			uint32_t m_numIndices;
 
-			Render* m_renderPtr; // TODO: rm?
+            Commons::Render::Context* mContext;
 		};
 
 		typedef std::shared_ptr<StaticModel> StaticModelPtr;
-
-
-		// TODO: separate file
-		class StaticModelNode : public Commons::Render::RenderNode
-		{
-		public:
-			StaticModelNode(const StaticModelPtr& model);
-			virtual ~StaticModelNode();
-
-			virtual void doRender(const glm::mat4& matrix);
-
-		private:
-			StaticModelPtr m_node;
-		};
-        typedef std::shared_ptr<StaticModelNode> StaticModelNodePtr;
 	}
 }

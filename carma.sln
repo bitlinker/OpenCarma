@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BitlinkerCommons", "BitlinkerCommons\BitlinkerCommons.vcxproj", "{F6EAF9A2-3F22-4F5E-BCC6-51076AEDB4AD}"
 EndProject
@@ -11,6 +11,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BRenderLib", "BRenderLib\BR
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TextDecoder", "TextDecoder\TextDecoder.vcxproj", "{444D083E-7BE7-4149-8F94-0A05DA10BEDA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BA26134E-DC44-4720-BC5C-3D1407D11BCA} = {BA26134E-DC44-4720-BC5C-3D1407D11BCA}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BRenderTest", "BRenderTest\BRenderTest.vcxproj", "{50E2C615-CF4C-48CE-9A55-CC22AC2E2D80}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -19,8 +22,17 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BRenderTest", "BRenderTest\
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ActorDump", "ActorDump\ActorDump.vcxproj", "{6F717575-790A-4E16-A6C4-F5260A285087}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AB283419-DF6E-479B-A2D6-F35F108E797D} = {AB283419-DF6E-479B-A2D6-F35F108E797D}
+		{F6EAF9A2-3F22-4F5E-BCC6-51076AEDB4AD} = {F6EAF9A2-3F22-4F5E-BCC6-51076AEDB4AD}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenCarma", "OpenCarma\OpenCarma.vcxproj", "{5A5AD4E5-778C-40A7-9072-7B00C9A20F3D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AB283419-DF6E-479B-A2D6-F35F108E797D} = {AB283419-DF6E-479B-A2D6-F35F108E797D}
+		{BA26134E-DC44-4720-BC5C-3D1407D11BCA} = {BA26134E-DC44-4720-BC5C-3D1407D11BCA}
+		{F6EAF9A2-3F22-4F5E-BCC6-51076AEDB4AD} = {F6EAF9A2-3F22-4F5E-BCC6-51076AEDB4AD}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TextLib", "TextLib\TextLib.vcxproj", "{BA26134E-DC44-4720-BC5C-3D1407D11BCA}"
 EndProject

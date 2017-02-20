@@ -5,14 +5,14 @@ namespace OpenCarma
 {
 	namespace Render
 	{
-		StaticModel::StaticModel(const BRender::ModelPtr& model, Render* renderPtr)
+		StaticModel::StaticModel(const BRender::ModelPtr& model, Commons::Render::Context* context)
 			: m_materials()
 			, m_vertBuf(GL_ARRAY_BUFFER)
 			, m_UVBuf(GL_ARRAY_BUFFER)
 			, m_indexBuf(GL_ELEMENT_ARRAY_BUFFER)
 			, m_vao()
 			, m_numIndices(0)
-			, m_renderPtr(renderPtr)
+			, mContext(context)
 		{
 			// TODO: init
 			// TODO: model utils or custom methods
@@ -83,7 +83,6 @@ namespace OpenCarma
 		}
 
 
-		// TODO: context as parameter
 		void StaticModel::render(const glm::mat4& matrix)
 		{
 			Commons::Render::ScopeBind bind(m_vao);
@@ -95,23 +94,8 @@ namespace OpenCarma
 
             //m_renderPtr->drawElements();
 
+            // TODO: context
 			glDrawElements(GL_TRIANGLES, m_numIndices, GL_UNSIGNED_SHORT, 0);
-		}
-
-
-		StaticModelNode::StaticModelNode(const StaticModelPtr& model)
-			: RenderNode()
-			, m_node(model)
-		{
-		}
-
-		StaticModelNode::~StaticModelNode()
-		{
-		}
-
-		void StaticModelNode::doRender(const glm::mat4& matrix)
-		{
-			m_node->render(matrix);
 		}
 	}
 }
