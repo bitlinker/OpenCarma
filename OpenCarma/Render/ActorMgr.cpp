@@ -1,6 +1,6 @@
 #include <ActorMgr.h>
 #include <Streams/IOStream.h>
-#include <Streams/FileStream.h>
+#include <Logger/Log.h>
 #include <Serialization/ActorSerializer.h>
 #include <algorithm>
 
@@ -14,32 +14,12 @@ namespace OpenCarma
 {
     namespace Render
     {
-		ActorMgr::ActorMgr(Context* context)
+		ActorMgr::ActorMgr(Context* context, Filesystem* fs, ModelMgr* modelMgr)
 			: mContext(context)
+            , mFs(fs)
+            , mModelMgr(modelMgr)
 		{
 		}
-
-		IOStreamPtr openInputStream(const std::string& name)
-		{
-			
-			// TODO: case insensitive compare
-			// TODO: handle stream creation
-			std::string carmaPath = "test"; // TODO
-			std::string fullName = carmaPath + "/ACTORS/" + name;
-			return IOStreamPtr(new FileStream(fullName, FileStream::MODE_READ));
-		}
-
-        // TODO: with palette?
-        // TODO: throw or bool?
-        void ActorMgr::registerActorPack(const std::string& packName)
-        {
-            // TODO
-        }
-
-        void ActorMgr::unregisterActorPack(const std::string& packName)
-        {
-            // TODO
-        }
 
 		static glm::mat4 TranslateMatrix(const Matrix34& matrix)
 		{
@@ -77,8 +57,7 @@ namespace OpenCarma
             const auto model = actor->getModel();
             if (!model.empty())
             {
-                // TODO: load model using MDL manager
-                StaticModelPtr staticModel = std::make_shared<StaticModel>(mdl, mContext);
+                StaticModelPtr staticModel = mModelMgr->getModel(model);
                 node->setRenderable(staticModel);
             }
 			
@@ -91,10 +70,14 @@ namespace OpenCarma
 
 		RenderNodePtr ActorMgr::inflateActorTree(const std::string& name)
 		{
-			// TODO: case insensitive compare
-			ActorSerializer actorSerializer;
-
-			ActorPtr actor = actorSerializer.read(openInputStream(name));
+            LOG_DEBUG("Requesting actor %s", name.c_str());
+            IOStreamPtr strm = mFs->openResource(name);
+            if (!strm) {
+                LOG_WARN("Can't get input stream for actor %s", name.c_str());
+                return nullptr;
+            }
+            ActorSerializer actorSerializer;
+            ActorPtr actor = actorSerializer.read(strm);
 			return actor2Node(actor);
 		}
     }

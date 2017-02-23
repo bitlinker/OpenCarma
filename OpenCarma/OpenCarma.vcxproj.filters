@@ -47,6 +47,7 @@
     <ClCompile Include="Render\ModelMgr.cpp">
       <Filter>Render</Filter>
     </ClCompile>
+    <ClCompile Include="Filesystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="TextFiles">
@@ -105,5 +106,6 @@
     <ClInclude Include="Render\ModelMgr.h">
       <Filter>Render</Filter>
     </ClInclude>
+    <ClInclude Include="Filesystem.h" />
   </ItemGroup>
 </Project>

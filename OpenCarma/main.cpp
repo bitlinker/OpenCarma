@@ -13,6 +13,7 @@
 #include <MaterialMgr.h>
 #include <ModelMgr.h>
 #include <ActorMgr.h>
+#include <Filesystem.h>
 //#include <StaticModel.h>
 
 //#include <Serialization/ModelSerializer.h>
@@ -38,6 +39,8 @@ int main(int argc, char **argv)
 		{
 			carmaPath = argv[1];
 		}
+
+        OpenCarma::Filesystem fs(carmaPath);
 		
 		WindowParams params;
 		params.width = 1024;
@@ -56,11 +59,11 @@ int main(int argc, char **argv)
 		//textureMgr.registerPixelmapPack();
 		
 		MaterialMgr materialMgr(context);
-		ModelMgr modelMgr(context);
-		ActorMgr actorMgr(context);
+		ModelMgr modelMgr(context, &fs);
+		ActorMgr actorMgr(context, &fs, &modelMgr);
 
 		RenderNodePtr rootNode(new RenderNode("root"));
-		RenderNodePtr track = actorMgr.inflateActorTree("citya1");
+		RenderNodePtr track = actorMgr.inflateActorTree("CITYA1.ACT");
 		rootNode->attachChild(track);
 
 		CameraPtr camera = Camera::MakePerspectiveCamera(55.F, 4.F / 3.F, 1000.F, 0.01F);

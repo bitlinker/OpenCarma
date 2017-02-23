@@ -1,6 +1,10 @@
 #pragma once
 #include <Render/Context.h>
+#include <Render/ModelMgr.h>
+#include <Filesystem.h>
+
 #include <Objects/Actor.h>
+
 #include <map>
 
 namespace OpenCarma
@@ -10,13 +14,10 @@ namespace OpenCarma
         class ActorMgr
         {
         public:
-			ActorMgr(Commons::Render::Context* context);
+			ActorMgr(Commons::Render::Context* context, Filesystem* fs, ModelMgr* modelMgr);
 			virtual ~ActorMgr() {};
 
-            void registerActorPack(const std::string& packName);
-            void unregisterActorPack(const std::string& packName);
-
-			Commons::Render::RenderNodePtr inflateActorTree(const std::string& name);
+            Commons::Render::RenderNodePtr inflateActorTree(const std::string& name);
 
 		private:
 			Commons::Render::RenderNodePtr actor2Node(const OpenCarma::BRender::ActorPtr& actor);
@@ -25,6 +26,8 @@ namespace OpenCarma
             //typedef std::map<std::string, Commons::Render::Texture2dWeakPtr> TTexturesMap;
             //TTexturesMap m_textures;
 			Commons::Render::Context* mContext;
+            Filesystem* mFs;
+            ModelMgr* mModelMgr;
         };
 
         typedef std::shared_ptr<ActorMgr> ActorMgrPtr;

@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Filesystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Render\ActorMgr.cpp" />
     <ClCompile Include="Render\AxisDrawable.cpp" />
@@ -172,6 +173,7 @@
     <ClCompile Include="TextFiles\TextReader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Filesystem.h" />
     <ClInclude Include="Render\ActorMgr.h" />
     <ClInclude Include="Render\AxisDrawable.h" />
     <ClInclude Include="Render\MaterialMgr.h" />
