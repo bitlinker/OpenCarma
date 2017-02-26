@@ -178,6 +178,7 @@
     <ClInclude Include="Render\AxisDrawable.h" />
     <ClInclude Include="Render\MaterialMgr.h" />
     <ClInclude Include="Render\ModelMgr.h" />
+    <ClInclude Include="Render\ResourceMgr.h" />
     <ClInclude Include="Render\TextureMgr.h" />
     <ClInclude Include="Render\FreeFlyCameraController.h" />
     <ClInclude Include="Render\PlainShaderProgram.h" />

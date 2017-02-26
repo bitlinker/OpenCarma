@@ -53,14 +53,30 @@ int main(int argc, char **argv)
         ScopedInitializer init;
 		RenderWindow window(params);
 
-
 		Context* context = window.getContextPtr();
-		TextureMgr textureMgr(context);
-		//textureMgr.registerPixelmapPack();
-		
-		MaterialMgr materialMgr(context);
-		ModelMgr modelMgr(context, &fs);
+		TextureMgr textureMgr(context, &fs);
+		MaterialMgr materialMgr(context, &fs, &textureMgr);
+		ModelMgr modelMgr(context, &fs, &materialMgr);
 		ActorMgr actorMgr(context, &fs, &modelMgr);
+
+		// TODO: preload resources...
+		//textureMgr.registerPixelmapPack();
+
+
+		// Hardcoded?
+		materialMgr.loadMaterialPack("DRKCURB.MAT");
+		// From CITYA1.TXT:
+		materialMgr.loadMaterialPack("GRIDDY.MAT");
+		materialMgr.loadMaterialPack("STADY.MAT");
+		materialMgr.loadMaterialPack("WATTY.MAT");
+		materialMgr.loadMaterialPack("NYSKY1.MAT");
+		materialMgr.loadMaterialPack("CITYA2.MAT");
+		materialMgr.loadMaterialPack("DRKSCRN.MAT");
+		materialMgr.loadMaterialPack("FOGSCRN.MAT");
+		materialMgr.loadMaterialPack("SKIDMARK.MAT");
+
+
+		modelMgr.loadModelPack("CITYA1.DAT");
 
 		RenderNodePtr rootNode(new RenderNode("root"));
 		RenderNodePtr track = actorMgr.inflateActorTree("CITYA1.ACT");

@@ -1,6 +1,6 @@
 #pragma once
 #include <Common.h>
-#include <Material.h>
+#include <MaterialMgr.h>
 #include <Objects/Model.h>
 #include <Render/RenderNode.h>
 #include <Render/BufferObject.h>
@@ -15,7 +15,7 @@ namespace OpenCarma
 		class StaticModel : public Commons::Render::IRenderable
 		{
 		public:
-			StaticModel(const BRender::ModelPtr& model, Commons::Render::Context* context);
+			StaticModel(const BRender::ModelPtr& model, Commons::Render::Context* context, MaterialMgr* materialMgr);
 			virtual ~StaticModel();
 
             virtual void render(const glm::mat4& matrix);

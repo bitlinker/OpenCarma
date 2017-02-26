@@ -23,8 +23,6 @@ namespace OpenCarma
 			Commons::Render::RenderNodePtr actor2Node(const OpenCarma::BRender::ActorPtr& actor);
 
         private:
-            //typedef std::map<std::string, Commons::Render::Texture2dWeakPtr> TTexturesMap;
-            //TTexturesMap m_textures;
 			Commons::Render::Context* mContext;
             Filesystem* mFs;
             ModelMgr* mModelMgr;

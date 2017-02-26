@@ -1,7 +1,12 @@
 #pragma once
 #include <Render/Context.h>
+
 #include <Material.h>
-#include <map>
+#include <Filesystem.h>
+#include <TextureMgr.h>
+#include <ResourceMgr.h>
+
+#include <Objects/Material.h>
 
 namespace OpenCarma
 {
@@ -10,18 +15,25 @@ namespace OpenCarma
         class MaterialMgr
         {
         public:
-			MaterialMgr(Commons::Render::Context* context);
+			MaterialMgr(Commons::Render::Context* context, Filesystem* fs, TextureMgr* textureMgr);
 			virtual ~MaterialMgr() {};
 
-            void registerMaterialPack(const std::string& packName);
-            void unregisterMaterialPack(const std::string& packName);
+            bool loadMaterialPack(const std::string& packName);
+            bool unloadMaterialPack(const std::string& packName);
 
+			// Not null!
 			MaterialPtr getMaterial(const std::string& name);
 
+		private:
+			MaterialPtr loadMaterial(OpenCarma::BRender::MaterialPtr carmaMat);
+
         private:
-            //typedef std::map<std::string, Commons::Render::Texture2dWeakPtr> TTexturesMap;
-            //TTexturesMap m_textures;
 			Commons::Render::Context* mContext;
+			Filesystem* mFs;
+			TextureMgr* mTextureMgr;
+			ResourceMgr<MaterialPtr> mResMgr;
+			MaterialPtr mDefaultMat;
+
         };
 
         typedef std::shared_ptr<MaterialMgr> MaterialMgrPtr;

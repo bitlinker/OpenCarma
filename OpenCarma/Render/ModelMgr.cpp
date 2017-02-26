@@ -1,7 +1,10 @@
 #include <ModelMgr.h>
 #include <Streams/IOStream.h>
 #include <Logger/Log.h>
+#include <Exception/Exception.h>
 #include <Serialization/ModelSerializer.h>
+
+#include <algorithm>
 
 using namespace Commons;
 using namespace Commons::Render;
@@ -11,60 +14,75 @@ namespace OpenCarma
 {
     namespace Render
     {
-        // TODO: model pack instead of mgr? this will allow to load only needed data from actors
-		ModelMgr::ModelMgr(Context* context, Filesystem* fs)
+		ModelMgr::ModelMgr(Context* context, Filesystem* fs, MaterialMgr* materialMgr)
 			: mContext(context)
             , mFs(fs)
+			, mMaterialMgr(materialMgr)
 		{
 		}
 
-        class ResPack
-        {
-        public:
-        private:
-        };
-
-        std::map<std::string, std::shared_ptr<ResPack> > mPacks;
-
         StaticModelPtr ModelMgr::loadModel(const ModelPtr& model)
         {
-            // TODO
-            // MaterialMgr here...
-            return std::make_shared<StaticModel>(model, mContext);
+			// TODO: move here
+            return std::make_shared<StaticModel>(model, mContext, mMaterialMgr);
         }
 
-        bool ModelMgr::registerModelPack(const std::string& packName)
+        bool ModelMgr::loadModelPack(const std::string& packName)
         {
-            LOG_DEBUG("Registering model pack %s", packName.c_str());
+            LOG_DEBUG("Loading model pack %s", packName.c_str());
             IOStreamPtr strm = mFs->openResource(packName);
-            if (!strm) {
+            if (!strm)
+			{
                 LOG_WARN("Can't get input stream for model pack %s", packName.c_str());
-                return nullptr;
+                return false;
             }
 
-            //mPacks.insert()
-
+			ResourceMgr<StaticModelPtr>::ResourcePackPtr resPack(std::make_shared<ResourceMgr<StaticModelPtr>::ResourcePack>());
             ModelSerializer serializer;
-            serializer.read(strm, [this](const ModelPtr& mdl) {
-                loadModel(mdl); // TODO: add to pack
-            });
+			try
+			{
+				serializer.read(strm, [this, &resPack](const ModelPtr& mdl) {
+					StaticModelPtr staticModel = loadModel(mdl);
+					resPack->addResource(mdl->getName(), staticModel);
+				});
+			}
+			catch (SerializationException se)
+			{
+				LOG_ERROR("SerializationException: %s", se.what());
+				return false;
+			}
+			catch (IOException ioe)
+			{
+				LOG_ERROR("IOException: %s", ioe.what());
+				return false;
+			}
 
-            // TODO: catch?
-
+			mResMgr.addPack(packName, resPack);
             return true;
         }
 
-        void ModelMgr::unregisterModelPack(const std::string& packName)
+        bool ModelMgr::unloadModelPack(const std::string& packName)
         {
-            LOG_DEBUG("Unregistering model pack %s", packName.c_str());
-            // TODO
+            LOG_DEBUG("Unloading model pack %s", packName.c_str());
+			if (!mResMgr.removePack(packName))
+			{
+				LOG_WARN("Pack not found: %s", packName.c_str());
+				return false;
+			}
+			return true;
         }
 
 		StaticModelPtr ModelMgr::getModel(const std::string& name)
 		{
             LOG_DEBUG("Requesting model %s", name.c_str());
-			// TODO
-			return nullptr;
+			StaticModelPtr mdl;
+			if (!mResMgr.getResource(name, mdl))
+			{
+				LOG_WARN("Model %s not found", name.c_str());
+				return nullptr;
+				// TODO: return default? empty is ok...
+			}
+			return mdl;			
 		}
     }
 }

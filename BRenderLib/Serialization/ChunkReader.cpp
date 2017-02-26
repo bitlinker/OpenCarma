@@ -48,13 +48,10 @@ namespace OpenCarma
                 }
 
 				IOStream::size_type redSize = reader.tell() - lastOffset;
-				if (redSize != header.getSize()	&&
-					(header.getMagic() != ChunkHeader::CHUNK_ACTOR_MODEL_NAME
-					&& header.getMagic() != ChunkHeader::CHUNK_ACTOR_MATERIAL_NAME
-					&& header.getMagic() != ChunkHeader::CHUNK_ACTOR_MATERIAL_NAME)
-				) // BUGFIX: Model name or material name in actor has incorrect size
+				if (redSize != header.getSize())
 				{
-					throw SerializationException(StringUtils::FormatString("Incorrect chunk size read: required: %d, current %d", header.getSize(), redSize));
+					// Chunk size seems to be ignored. There is lot of files in Carma with corrupted chunk sizes.
+					LOG_WARN("Incorrect chunk size read: required: %d, current %d", header.getSize(), redSize);
 				}
 			}
 			onFinish();

@@ -5,7 +5,7 @@ namespace OpenCarma
 {
 	namespace Render
 	{
-		StaticModel::StaticModel(const BRender::ModelPtr& model, Commons::Render::Context* context)
+		StaticModel::StaticModel(const BRender::ModelPtr& model, Commons::Render::Context* context, MaterialMgr* materialMgr)
 			: m_materials()
 			, m_vertBuf(GL_ARRAY_BUFFER)
 			, m_UVBuf(GL_ARRAY_BUFFER)
@@ -14,18 +14,12 @@ namespace OpenCarma
 			, m_numIndices(0)
 			, mContext(context)
 		{
-			// TODO: init
-			// TODO: model utils or custom methods
 			auto mats = model->getMaterials();
+			m_materials.reserve(mats.size());
 			for (auto it = mats.begin(); it != mats.end(); ++it)
 			{
-				//auto mat = renderPtr->getMaterialManager().getMaterial(*it);
-				// TODO: check
-
-				//render.getTextureManager().getTexture();
-				// TODO: load material
+				m_materials.push_back(materialMgr->getMaterial(*it));
 			}
-			//m_materials[0]->set();
 
 			auto vertices = model->getVertices();
 			auto uvs = model->getUVs();
@@ -93,6 +87,8 @@ namespace OpenCarma
 			//shaderProg->use(); // TODO: in materials?
 
             //m_renderPtr->drawElements();
+
+			// TODO: set materials...
 
             // TODO: context
 			glDrawElements(GL_TRIANGLES, m_numIndices, GL_UNSIGNED_SHORT, 0);

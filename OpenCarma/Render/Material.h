@@ -12,10 +12,12 @@ namespace OpenCarma
 			Material();
 			~Material();
 
-
 		private:
-			//Commons::Render::ShaderProgramPtr m_shader;
-			//std::vector<Commons::Render::TexturePtr> m_textures;
+			// TODO:
+			// texture
+			// color
+			// tex matrix
+			// render flags (double sided, force z, etc...)
 		};
 
 		typedef std::shared_ptr<Material> MaterialPtr;

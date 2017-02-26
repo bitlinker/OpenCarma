@@ -34,11 +34,11 @@ namespace OpenCarma
                 material->setDiffuse(reader.readFloat());
                 material->setSpecular(reader.readFloat());
                 material->setSpecularPower(reader.readFloat());
-                material->setIndexedColor(reader.readUInt8(), reader.readUInt8());
-                material->setFlags(reader.readUInt32());
+				material->setFlags(reader.readUInt16()); // TODO: uint16!
                 Matrix23 matrix;
                 ReadMatrix23(reader, matrix);
                 material->setTransform(matrix);
+				material->setIndexedColor(reader.readUInt8(), reader.readUInt8());
                 material->setName(reader.readNullTermString());
             }
 
@@ -51,10 +51,10 @@ namespace OpenCarma
                 streamWriter.writeFloat(material->getDiffuse());
                 streamWriter.writeFloat(material->getSpecular());
                 streamWriter.writeFloat(material->getSpecularPower());
-                streamWriter.writeUInt8(material->getIndexedBase());
-                streamWriter.writeUInt8(material->getIndexedRange());
-                streamWriter.writeUInt32(material->getFlags());
+				streamWriter.writeUInt16(material->getFlags());
                 WriteMatrix23(streamWriter, material->getTransform());
+				streamWriter.writeUInt8(material->getIndexedBase());
+				streamWriter.writeUInt8(material->getIndexedRange());
                 streamWriter.writeNullTermString(material->getName());
                 writer.endChunk();
             }
