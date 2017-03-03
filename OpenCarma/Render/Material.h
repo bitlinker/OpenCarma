@@ -1,6 +1,8 @@
 #pragma once
 #include <Render/RenderCommon.h>
 #include <Render/Context.h>
+#include <Render/Texture2d.h>
+#include <Objects/Material.h>
 
 namespace OpenCarma
 {
@@ -9,10 +11,19 @@ namespace OpenCarma
 		class Material
 		{
 		public:
-			Material();
+			Material(const OpenCarma::BRender::MaterialPtr& mat);
 			~Material();
 
+            void use(Commons::Render::Context* context);
+
 		private:
+
+            // TODO: needed?
+            OpenCarma::BRender::MaterialPtr mMaterial;
+
+            Commons::Render::Texture2dPtr mTexture;
+            bool mDoubleSided;
+            uint32_t mColor;
 			// TODO:
 			// texture
 			// color

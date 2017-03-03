@@ -25,9 +25,12 @@ namespace OpenCarma
 
 		MaterialPtr MaterialMgr::loadMaterial(OpenCarma::BRender::MaterialPtr carmaMat)
 		{
+            auto mat = std::make_shared<Material>(carmaMat);
+
+            //carmaMat->getFlags(); // BR_MATF_TWO_SIDED
 			// TODO
 			// TODO: with palette & shadetab?
-			//std::make_shared<Material>();
+			
 			return mDefaultMat;
 		}
 
