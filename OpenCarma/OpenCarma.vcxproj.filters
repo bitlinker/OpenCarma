@@ -48,6 +48,9 @@
       <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="Filesystem.cpp" />
+    <ClCompile Include="Render\ShadetabMgr.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="TextFiles">
@@ -108,6 +111,9 @@
     </ClInclude>
     <ClInclude Include="Filesystem.h" />
     <ClInclude Include="Render\ResourceMgr.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\ShadetabMgr.h">
       <Filter>Render</Filter>
     </ClInclude>
   </ItemGroup>

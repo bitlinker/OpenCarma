@@ -18,20 +18,40 @@ namespace OpenCarma
 			, mFs(fs)
 			, mTextureMgr(textureMgr)
 			, mResMgr()
-			, mDefaultMat(std::make_shared<Material>())
-		{
+			, mDefaultMat(nullptr)
+		{			
 			// TODO: init mDefaultMat
+		}
+
+		// 2 palettes, registered in carma.exe - hardcoded
+		// DRRENDER is the main one
+		bool MaterialMgr::lazyLoadMainPalette()
+		{
+			if (mPalette) { return true; }
+			mPalette = mTextureMgr->getPalette("DRRENDER.PAL");
+			return mPalette != nullptr;
 		}
 
 		MaterialPtr MaterialMgr::loadMaterial(OpenCarma::BRender::MaterialPtr carmaMat)
 		{
+			if (!lazyLoadMainPalette()) { return mDefaultMat; }
             auto mat = std::make_shared<Material>(carmaMat);
 
+			// shadetabs - referenced in material
+			// TODO: shadetab
             //carmaMat->getFlags(); // BR_MATF_TWO_SIDED
 			// TODO
 			// TODO: with palette & shadetab?
+
+			std::string pixmapName = carmaMat->getPixmap();
+			if (!pixmapName.empty())
+			{
+				//mTextureMgr->getTexture(pixmapName, mPalette, mShadetab);
+			}
+
+			// TODO: material stuff
 			
-			return mDefaultMat;
+			return mat;
 		}
 
         bool MaterialMgr::loadMaterialPack(const std::string& packName)

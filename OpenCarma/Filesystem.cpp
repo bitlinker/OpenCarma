@@ -1,5 +1,7 @@
 #include <Filesystem.h>
 
+#include <windows.h>
+
 using namespace Commons;
 
 namespace OpenCarma
@@ -14,6 +16,37 @@ namespace OpenCarma
         return false;
     }
 
+	// TODO: fs utils class; commons
+	bool Filesystem::EnumerateFiles(const std::string path, bool isRecursive, std::vector<std::string>& files)
+	{
+		WIN32_FIND_DATAA findFileData;
+		HANDLE hFind = ::FindFirstFileA((path + "\\*").c_str(), &findFileData);
+		if (hFind == INVALID_HANDLE_VALUE) { return false; }
+		do 
+		{
+			std::string curName(findFileData.cFileName);
+			std::string fullPath = path + "\\" + std::string(findFileData.cFileName);
+			if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+			{
+				if (!isRecursive) continue;
+				if (curName == "." || curName == "..") continue;
+
+				if (!EnumerateFiles(fullPath, isRecursive, files))
+				{
+					::FindClose(hFind);
+					return false;
+				}
+			}
+			else
+			{
+				files.push_back(fullPath);
+			}
+		} while (::FindNextFileA(hFind, &findFileData));
+		::FindClose(hFind);
+
+		return true;
+	}
+
     Filesystem::Filesystem(const std::string& carmaPath)
         : mCarmaPath(carmaPath)
         , mPaths()
@@ -21,6 +54,10 @@ namespace OpenCarma
         // TODO
         bool isHighres = true;
 
+		// Full path workaround
+		mPaths.push_back(carmaPath);
+
+		// TODO: rm reg!
         mPaths.push_back(carmaPath + "/DATA/REG/SHADETAB");
         mPaths.push_back(carmaPath + "/DATA/SHADETAB");
 

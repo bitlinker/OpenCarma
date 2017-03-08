@@ -7,6 +7,7 @@
 #include <ResourceMgr.h>
 
 #include <Objects/Material.h>
+#include <Objects/Pixmap.h>
 
 namespace OpenCarma
 {
@@ -25,6 +26,7 @@ namespace OpenCarma
 			MaterialPtr getMaterial(const std::string& name);
 
 		private:
+			bool lazyLoadMainPalette();
 			MaterialPtr loadMaterial(OpenCarma::BRender::MaterialPtr carmaMat);
 
         private:
@@ -33,7 +35,7 @@ namespace OpenCarma
 			TextureMgr* mTextureMgr;
 			ResourceMgr<MaterialPtr> mResMgr;
 			MaterialPtr mDefaultMat;
-
+			BRender::PixmapPtr mPalette;
         };
 
         typedef std::shared_ptr<MaterialMgr> MaterialMgrPtr;

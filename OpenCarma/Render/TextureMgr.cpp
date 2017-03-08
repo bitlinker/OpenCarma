@@ -18,10 +18,54 @@ namespace OpenCarma
 			: mContext(context)
 			, mFs(fs)
 			, mResMgr()
+			, mPalettesPack()
 		{
-			// TODO: load palettes
 		}
 
+		bool TextureMgr::loadPalettePack(const std::string& packName)
+		{
+			LOG_DEBUG("Loading palette pack %s", packName.c_str());
+			IOStreamPtr strm = mFs->openResource(packName);
+			if (!strm)
+			{
+				LOG_WARN("Can't get input stream for palette pack %s", packName.c_str());
+				return false;
+			}
+
+			PixmapSerializer serializer;
+			try
+			{
+				serializer.read(strm, [this](const PixmapPtr& pixmap) {
+					mPalettesPack.addResource(pixmap->getName(), pixmap);
+				});
+			}
+			catch (SerializationException se)
+			{
+				LOG_ERROR("SerializationException: %s", se.what());
+				return false;
+			}
+			catch (IOException ioe)
+			{
+				LOG_ERROR("IOException: %s", ioe.what());
+				return false;
+			}
+			
+			return true;
+		}
+
+		PixmapPtr TextureMgr::getPalette(const std::string& name)
+		{
+			PixmapPtr palette;
+			if (!mPalettesPack.getResource(name, palette))
+			{
+				LOG_WARN("Palette %s not found", name.c_str());
+				return nullptr;
+			}
+			return palette;
+		}
+
+		// TODO: load reg as single pack optimization!
+		// Multiple pack names argument?
         // TODO: with palette?
         bool TextureMgr::loadPixelmapPack(const std::string& packName)
         {

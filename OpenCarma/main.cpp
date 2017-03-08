@@ -61,6 +61,10 @@ int main(int argc, char **argv)
 
 		// TODO: preload resources...
 		//textureMgr.registerPixelmapPack();
+		textureMgr.loadPalettePack("DATA/REG/PALETTES/DRRENDER.PAL");
+
+		std::vector<std::string> regFiles;
+		bool res = Filesystem::EnumerateFiles(carmaPath + "/DATA/REG", true, regFiles);
 
 
 		// Hardcoded?

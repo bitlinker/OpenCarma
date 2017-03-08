@@ -67,10 +67,14 @@ namespace OpenCarma
                 return mData[index];
             }
 
+			// TODO: scanline version
             inline uint32_t getColorARGB(uint32_t index) const
             {
                 return reinterpret_cast<const uint32_t*>(&mData[0])[index];
             }
+
+			// TODO: shadetab methods
+
 
         private:
             PixelFormat mPixelFormat;

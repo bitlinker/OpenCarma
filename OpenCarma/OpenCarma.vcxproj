@@ -160,6 +160,7 @@
     <ClCompile Include="Render\AxisDrawable.cpp" />
     <ClCompile Include="Render\MaterialMgr.cpp" />
     <ClCompile Include="Render\ModelMgr.cpp" />
+    <ClCompile Include="Render\ShadetabMgr.cpp" />
     <ClCompile Include="Render\TextureMgr.cpp" />
     <ClCompile Include="Render\FreeFlyCameraController.cpp" />
     <ClCompile Include="Render\PlainShaderProgram.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="Render\MaterialMgr.h" />
     <ClInclude Include="Render\ModelMgr.h" />
     <ClInclude Include="Render\ResourceMgr.h" />
+    <ClInclude Include="Render\ShadetabMgr.h" />
     <ClInclude Include="Render\TextureMgr.h" />
     <ClInclude Include="Render\FreeFlyCameraController.h" />
     <ClInclude Include="Render\PlainShaderProgram.h" />

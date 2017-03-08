@@ -12,6 +12,8 @@ namespace OpenCarma
         Filesystem(const std::string& carmaPath);
         Commons::IOStreamPtr openResource(const std::string& name);
 
+		static bool EnumerateFiles(const std::string path, bool isRecursive, std::vector<std::string>& files);
+
     private:
         std::string mCarmaPath;
         std::vector<std::string> mPaths;
